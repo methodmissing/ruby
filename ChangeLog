@@ -1,3 +1,182 @@
+Sun Nov  1 20:16:03 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* ext/bigdecimal/bigdecimal.c: fixed rdoc. [ruby-core:26457]
+
+Sun Nov  1 16:24:16 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* configure.in (rb_cv_stack_grow_dir): fix for universal binary.
+
+	* configure.in (sitehdrdir, vendorhdrdir): fixed default values.
+
+Sun Nov  1 13:31:16 2009  wanabe  <s.wanabe@gmail.com>
+
+	* win32/win32.c (overlapped_socket_io, recvmsg, sendmsg): pass handle
+	  instead of pointer to CloseHandle().
+
+Sun Nov  1 13:11:27 2009  wanabe  <s.wanabe@gmail.com>
+
+	* ext/socket/socket.c (socket_s_ip_address_list): use FreeLibrary() to
+	  free HMODULE.
+
+Sun Nov  1 08:17:48 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* gc.c (GET_STACK_BOUNDS): refactored common code.  based on a
+	  patch from Suraj N. Kurapati <sunaku AT gmail.com> in
+	  [ruby-core:26443].
+
+Sat Oct 31 23:44:35 2009  Yukihiro Matsumoto  <matz@ruby-lang.org>
+
+	* enum.c (enum_count): remove optimization using #size.
+	  revert r25560.
+
+	* vm_eval.c (rb_funcall_no_recursive): remove method.
+
+Sat Oct 31 23:28:49 2009  Yukihiro Matsumoto  <matz@ruby-lang.org>
+
+	* vm_eval.c (check_funcall): logic updated according to
+	  [ruby-dev:39594].  search method entry, call if it exists;
+	  otherwise check method_missing, call if it was overridden,
+	  protecting exceptions; if NoMethodError happens, check method
+	  name.
+
+	* vm_eval.c (vm_call0): use idMethodMissing.
+
+	* vm_eval.c (rb_search_method_entry): typo fixed.
+
+Sat Oct 31 17:19:28 2009  NAKAMURA, Hiroshi  <nahi@ruby-lang.org>
+
+	* lib/net/http.rb (Net::HTTPResponse#each_response_header):
+	  cosmetic: '?\ ' -> '?\s'
+
+Fri Oct 30 22:09:47 2009  NAKAMURA, Hiroshi  <nahi@ruby-lang.org>
+
+	* lib/net/http.rb (Net::HTTPResponse#each_response_header):
+	  accept multiline message header of HTTP response.  see #1796.
+	  cf. RFC 2616 '4.2 Message Header'.  
+
+	* test/net/http/test_httpresponse.rb: added.
+
+Fri Oct 30 18:54:04 2009  Yukihiro Matsumoto  <matz@ruby-lang.org>
+
+	* string.c (trnext): detect empty range and raise exception.
+	   [ruby-dev:39108]
+
+Fri Oct 30 17:01:46 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* vm_eval.c (enum call_type): get rid of last comma.
+
+	* vm_eval.c (vm_call0, vm_call_super, rb_f_send, rb_f_public_send):
+	  fixed call_type.  [ruby-dev:39581]
+
+	* vm_eval.c (rb_search_method_emtry, rb_method_call_status): spli
+	  from rb_call0().
+
+	* vm_eval.c (rb_check_funcall): get rid of raising exceptions and
+	  hiding further exceptions.  [ruby-dev:39584]
+
+	* vm_eval.c (rb_funcall_no_recursive): ditto.
+
+Fri Oct 30 13:36:39 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* thread.c (rb_thread_blocking_region): reverted r25566, and added
+	  description that no exception is allowed inside `func', instead.
+	  see [ruby-dev:39582]
+
+Fri Oct 30 13:13:16 2009  NAKAMURA Usaku  <usa@ruby-lang.org>
+
+	* win32.c (recvmsg, sendmsg, link): shouldn't raise ruby's exceptions
+	  in the functions expected as system API.  see [ruby-dev:39579] and
+	  [ruby-dev:39582]
+
+Fri Oct 30 12:59:20 2009  NAKAMURA Usaku  <usa@ruby-lang.org>
+
+	* thread.c (rb_thread_blocking_region): standard C doesn't accept
+	  preprosessing directive within macro expansion.
+
+Fri Oct 30 10:55:36 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* thread.c (rb_thread_blocking_region): must ensure to unlock GVL.
+	  [ruby-dev:39579]
+
+Fri Oct 30 04:47:26 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* include/ruby/ruby.h (RSTRING_END): trivial optimization.
+
+	* string.c (rb_str_sub_bang): trivial optimization.
+
+Fri Oct 30 02:11:36 2009  Yukihiro Matsumoto  <matz@ruby-lang.org>
+
+	* enum.c (enum_count): call #size using rb_funcall_no_recursive()
+	  to prevent infinite recursive calls.  [ruby-core:24794]
+
+	* vm_eval.c (rb_funcall_no_recursive): utility function to check
+	  direct recursive call.
+
+	* vm_eval.c (rb_check_funcall): move from eval.c. [refactoring]
+
+Thu Oct 29 18:37:02 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* encoding.c (Init_Encoding): revert previous commit.
+
+	* ruby.c (process_options): ditto.
+
+Thu Oct 29 15:35:39 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* encoding.c (Init_Encoding): set locale and filesystem encindex.
+
+	* ruby.c (process_options): move setting func of filesystem
+	  encoding to Init_Encoding.
+
+Thu Oct 29 15:43:25 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* vm_core.h (rb_name_err_mesg_new): added prototype.
+
+Thu Oct 29 13:53:18 2009  Yukihiro Matsumoto  <matz@ruby-lang.org>
+
+	* array.c (rb_ary_to_ary): do not use #respond_to? to detect
+	  to_ary.  Just call.  [ruby-core:23738]
+
+	* eval.c (rb_check_funcall): new function with method existence
+	  check.  returns Qundef when the method does not exist.
+
+	* enumerator.c (enumerator_rewind): just call method, using
+	  rb_check_funcall().  [ruby-core:23738]
+
+	* error.c (exc_equal): ditto.
+
+	* object.c (convert_type): ditto.
+
+	* error.c (rb_name_err_mesg_new): export function.
+
+	* eval.c (make_exception): ditto.
+
+	* io.c (pop_last_hash): return early when the last argument is nil.
+
+	* io.c (rb_io_puts): treat T_STRING specially for small
+	  optimization. 
+
+	* vm_eval.c (raise_method_missing): skip method call if possible
+	  using rb_method_basic_definition_p().
+
+	* vm_eval.c (method_missing): ditto.
+
+	* test/ruby/test_rubyoptions.rb (TestRubyOptions#test_debug): test
+	  suites changed to ignore exceptions caused by just-call policy.
+
+Thu Oct 29 04:41:44 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* ruby.c (process_options): call rb_filesystem_encoding().
+
+Thu Oct 29 04:40:36 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* io.c (Init_IO): rb_default_rs should be US-ASCII.
+
+Thu Oct 29 01:22:01 2009  Yutaka Kanemoto  <kanemoto@ruby-lang.org>
+
+	* ext/socket/extconf.rb : Compilation failure on AIX.
+	  ss_len (a member of struct sockaddr_storage) has preceding __,
+	  but ss_family does not have it from AIX 5.2.
+
 Wed Oct 28 16:32:49 2009  NARUSE, Yui  <naruse@ruby-lang.org>
 
 	* encoding.c (get_filesystem_encoding): removed.

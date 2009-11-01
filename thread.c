@@ -1049,9 +1049,10 @@ rb_thread_blocking_region_end(struct rb_blocking_region_buffer *region)
  *     * RUBY_UBF_IO: ubf for IO operation
  *     * RUBY_UBF_PROCESS: ubf for process operation
  *
- *   NOTE: You can not execute most of Ruby C API and touch Ruby objects
- *         in `func()' and `ubf()' because current thread doesn't acquire
- *         GVL (cause synchronization problem).  If you need to do it,
+ *   NOTE: You can not execute most of Ruby C API and touch Ruby
+ *         objects in `func()' and `ubf()', including raising an
+ *         exception, because current thread doesn't acquire GVL
+ *         (cause synchronization problem).  If you need to do it,
  *         read source code of C APIs and confirm by yourself.
  *
  *   NOTE: In short, this API is difficult to use safely.  I recommend you

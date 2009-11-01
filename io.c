@@ -5157,6 +5157,7 @@ pop_last_hash(int *argc_p, VALUE *argv)
     if (*argc_p == 0)
         return Qnil;
     last = argv[*argc_p-1];
+    if (NIL_P(last)) return Qnil;
     tmp = rb_check_convert_type(last, T_HASH, "Hash", "to_hash");
     if (NIL_P(tmp))
         return Qnil;
@@ -6066,12 +6067,17 @@ rb_io_puts(int argc, VALUE *argv, VALUE out)
 	return Qnil;
     }
     for (i=0; i<argc; i++) {
+	if (TYPE(argv[i]) == T_STRING) {
+	    line = argv[i];
+	    goto string;
+	}
 	line = rb_check_array_type(argv[i]);
 	if (!NIL_P(line)) {
 	    rb_exec_recursive(io_puts_ary, line, out);
 	    continue;
 	}
 	line = rb_obj_as_string(argv[i]);
+      string:
 	rb_io_write(out, line);
 	if (RSTRING_LEN(line) == 0 ||
             RSTRING_PTR(line)[RSTRING_LEN(line)-1] != '\n') {
@@ -9692,7 +9698,7 @@ Init_IO(void)
     rb_output_fs = Qnil;
     rb_define_hooked_variable("$,", &rb_output_fs, 0, rb_str_setter);
 
-    rb_rs = rb_default_rs = rb_str_new2("\n");
+    rb_rs = rb_default_rs = rb_usascii_str_new2("\n");
     rb_gc_register_mark_object(rb_default_rs);
     rb_output_rs = Qnil;
     OBJ_FREEZE(rb_default_rs);	/* avoid modifying RS_default */

@@ -149,9 +149,6 @@ enum_count(int argc, VALUE *argv, VALUE obj)
 	    func = count_iter_i;
 	}
 	else {
-	    if (rb_respond_to(obj, id_size)) {
-		return rb_funcall(obj, id_size, 0, 0);
-	    }
 	    func = count_all_i;
 	}
     }
