@@ -1,6 +1,13 @@
 require 'test/unit'
 
 class TestSymbol < Test::Unit::TestCase
+  def test_hash
+    assert_instance_of Fixnum, :symbol.hash
+    assert_equal 'symbol'.hash, :symbol.hash
+    assert_equal :"!".hash, :"!".hash
+    assert_not_equal :"$1".hash, :"@@1".hash
+  end
+  
   # [ruby-core:3573]
 
   def assert_eval_inspected(sym)

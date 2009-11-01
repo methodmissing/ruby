@@ -23,6 +23,27 @@ static VALUE rb_hash_s_try_convert(VALUE, VALUE);
 
 #define HASH_DELETED  FL_USER1
 #define HASH_PROC_DEFAULT FL_USER2
+#define STR_HASH FL_USER3
+
+static VALUE rb_hash_rehash(VALUE hash);
+static VALUE rb_hash_update(VALUE hash1, VALUE hash2);
+static VALUE rb_hash_strhash(VALUE hash);
+static void rb_strhash_convert(VALUE *value);
+
+#define NEW_STR_HASH(hash,other) do {\
+   FL_SET(RHASH(hash), STR_HASH); \
+   RHASH(hash)->ntbl->type = &strhash; \
+   RHASH(hash)->ifnone = RHASH(other)->ifnone; \
+   return rb_hash_rehash(rb_convert_type(hash, T_HASH, "StrHash", "to_hash")); \
+} while (0)
+
+#define STR_HASH_P(hash) (FL_TEST(RHASH(hash), STR_HASH) || RBASIC(hash)->klass == rb_cStrHash)
+
+#define CONVERT_STR_HASH(hash,value) do {\
+   if STR_HASH_P(hash){ \
+   rb_strhash_convert(&value); \
+   } \
+} while (0)
 
 VALUE
 rb_hash_freeze(VALUE hash)
@@ -31,6 +52,7 @@ rb_hash_freeze(VALUE hash)
 }
 
 VALUE rb_cHash;
+VALUE rb_cStrHash;
 
 static VALUE envtbl;
 static ID id_hash, id_yield, id_default;
@@ -51,6 +73,37 @@ rb_any_cmp(VALUE a, VALUE b)
 	return a != b;
     }
 
+    return !rb_eql(a, b);
+}
+
+int
+strhash_cmp(VALUE *s1,VALUE *s2)
+{
+    int s1_hash = SYMBOL_P(*s1) ? rb_sym_hash(*s1) : rb_str_hash(*s1);
+    int s2_hash = SYMBOL_P(*s2) ? rb_sym_hash(*s2) : rb_str_hash(*s2);
+    if (s1_hash == s2_hash) return 0;
+    if (s1_hash > s2_hash) return 1;
+    return -1;	
+}
+
+static int
+rb_strhash_cmp(VALUE a, VALUE b)
+{
+    if (a == b) return 0;
+    if (FIXNUM_P(a) && FIXNUM_P(b)) {
+	return a != b;
+    }
+    if (a == Qundef || b == Qundef) return -1;
+    if (SYMBOL_P(a) && SYMBOL_P(b)) {
+	return a != b;
+    }
+    if ((TYPE(a) == T_STRING && RBASIC(a)->klass == rb_cString && SYMBOL_P(b)) || (TYPE(b) == T_STRING && RBASIC(b)->klass == rb_cString && SYMBOL_P(a))) {
+	return strhash_cmp(&a, &b);
+    }
+    if (TYPE(a) == T_STRING && RBASIC(a)->klass == rb_cString &&
+    TYPE(b) == T_STRING && RBASIC(b)->klass == rb_cString) {
+	return rb_str_cmp(a, b);
+    }
     return !rb_eql(a, b);
 }
 
@@ -99,9 +152,42 @@ rb_any_hash(VALUE a)
     return (st_index_t)RSHIFT(hnum, 1);
 }
 
+static st_index_t
+rb_strhash_hash(VALUE a)
+{
+    VALUE hval;
+    st_index_t hnum;
+
+    switch (TYPE(a)) {
+      case T_FIXNUM:
+      case T_NIL:
+      case T_FALSE:
+      case T_TRUE:
+	hnum = rb_hash_end(rb_hash_start((unsigned int)a));
+	break;
+      case T_SYMBOL:
+	hnum = rb_sym_hash(a);  
+	break;
+      case T_STRING:
+	hnum = rb_str_hash(a);
+	break;
+
+      default:
+        hval = rb_hash(a);
+	hnum = FIX2LONG(hval);
+    }
+    hnum <<= 1;
+    return (st_index_t)RSHIFT(hnum, 1);
+}
+
 static const struct st_hash_type objhash = {
     rb_any_cmp,
     rb_any_hash,
+};
+
+static const struct st_hash_type strhash = {
+    rb_strhash_cmp,
+    rb_strhash_hash,
 };
 
 static const struct st_hash_type identhash = {
@@ -219,7 +305,7 @@ hash_alloc(VALUE klass)
     OBJSETUP(hash, klass, T_HASH);
 
     hash->ifnone = Qnil;
-
+    if (klass == rb_cStrHash) FL_SET(hash, STR_HASH);
     return (VALUE)hash;
 }
 
@@ -227,6 +313,12 @@ VALUE
 rb_hash_new(void)
 {
     return hash_alloc(rb_cHash);
+}
+
+VALUE
+rb_strhash_new(void)
+{
+    return hash_alloc(rb_cStrHash);
 }
 
 VALUE
@@ -240,8 +332,33 @@ rb_hash_dup(VALUE hash)
     if (FL_TEST(hash, HASH_PROC_DEFAULT)) {
         FL_SET(ret, HASH_PROC_DEFAULT);
     }
-    ret->ifnone = RHASH(hash)->ifnone;
-    return (VALUE)ret;
+    if STR_HASH_P(hash){
+       NEW_STR_HASH(ret,hash);
+    }else{ 
+      ret->ifnone = RHASH(hash)->ifnone;
+      return (VALUE)ret;
+    }
+}
+
+static void
+rb_strhash_convert(VALUE *val)
+{
+    int i;
+    VALUE values;
+
+    switch (TYPE(*val)) {
+      case T_HASH:
+           *val = rb_hash_strhash(*val); 
+           break;   
+      case T_ARRAY:
+            values = rb_ary_new2(RARRAY_LEN(*val));
+            for (i = 0; i < RARRAY_LEN(*val); i++) {
+               VALUE el = RARRAY_PTR(*val)[i];
+               rb_ary_push(values, (TYPE(el) == T_HASH) ? rb_hash_strhash(el) : el);
+            } 
+           *val = values;
+           break;
+    }
 }
 
 static void
@@ -256,7 +373,7 @@ struct st_table *
 rb_hash_tbl(VALUE hash)
 {
     if (!RHASH(hash)->ntbl) {
-        RHASH(hash)->ntbl = st_init_table(&objhash);
+	RHASH(hash)->ntbl = STR_HASH_P(hash) ? st_init_table(&strhash) : st_init_table(&objhash);
     }
     return RHASH(hash)->ntbl;
 }
@@ -318,7 +435,9 @@ static VALUE
 rb_hash_initialize(int argc, VALUE *argv, VALUE hash)
 {
     VALUE ifnone;
-
+    VALUE constructor;
+    rb_scan_args(argc, argv, "01", &constructor);
+    if(TYPE(constructor) == T_HASH) return rb_hash_update(hash,constructor);
     rb_hash_modify(hash);
     if (rb_block_given_p()) {
 	if (argc > 0) {
@@ -333,7 +452,6 @@ rb_hash_initialize(int argc, VALUE *argv, VALUE hash)
 	rb_scan_args(argc, argv, "01", &ifnone);
 	RHASH(hash)->ifnone = ifnone;
     }
-
     return hash;
 }
 
@@ -366,8 +484,11 @@ rb_hash_s_create(int argc, VALUE *argv, VALUE klass)
 	    hash = hash_alloc(klass);
 	    if (RHASH(tmp)->ntbl) {
 		RHASH(hash)->ntbl = st_copy(RHASH(tmp)->ntbl);
+		if (FL_TEST(RHASH(tmp), STR_HASH) || klass == rb_cStrHash){
+		  NEW_STR_HASH(hash,tmp);
+		}else
+		return hash;
 	    }
-	    return hash;
 	}
 
 	tmp = rb_check_array_type(argv[0]);
@@ -426,12 +547,21 @@ rb_hash_s_try_convert(VALUE dummy, VALUE hash)
     return rb_check_convert_type(hash, T_HASH, "Hash", "to_hash");
 }
 
+static VALUE
+rb_strhash_s_try_convert(VALUE dummy, VALUE hash)
+{
+    return rb_check_convert_type(hash, T_HASH, "StrHash", "to_hash");
+}
+
 static int
 rb_hash_rehash_i(VALUE key, VALUE value, VALUE arg)
 {
     st_table *tbl = (st_table *)arg;
 
-    if (key != Qundef) st_insert(tbl, key, value);
+    if (key != Qundef){ 
+      if (tbl->type == &strhash) rb_strhash_convert(&value);
+      st_insert(tbl, key, value);
+    }
     return ST_CONTINUE;
 }
 
@@ -459,7 +589,6 @@ static VALUE
 rb_hash_rehash(VALUE hash)
 {
     st_table *tbl;
-
     if (RHASH(hash)->iter_lev > 0) {
 	rb_raise(rb_eRuntimeError, "rehash during iteration");
     }
@@ -470,7 +599,6 @@ rb_hash_rehash(VALUE hash)
     rb_hash_foreach(hash, rb_hash_rehash_i, (VALUE)tbl);
     st_free_table(RHASH(hash)->ntbl);
     RHASH(hash)->ntbl = tbl;
-
     return hash;
 }
 
@@ -974,7 +1102,7 @@ rb_hash_select(VALUE hash)
     VALUE result;
 
     RETURN_ENUMERATOR(hash, 0, 0);
-    result = rb_hash_new();
+    result = STR_HASH_P(hash) ? rb_strhash_new() : rb_hash_new();
     rb_hash_foreach(hash, select_i, result);
     return result;
 }
@@ -1044,6 +1172,13 @@ rb_hash_aset(VALUE hash, VALUE key, VALUE val)
 	st_insert2(RHASH(hash)->ntbl, key, val, rb_str_new4);
     }
     return val;
+}
+
+VALUE
+rb_strhash_aset(VALUE hash, VALUE key, VALUE val)
+{
+    CONVERT_STR_HASH(hash,val);
+    rb_hash_aset(hash, key, val);
 }
 
 static int
@@ -1617,7 +1752,7 @@ rb_hash_invert_i(VALUE key, VALUE value, VALUE hash)
 static VALUE
 rb_hash_invert(VALUE hash)
 {
-    VALUE h = rb_hash_new();
+	VALUE h = STR_HASH_P(hash) ? rb_strhash_new() : rb_hash_new();
 
     rb_hash_foreach(hash, rb_hash_invert_i, h);
     return h;
@@ -1627,6 +1762,7 @@ static int
 rb_hash_update_i(VALUE key, VALUE value, VALUE hash)
 {
     if (key == Qundef) return ST_CONTINUE;
+    CONVERT_STR_HASH(hash,value);
     st_insert(RHASH(hash)->ntbl, key, value);
     return ST_CONTINUE;
 }
@@ -1637,6 +1773,7 @@ rb_hash_update_block_i(VALUE key, VALUE value, VALUE hash)
     if (key == Qundef) return ST_CONTINUE;
     if (rb_hash_has_key(hash, key)) {
 	value = rb_yield_values(3, key, rb_hash_aref(hash, key), value);
+    CONVERT_STR_HASH(hash,value);
     }
     st_insert(RHASH(hash)->ntbl, key, value);
     return ST_CONTINUE;
@@ -1850,6 +1987,24 @@ rb_hash_compare_by_id_p(VALUE hash)
 	return Qtrue;
     }
     return Qfalse;
+}
+
+static VALUE
+rb_hash_strhash(VALUE hash)
+{
+    if STR_HASH_P(hash)
+    return hash;
+    VALUE args[1];
+    args[0] = hash;
+    return rb_hash_s_create(1, (VALUE *)args, rb_cStrHash);
+}
+
+static VALUE
+rb_strhash_to_hash(VALUE hash)
+{
+    VALUE args[1];
+    args[0] = hash;
+    return rb_hash_s_create(1, (VALUE *)args, rb_cHash);
 }
 
 static int path_tainted = -1;
@@ -2649,6 +2804,8 @@ Init_Hash(void)
     id_default = rb_intern("default");
 
     rb_cHash = rb_define_class("Hash", rb_cObject);
+    rb_cStrHash = rb_define_class("StrHash", rb_cHash);
+    rb_define_singleton_method(rb_cStrHash, "try_convert", rb_strhash_s_try_convert, 1);
 
     rb_include_module(rb_cHash, rb_mEnumerable);
 
@@ -2715,6 +2872,10 @@ Init_Hash(void)
 
     rb_define_method(rb_cHash,"compare_by_identity", rb_hash_compare_by_id, 0);
     rb_define_method(rb_cHash,"compare_by_identity?", rb_hash_compare_by_id_p, 0);
+    rb_define_method(rb_cHash, "strhash", rb_hash_strhash, 0);
+    rb_define_method(rb_cStrHash, "to_hash", rb_strhash_to_hash, 0);
+    rb_define_method(rb_cStrHash, "[]=", rb_strhash_aset, 2);
+    rb_define_method(rb_cStrHash, "store", rb_strhash_aset, 2);
 
     origenviron = environ;
     envtbl = rb_obj_alloc(rb_cObject);

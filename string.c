@@ -7012,6 +7012,17 @@ sym_equal(VALUE sym1, VALUE sym2)
     return Qfalse;
 }
 
+st_index_t
+rb_sym_hash(VALUE sym){
+   ID id = SYM2ID(sym);
+   return rb_str_hash(rb_id2str(id));  
+}
+
+static VALUE
+rb_sym_hash_m(VALUE sym){
+    st_index_t hval = rb_sym_hash(sym);
+    return INT2FIX(hval);
+}
 
 static int
 sym_printable(const char *s, const char *send, rb_encoding *enc)
@@ -7495,6 +7506,7 @@ Init_String(void)
     rb_define_method(rb_cSymbol, "===", sym_equal, 1);
     rb_define_method(rb_cSymbol, "inspect", sym_inspect, 0);
     rb_define_method(rb_cSymbol, "to_s", rb_sym_to_s, 0);
+    rb_define_method(rb_cSymbol, "hash", rb_sym_hash_m, 0);
     rb_define_method(rb_cSymbol, "id2name", rb_sym_to_s, 0);
     rb_define_method(rb_cSymbol, "intern", sym_to_sym, 0);
     rb_define_method(rb_cSymbol, "to_sym", sym_to_sym, 0);

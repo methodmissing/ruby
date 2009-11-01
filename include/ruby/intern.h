@@ -659,6 +659,7 @@ void rb_str_associate(VALUE, VALUE);
 VALUE rb_str_associated(VALUE);
 void rb_str_setter(VALUE, ID, VALUE*);
 VALUE rb_str_intern(VALUE);
+st_index_t rb_sym_hash(VALUE);
 VALUE rb_sym_to_s(VALUE);
 VALUE rb_str_length(VALUE);
 long rb_str_offset(VALUE, long);
