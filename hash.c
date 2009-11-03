@@ -79,8 +79,8 @@ rb_any_cmp(VALUE a, VALUE b)
 int
 strhash_cmp(VALUE *s1,VALUE *s2)
 {
-    int s1_hash = SYMBOL_P(*s1) ? rb_sym_hash(*s1) : rb_str_hash(*s1);
-    int s2_hash = SYMBOL_P(*s2) ? rb_sym_hash(*s2) : rb_str_hash(*s2);
+    st_index_t s1_hash = SYMBOL_P(*s1) ? rb_sym_hash(*s1) : rb_str_hash(*s1);
+    st_index_t s2_hash = SYMBOL_P(*s2) ? rb_sym_hash(*s2) : rb_str_hash(*s2);
     if (s1_hash == s2_hash) return 0;
     if (s1_hash > s2_hash) return 1;
     return -1;	
@@ -333,7 +333,7 @@ rb_hash_dup(VALUE hash)
         FL_SET(ret, HASH_PROC_DEFAULT);
     }
     if STR_HASH_P(hash){
-       NEW_STR_HASH(ret,hash);
+       NEW_STR_HASH((VALUE)ret,hash);
     }else{ 
       ret->ifnone = RHASH(hash)->ifnone;
       return (VALUE)ret;
@@ -1178,7 +1178,7 @@ VALUE
 rb_strhash_aset(VALUE hash, VALUE key, VALUE val)
 {
     CONVERT_STR_HASH(hash,val);
-    rb_hash_aset(hash, key, val);
+    return rb_hash_aset(hash, key, val);
 }
 
 static int
@@ -1992,9 +1992,8 @@ rb_hash_compare_by_id_p(VALUE hash)
 static VALUE
 rb_hash_strhash(VALUE hash)
 {
-    if STR_HASH_P(hash)
-    return hash;
     VALUE args[1];
+    if STR_HASH_P(hash) return hash;
     args[0] = hash;
     return rb_hash_s_create(1, (VALUE *)args, rb_cStrHash);
 }
