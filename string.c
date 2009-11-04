@@ -1993,32 +1993,6 @@ rb_str_concat(VALUE str1, VALUE str2)
 }
 
 st_index_t
-rb_hash_start(st_index_t h)
-{
-    static int hashseed_init = 0;
-    static st_index_t hashseed;
-
-    if (!hashseed_init) {
-        hashseed = rb_genrand_int32();
-#if SIZEOF_ST_INDEX_T*CHAR_BIT > 4*8
-	hashseed <<= 32;
-	hashseed |= rb_genrand_int32();
-#endif
-#if SIZEOF_ST_INDEX_T*CHAR_BIT > 8*8
-	hashseed <<= 32;
-	hashseed |= rb_genrand_int32();
-#endif
-#if SIZEOF_ST_INDEX_T*CHAR_BIT > 12*8
-	hashseed <<= 32;
-	hashseed |= rb_genrand_int32();
-#endif
-        hashseed_init = 1;
-    }
-
-    return st_hash_start(hashseed + h);
-}
-
-st_index_t
 rb_memhash(const void *ptr, long len)
 {
     return st_hash(ptr, len, rb_hash_start(0));
@@ -2952,11 +2926,14 @@ rb_str_upto(int argc, VALUE *argv, VALUE beg)
     if (n > 0 || (excl && n == 0)) return beg;
 
     after_end = rb_funcall(end, succ, 0, 0);
-    current = beg;
+    current = rb_str_dup(beg);
     while (!rb_str_equal(current, after_end)) {
+	VALUE next = Qnil;
+	if (excl || !rb_str_equal(current, end))
+	    next = rb_funcall(current, succ, 0, 0);
 	rb_yield(current);
-	if (!excl && rb_str_equal(current, end)) break;
-	current = rb_funcall(current, succ, 0, 0);
+	if (NIL_P(next)) break;
+	current = next;
 	StringValue(current);
 	if (excl && rb_str_equal(current, end)) break;
 	if (RSTRING_LEN(current) > RSTRING_LEN(end) || RSTRING_LEN(current) == 0)
