@@ -861,6 +861,31 @@ class TestHash < Test::Unit::TestCase
     assert_equal({o1=>1,o2=>2}.hash, {o2=>2,o1=>1}.hash)
   end
 
+  class MemorySlot
+    attr_reader :size
+    def initialize(size)
+      @size = size
+    end
+    
+    def <=>(other)
+      size <=> other.size
+    end
+    alias hash size
+  end
+
+  def test_uniform
+    s = MemorySlot.new(256)
+    s1 = MemorySlot.new(512)    
+    assert(!{}.uniform?)
+    h = { s => %w(obj1 obj2 ob3) }
+    h.uniform 
+    assert(h.uniform?)
+    assert_equal %w(obj1 obj2 ob3), h[s]
+    h[s1] = %w(obj4)
+    h[MemorySlot.new(256)] = %w(obj1)
+    assert_equal %w(obj1), h[s]
+  end
+
   def test_hash_bignum_hash
     x = 2<<(32-3)-1
     assert_equal({x=>1}.hash, {x=>1}.hash)

@@ -33,8 +33,7 @@ rb_hash_freeze(VALUE hash)
 VALUE rb_cHash;
 
 static VALUE envtbl;
-static ID id_hash, id_yield, id_default;
-
+static ID id_hash, id_yield, id_default, id_cmp;
 static int
 rb_any_cmp(VALUE a, VALUE b)
 {
@@ -99,6 +98,14 @@ rb_any_hash(VALUE a)
     return (st_index_t)RSHIFT(hnum, 1);
 }
 
+static int
+rb_uniform_cmp(VALUE a, VALUE b)
+{
+    if (rb_respond_to(a, id_cmp) && rb_respond_to(b, id_cmp))
+    return FIX2INT(rb_funcall(a, id_cmp, 1, b));
+    rb_raise(rb_eRuntimeError, "object expected to implement a Comparable interface");
+}
+
 static const struct st_hash_type objhash = {
     rb_any_cmp,
     rb_any_hash,
@@ -107,6 +114,11 @@ static const struct st_hash_type objhash = {
 static const struct st_hash_type identhash = {
     st_numcmp,
     st_numhash,
+};
+
+static const struct st_hash_type uniformhash = {
+    rb_uniform_cmp,
+    rb_any_hash,
 };
 
 typedef int st_foreach_func(st_data_t, st_data_t, st_data_t);
@@ -1852,6 +1864,26 @@ rb_hash_compare_by_id_p(VALUE hash)
     return Qfalse;
 }
 
+static VALUE
+rb_hash_uniform(VALUE hash)
+{
+    rb_hash_modify(hash);
+    RHASH(hash)->ntbl->type = &uniformhash;
+    rb_hash_rehash(hash);
+    return hash;
+}
+
+static VALUE
+rb_hash_uniform_p(VALUE hash)
+{
+    if (!RHASH(hash)->ntbl)
+        return Qfalse;
+    if (RHASH(hash)->ntbl->type == &uniformhash) {
+	return Qtrue;
+    }
+    return Qfalse;
+}
+
 static int path_tainted = -1;
 
 static char **origenviron;
@@ -2647,6 +2679,7 @@ Init_Hash(void)
     id_hash = rb_intern("hash");
     id_yield = rb_intern("yield");
     id_default = rb_intern("default");
+    id_cmp = rb_intern("<=>");
 
     rb_cHash = rb_define_class("Hash", rb_cObject);
 
@@ -2715,6 +2748,9 @@ Init_Hash(void)
 
     rb_define_method(rb_cHash,"compare_by_identity", rb_hash_compare_by_id, 0);
     rb_define_method(rb_cHash,"compare_by_identity?", rb_hash_compare_by_id_p, 0);
+
+    rb_define_method(rb_cHash,"uniform", rb_hash_uniform, 0);
+    rb_define_method(rb_cHash,"uniform?", rb_hash_uniform_p, 0);
 
     origenviron = environ;
     envtbl = rb_obj_alloc(rb_cObject);
