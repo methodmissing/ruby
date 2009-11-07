@@ -1,5 +1,5 @@
 require 'test/unit'
-#require 'continuation'
+require 'continuation'
 
 class TestHash < Test::Unit::TestCase
 
@@ -872,13 +872,13 @@ class TestHash < Test::Unit::TestCase
     assert_equal({x=>1}.hash, {x=>1}.hash)
   end
   
-  module HwiaIndex
-    def hsh(obj)
+  module Hwia
+    def hash(obj)
       case obj
         when Symbol, String
           obj.to_s.hash
         else
-          obj.hash   
+          obj.hash
       end
     end 
     
@@ -888,8 +888,8 @@ class TestHash < Test::Unit::TestCase
       else
         a <=> b
       end    
-    end    
-    extend self
+    end 
+    extend self   
   end
   
   def test_index_with
@@ -900,7 +900,11 @@ class TestHash < Test::Unit::TestCase
     assert_raises(RuntimeError) do
       h.index_with(Object.new)
     end
-    h.index_with(HwiaIndex)
+    h.index_with(Hwia)
+    assert_equal Hwia, h.indexed_with
     assert h.custom_index?
+    h["foo"]
+    #assert_equal "bar", h["foo"]
+    #assert_equal "bar", h[:foo]
   end
 end

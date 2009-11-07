@@ -34,7 +34,7 @@ rb_hash_freeze(VALUE hash)
 VALUE rb_cHash;
 
 static VALUE envtbl;
-static ID id_hash, id_yield, id_default, id_compare, id_hsh;
+static ID id_hash, id_yield, id_default, id_compare;
 
 static int
 rb_any_cmp(VALUE a, VALUE b)
@@ -104,19 +104,19 @@ static int
 rb_custom_cmp(VALUE a, VALUE b)
 {
     rb_thread_t *th = GET_THREAD();
-    rb_control_frame_t *cfp = th->cfp;
-    VALUE hash = cfp->self;
-    return FIX2INT(rb_funcall(RHASH(hash)->index_with, id_compare, 3, Qnil, a, b));
+    VALUE hash = th->cfp->self; 
+    Check_Type(hash, T_HASH);
+    return FIX2INT(rb_funcall(RHASH(hash)->index_with, id_compare, 2, a, b));
 }
 
 static st_index_t
 rb_custom_hash(VALUE a)
 {
-    rb_thread_t *th = GET_THREAD();
-    rb_control_frame_t *cfp = th->cfp;
-    VALUE hash = cfp->self;
     st_index_t hnum;
-    hnum = FIX2LONG(rb_funcall(RHASH(hash)->index_with, id_hsh, 1, a));
+    rb_thread_t *th = GET_THREAD();
+    VALUE hash = th->cfp->self;
+    Check_Type(hash, T_HASH);
+    hnum = FIX2LONG(rb_funcall(RHASH(hash)->index_with, id_hash, 1, a));
     hnum <<= 1;
     return (st_index_t)RSHIFT(hnum, 1);  
 }
@@ -521,7 +521,6 @@ VALUE
 rb_hash_aref(VALUE hash, VALUE key)
 {
     VALUE val;
-
     if (!RHASH(hash)->ntbl || !st_lookup(RHASH(hash)->ntbl, key, &val)) {
 	return rb_funcall(hash, id_default, 1, key);
     }
@@ -1885,12 +1884,15 @@ rb_hash_compare_by_id_p(VALUE hash)
 static VALUE
 rb_hash_index_with(VALUE hash, VALUE idx)
 {
-    if (!rb_respond_to(idx, id_hsh) && !rb_respond_to(idx, id_compare))
-    rb_raise(rb_eRuntimeError, "custom Hash index should implement #hsh(a) and #compare(a,b)");
-    rb_hash_modify(hash);
-    RHASH(hash)->ntbl->type = &customhash;
-    rb_hash_rehash(hash);
-    return hash;
+    if (rb_respond_to(idx, id_hash) && rb_respond_to(idx, id_compare)){
+      rb_hash_modify(hash);
+      RHASH(hash)->index_with = idx;
+      RHASH(hash)->ntbl->type = &customhash;
+      rb_hash_rehash(hash);
+      return hash;
+    }else{
+      rb_raise(rb_eRuntimeError, "a custom hashing scheme should implement #index(a) and #compare(a,b)");
+    }    
 }
 
 static VALUE
@@ -2706,7 +2708,6 @@ Init_Hash(void)
     id_yield = rb_intern("yield");
     id_default = rb_intern("default");
     id_compare = rb_intern("compare");
-    id_hsh = rb_intern("hsh");
 
     rb_cHash = rb_define_class("Hash", rb_cObject);
 
