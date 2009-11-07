@@ -1,3 +1,58 @@
+Fri Nov  6 12:02:32 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* configure.in (MINIDLNOBJ): set default as dmydln.o.
+	  Now LLVM clang seems to be able to build Ruby 1.9.
+
+Fri Nov  6 09:29:32 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* encoding.c (rb_filesystem_encindex): add fallback to
+	  ASCII-8BIT on Windows.
+
+Fri Nov  6 07:29:07 2009  Kazuhiro NISHIYAMA  <zn@mbf.nifty.com>
+
+	* test/ruby/test_case.rb: merged r25658 from ruby_1_8.
+
+Thu Nov  5 12:27:07 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* gem_prelude.rb (Gem.user_home): force_encoding(
+	  Encoding.find('filesystem')). [ruby-core:26525]
+
+Thu Nov  5 07:47:31 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* parse.y (BEGIN): now local_push and local_pop are necessary in
+	  ripper.
+
+Wed Nov  4 21:39:10 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* .document: add some README files to default rdoc's of trunk.
+	  patched by Roger Pack [ruby-core:26459]
+
+Wed Nov  4 16:06:11 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* include/ruby/st.h (SIZEOF_ST_INDEX_T): moved from st.c for
+	  Init_RandomSeed().
+
+Wed Nov  4 15:50:16 2009  URABE Shyouhei  <shyouhei@ruby-lang.org>
+
+	* include/ruby/ruby.h (NUM2CHR): prefix __extension__ for
+	  braced-groups within expressions.
+
+Wed Nov  4 15:46:30 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* ruby.c (set_{internal,external}_encoding_once): fixed typos.
+
+Wed Nov  4 12:49:18 2009  Marc-Andre Lafortune  <ruby-core@marc-andre.ca>
+
+	* proc.c (mnew): Fix scope issue [ruby-core:26069]
+
+Wed Nov  4 08:50:51 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* random.c (rb_hash_start): moved from string.c.
+
+	* random.c (Init_RandomSeed2): register global address before set.
+
+	* random.c (Init_RandomSeed): initialize hashseed.
+
 Wed Nov  4 08:26:00 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
 
 	* dir.c (dir_check): moved other checks from GetDIR.
@@ -8,7 +63,7 @@ Wed Nov  4 08:19:31 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
 
 	* cont.c (rb_fiber_start): fixed unconditional test.
 
-Wed Nov  4 02:08:14 2009  Aaron Patterson <tenderlove@ruby-lang.org>
+Wed Nov  4 02:08:14 2009  Aaron Patterson  <tenderlove@ruby-lang.org>
 
 	* ext/dl/cptr.c (rb_dlptr_eql, rb_dlptr_cmp): DL::CPtr#== and DL::CPtr#<=>
 	  should not raise an exception when compared to a different object.
@@ -38,7 +93,7 @@ Mon Nov  2 14:52:53 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
 
 Mon Nov  2 14:43:48 2009  NAKAMURA Usaku  <usa@ruby-lang.org>
 
-	* thread_pthread.c (native_stop_timer_thread): delay joinning timer
+	* thread_pthread.c (native_stop_timer_thread): delay joining timer
 	  thread after unlocking mutex.
 
 Mon Nov  2 13:31:14 2009  NAKAMURA Usaku  <usa@ruby-lang.org>
@@ -54,7 +109,7 @@ Mon Nov  2 12:55:50 2009  NAKAMURA Usaku  <usa@ruby-lang.org>
 	* thread_{pthread,win32}.c (native_reset_timer_thread): new function.
 
 	* thread.c (rb_thread_stop_timer_thread, rb_thread_reset_timer_thread):
-	  call above function instead of simply seting 0.
+	  call above function instead of simply setting 0.
 
 Mon Nov  2 11:22:19 2009  NARUSE, Yui  <naruse@ruby-lang.org>
 
