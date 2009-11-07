@@ -1891,7 +1891,7 @@ rb_hash_index_with(VALUE hash, VALUE idx)
       rb_hash_rehash(hash);
       return hash;
     }else{
-      rb_raise(rb_eRuntimeError, "a custom hashing scheme should implement #index(a) and #compare(a,b)");
+      rb_raise(rb_eRuntimeError, "a custom hashing scheme should implement #hash(a) and #compare(a,b)");
     }    
 }
 
