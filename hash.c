@@ -14,6 +14,7 @@
 #include "ruby/ruby.h"
 #include "ruby/st.h"
 #include "ruby/util.h"
+#include "vm_core.h"
 
 #ifdef __APPLE__
 #include <crt_externs.h>
@@ -33,7 +34,7 @@ rb_hash_freeze(VALUE hash)
 VALUE rb_cHash;
 
 static VALUE envtbl;
-static ID id_hash, id_yield, id_default;
+static ID id_hash, id_yield, id_default, id_compare, id_hsh;
 
 static int
 rb_any_cmp(VALUE a, VALUE b)
@@ -99,9 +100,35 @@ rb_any_hash(VALUE a)
     return (st_index_t)RSHIFT(hnum, 1);
 }
 
+static int
+rb_custom_cmp(VALUE a, VALUE b)
+{
+    rb_thread_t *th = GET_THREAD();
+    rb_control_frame_t *cfp = th->cfp;
+    VALUE hash = cfp->self;
+    return FIX2INT(rb_funcall(RHASH(hash)->index_with, id_compare, 3, Qnil, a, b));
+}
+
+static st_index_t
+rb_custom_hash(VALUE a)
+{
+    rb_thread_t *th = GET_THREAD();
+    rb_control_frame_t *cfp = th->cfp;
+    VALUE hash = cfp->self;
+    st_index_t hnum;
+    hnum = FIX2LONG(rb_funcall(RHASH(hash)->index_with, id_hsh, 1, a));
+    hnum <<= 1;
+    return (st_index_t)RSHIFT(hnum, 1);  
+}
+
 static const struct st_hash_type objhash = {
     rb_any_cmp,
     rb_any_hash,
+};
+
+static const struct st_hash_type customhash = {
+    rb_custom_cmp,
+    rb_custom_hash,
 };
 
 static const struct st_hash_type identhash = {
@@ -219,6 +246,7 @@ hash_alloc(VALUE klass)
     OBJSETUP(hash, klass, T_HASH);
 
     hash->ifnone = Qnil;
+    hash->index_with = Qnil;
 
     return (VALUE)hash;
 }
@@ -241,6 +269,7 @@ rb_hash_dup(VALUE hash)
         FL_SET(ret, HASH_PROC_DEFAULT);
     }
     ret->ifnone = RHASH(hash)->ifnone;
+    ret->index_with = RHASH(hash)->index_with;
     return (VALUE)ret;
 }
 
@@ -1080,6 +1109,7 @@ rb_hash_replace(VALUE hash, VALUE hash2)
     }
     rb_hash_foreach(hash2, replace_i, hash);
     RHASH(hash)->ifnone = RHASH(hash2)->ifnone;
+    RHASH(hash)->index_with = RHASH(hash2)->index_with;
     if (FL_TEST(hash2, HASH_PROC_DEFAULT)) {
 	FL_SET(hash, HASH_PROC_DEFAULT);
     }
@@ -1850,6 +1880,34 @@ rb_hash_compare_by_id_p(VALUE hash)
 	return Qtrue;
     }
     return Qfalse;
+}
+
+static VALUE
+rb_hash_index_with(VALUE hash, VALUE idx)
+{
+    if (!rb_respond_to(idx, id_hsh) && !rb_respond_to(idx, id_compare))
+    rb_raise(rb_eRuntimeError, "custom Hash index should implement #hsh(a) and #compare(a,b)");
+    rb_hash_modify(hash);
+    RHASH(hash)->ntbl->type = &customhash;
+    rb_hash_rehash(hash);
+    return hash;
+}
+
+static VALUE
+rb_hash_custom_index_p(VALUE hash)
+{
+    if (!RHASH(hash)->ntbl)
+        return Qfalse;
+    if (RHASH(hash)->ntbl->type == &customhash) {
+	return Qtrue;
+    }
+    return Qfalse;
+}
+
+static VALUE
+rb_hash_indexed_with(VALUE hash)
+{
+	return RHASH(hash)->index_with;
 }
 
 static int path_tainted = -1;
@@ -2647,6 +2705,8 @@ Init_Hash(void)
     id_hash = rb_intern("hash");
     id_yield = rb_intern("yield");
     id_default = rb_intern("default");
+    id_compare = rb_intern("compare");
+    id_hsh = rb_intern("hsh");
 
     rb_cHash = rb_define_class("Hash", rb_cObject);
 
@@ -2715,6 +2775,11 @@ Init_Hash(void)
 
     rb_define_method(rb_cHash,"compare_by_identity", rb_hash_compare_by_id, 0);
     rb_define_method(rb_cHash,"compare_by_identity?", rb_hash_compare_by_id_p, 0);
+
+    rb_define_method(rb_cHash,"index_with", rb_hash_index_with, 1);
+    rb_define_method(rb_cHash,"indexed_with", rb_hash_indexed_with, 0);
+ 
+    rb_define_method(rb_cHash,"custom_index?", rb_hash_custom_index_p, 0);
 
     origenviron = environ;
     envtbl = rb_obj_alloc(rb_cObject);

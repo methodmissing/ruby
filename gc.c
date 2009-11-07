@@ -1697,6 +1697,7 @@ gc_mark_children(rb_objspace_t *objspace, VALUE ptr, int lev)
 
       case T_HASH:
 	mark_hash(objspace, obj->as.hash.ntbl, lev);
+	gc_mark(objspace, obj->as.hash.index_with, lev);
 	ptr = obj->as.hash.ifnone;
 	goto again;
 

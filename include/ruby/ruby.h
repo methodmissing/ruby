@@ -689,11 +689,13 @@ struct RHash {
     struct st_table *ntbl;      /* possibly 0 */
     int iter_lev;
     VALUE ifnone;
+    VALUE index_with;
 };
 /* RHASH_TBL allocates st_table if not available. */
 #define RHASH_TBL(h) rb_hash_tbl(h)
 #define RHASH_ITER_LEV(h) (RHASH(h)->iter_lev)
 #define RHASH_IFNONE(h) (RHASH(h)->ifnone)
+#define RHASH_IDX_WITH(h) (RHASH(h)->index_with)
 #define RHASH_SIZE(h) (RHASH(h)->ntbl ? RHASH(h)->ntbl->num_entries : 0)
 #define RHASH_EMPTY_P(h) (RHASH_SIZE(h) == 0)
 
