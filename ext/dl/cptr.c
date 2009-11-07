@@ -123,6 +123,15 @@ rb_dlptr_s_allocate(VALUE klass)
     return obj;
 }
 
+/*
+ * call-seq:
+ *    DL::CPtr.new(address)                   => dl_cptr
+ *    DL::CPtr.new(address, size)             => dl_cptr
+ *    DL::CPtr.new(address, size, freefunc)   => dl_cptr
+ *
+ * Create a new pointer to +address+ with an optional +size+ and +freefunc+.
+ * +freefunc+ will be called when the instance is garbage collected.
+ */
 static VALUE
 rb_dlptr_initialize(int argc, VALUE argv[], VALUE self)
 {
@@ -163,6 +172,16 @@ rb_dlptr_initialize(int argc, VALUE argv[], VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *
+ *    DL::CPtr.malloc(size, freefunc = nil)  => dl cptr instance
+ *
+ * Allocate +size+ bytes of memory and associate it with an optional
+ * +freefunc+ that will be called when the pointer is garbage collected.
+ * +freefunc+ must be an address pointing to a function or an instance of
+ * DL::CFunc
+ */
 static VALUE
 rb_dlptr_s_malloc(int argc, VALUE argv[], VALUE klass)
 {
@@ -188,7 +207,12 @@ rb_dlptr_s_malloc(int argc, VALUE argv[], VALUE klass)
     return obj;
 }
 
-VALUE
+/*
+ * call-seq: to_i
+ *
+ * Returns the integer memory location of this DL::CPtr.
+ */
+static VALUE
 rb_dlptr_to_i(VALUE self)
 {
     struct ptr_data *data;
@@ -202,7 +226,7 @@ rb_dlptr_to_i(VALUE self)
  *
  * Cast this CPtr to a ruby object.
  */
-VALUE
+static VALUE
 rb_dlptr_to_value(VALUE self)
 {
     struct ptr_data *data;
@@ -285,7 +309,17 @@ rb_dlptr_free_get(VALUE self)
     return rb_dlcfunc_new(pdata->free, DLTYPE_VOID, "free<anonymous>", CFUNC_CDECL);
 }
 
-VALUE
+/*
+ * call-seq:
+ *
+ *    ptr.to_s        => string
+ *    ptr.to_s(len)   => string
+ *
+ * Returns the pointer contents as a string.  When called with no arguments,
+ * this method will return the contents until the first NULL byte.  When
+ * called with +len+, a string of +len+ bytes will be returned.
+ */
+static VALUE
 rb_dlptr_to_s(int argc, VALUE argv[], VALUE self)
 {
     struct ptr_data *data;
@@ -308,7 +342,17 @@ rb_dlptr_to_s(int argc, VALUE argv[], VALUE self)
     return val;
 }
 
-VALUE
+/*
+ * call-seq:
+ *
+ *    ptr.to_str        => string
+ *    ptr.to_str(len)   => string
+ *
+ * Returns the pointer contents as a string.  When called with no arguments,
+ * this method will return the contents with the length of this pointer's
+ * +size+. When called with +len+, a string of +len+ bytes will be returned.
+ */
+static VALUE
 rb_dlptr_to_str(int argc, VALUE argv[], VALUE self)
 {
     struct ptr_data *data;
@@ -331,7 +375,13 @@ rb_dlptr_to_str(int argc, VALUE argv[], VALUE self)
     return val;
 }
 
-VALUE
+/*
+ * call-seq: inspect
+ *
+ * Returns a string formatted with an easily readable representation of the
+ * internal state of the DL::CPtr
+ */
+static VALUE
 rb_dlptr_inspect(VALUE self)
 {
     struct ptr_data *data;
@@ -386,7 +436,13 @@ rb_dlptr_cmp(VALUE self, VALUE other)
     return diff > 0 ? INT2NUM(1) : INT2NUM(-1);
 }
 
-VALUE
+/*
+ * call-seq:
+ *    ptr + n   => new cptr
+ *
+ * Returns a new DL::CPtr that has been advanced +n+ bytes.
+ */
+static VALUE
 rb_dlptr_plus(VALUE self, VALUE other)
 {
     void *ptr;
@@ -398,7 +454,13 @@ rb_dlptr_plus(VALUE self, VALUE other)
     return rb_dlptr_new((char *)ptr + num, size - num, 0);
 }
 
-VALUE
+/*
+ * call-seq:
+ *    ptr - n   => new cptr
+ *
+ * Returns a new DL::CPtr that has been moved back +n+ bytes.
+ */
+static VALUE
 rb_dlptr_minus(VALUE self, VALUE other)
 {
     void *ptr;

@@ -3,6 +3,66 @@ require_relative '../ruby/envutil'
 
 module DL
   class TestCPtr < TestBase
+    def test_malloc_free_func_int
+      free = CFunc.new(@libc['free'], TYPE_VOID, 'free')
+
+      ptr  = CPtr.malloc(10, free.to_i)
+      assert_equal 10, ptr.size
+      assert_equal free.to_i, ptr.free.to_i
+    end
+
+    def test_malloc_free_func
+      free = CFunc.new(@libc['free'], TYPE_VOID, 'free')
+
+      ptr  = CPtr.malloc(10, free)
+      assert_equal 10, ptr.size
+      assert_equal free.to_i, ptr.free.to_i
+    end
+
+    def test_to_str
+      str = "hello world"
+      ptr = CPtr[str]
+
+      assert_equal 3, ptr.to_str(3).length
+      assert_equal str, ptr.to_str
+
+      ptr[5] = 0
+      assert_equal "hello\0world", ptr.to_str
+    end
+
+    def test_to_s
+      str = "hello world"
+      ptr = CPtr[str]
+
+      assert_equal 3, ptr.to_s(3).length
+      assert_equal str, ptr.to_s
+
+      ptr[5] = 0
+      assert_equal 'hello', ptr.to_s
+    end
+
+    def test_minus
+      str = "hello world"
+      ptr = CPtr[str]
+      assert_equal ptr.to_s, (ptr + 3 - 3).to_s
+    end
+
+    # TODO: what if the pointer size is 0?  raise an exception? do we care?
+    def test_plus
+      str = "hello world"
+      ptr = CPtr[str]
+      new_str = ptr + 3
+      assert_equal 'lo world', new_str.to_s
+    end
+
+    def test_inspect
+      ptr = CPtr.new(0)
+      inspect = ptr.inspect
+      assert_match(/size=#{ptr.size}/, inspect)
+      assert_match(/free=#{ptr.free}/, inspect)
+      assert_match(/ptr=#{ptr.to_i}/, inspect)
+    end
+
     def test_to_ptr_string
       str = "hello world"
       ptr = CPtr[str]
