@@ -14,6 +14,10 @@
 #ifndef RUBY_RUBY_H
 #define RUBY_RUBY_H 1
 
+#ifdef ENABLE_DTRACE
+#include "dtrace.h"
+#endif
+
 #if defined(__cplusplus)
 extern "C" {
 #if 0

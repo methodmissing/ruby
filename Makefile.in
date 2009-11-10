@@ -122,6 +122,7 @@ OBJEXT        = @OBJEXT@
 ASMEXT        = S
 DLEXT         = @DLEXT@
 MANTYPE	      = @MANTYPE@
+DTRACE_OBJS   = @DTRACE_OBJS@
 
 INSTALLED_LIST= .installed.list
 
@@ -139,11 +140,11 @@ all:
 
 miniruby$(EXEEXT):
 		@-if test -f $@; then $(MV) -f $@ $@.old; $(RM) $@.old; fi
-		$(PURIFY) $(CC) $(LDFLAGS) $(XLDFLAGS) $(MAINLIBS) $(MAINOBJ) $(MINIOBJS) $(COMMONOBJS) $(DMYEXT) $(LIBS) $(OUTFLAG)$@
+		$(PURIFY) $(CC) $(LDFLAGS) $(XLDFLAGS) $(MAINLIBS) $(MAINOBJ) $(MINIOBJS) $(COMMONOBJS) $(DMYEXT) $(DTRACE_OBJS) $(LIBS) $(OUTFLAG)$@
 
 $(PROGRAM):
 		@$(RM) $@
-		$(PURIFY) $(CC) $(LDFLAGS) $(XLDFLAGS) $(MAINLIBS) $(MAINOBJ) $(EXTOBJS) $(LIBRUBYARG) $(LIBS) $(OUTFLAG)$@
+		$(PURIFY) $(CC) $(LDFLAGS) $(XLDFLAGS) $(MAINLIBS) $(MAINOBJ) $(EXTOBJS) $(LIBRUBYARG) $(DTRACE_OBJS) $(LIBS) $(OUTFLAG)$@
 
 # We must `rm' the library each time this rule is invoked because "updating" a
 # MAB library on Apple/NeXT (see --enable-fat-binary in configure) is not
@@ -155,7 +156,7 @@ $(LIBRUBY_A):
 
 $(LIBRUBY_SO):
 		@-$(PRE_LIBRUBY_UPDATE)
-		$(LDSHARED) $(DLDFLAGS) $(OBJS) $(DLDOBJS) $(SOLIBS) $(OUTFLAG)$@
+		$(LDSHARED) $(DLDFLAGS) $(OBJS) $(DLDOBJS) $(SOLIBS) $(DTRACE_OBJS) $(OUTFLAG)$@
 		-$(OBJCOPY) -w -L '@EXPORT_PREFIX@Init_*' -L '@EXPORT_PREFIX@*_threadptr_*' $@
 		@-$(MINIRUBY) -e 'ARGV.each{|link| File.delete link if File.exist? link; \
 						  File.symlink "$(LIBRUBY_SO)", link}' \
@@ -240,7 +241,7 @@ enc/unicode/name2ctype.h: enc/unicode/name2ctype.kwd
 	$(CPP) $(XCFLAGS) $(CPPFLAGS) $(COUTFLAG)$@ -E $< > $@
 
 clean-local::
-	@$(RM) ext/extinit.c ext/extinit.$(OBJEXT) ext/ripper/y.output
+	@$(RM) ext/extinit.c ext/extinit.$(OBJEXT) ext/ripper/y.output $(DTRACE_OBJS)
 
 distclean-local::
 	@$(RM) ext/config.cache $(RBCONFIG) Doxyfile
@@ -272,6 +273,9 @@ distclean-ext realclean-ext::
 
 ext/extinit.$(OBJEXT): ext/extinit.c $(SETUP)
 	$(CC) $(CFLAGS) $(XCFLAGS) $(CPPFLAGS) $(COUTFLAG)$@ -c ext/extinit.c
+
+dtrace.@OBJEXT@: dtrace.d $(OBJS) $(MAINOBJ)
+	/usr/sbin/dtrace -o $@ -h -s dtrace.d 
 
 up::
 	@$(CHDIR) "$(srcdir)" && LC_TIME=C exec $(VCSUP)
