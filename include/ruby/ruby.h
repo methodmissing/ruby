@@ -14,9 +14,7 @@
 #ifndef RUBY_RUBY_H
 #define RUBY_RUBY_H 1
 
-#ifdef ENABLE_DTRACE
-#include "dtrace.h"
-#endif
+#include "probes.h"
 
 #if defined(__cplusplus)
 extern "C" {

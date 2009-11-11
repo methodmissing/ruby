@@ -1244,12 +1244,9 @@ AC_ARG_ENABLE(dtrace,
 	[  --enable-dtrace         enable DTrace support.],
 	[enable_dtrace=$enableval])
 if test "$enable_dtrace" == "yes" -a "$ac_cv_header_sys_sdt_h" == "yes"; then
+	RUBY_APPEND_OPTIONS(CPPFLAGS, -DENABLE_DTRACE)
 	AC_DEFINE(ENABLE_DTRACE)
-	DTRACE_OBJS="dtrace.o"
-else
-	DTRACE_OBJS=""
 fi
-AC_SUBST(DTRACE_OBJS)
 
 AC_STRUCT_TIMEZONE
 AC_CACHE_CHECK(for struct tm.tm_gmtoff, rb_cv_member_struct_tm_tm_gmtoff,
