@@ -124,6 +124,7 @@ static inline void blocking_region_end(rb_thread_t *th, struct rb_blocking_regio
 
 #define blocking_region_begin(th, region, func, arg) \
   do { \
+    PROBE_LOCATION(GVM_LOCK_BEGIN); \
     (region)->prev_status = (th)->status; \
     (th)->blocking_region_buffer = (region); \
     set_unblock_function((th), (func), (arg), &(region)->oldubf); \
@@ -1011,6 +1012,7 @@ blocking_region_end(rb_thread_t *th, struct rb_blocking_region_buffer *region)
     if (th->status == THREAD_STOPPED) {
 	th->status = region->prev_status;
     }
+    PROBE_LOCATION(GVM_LOCK_END);
 }
 
 struct rb_blocking_region_buffer *

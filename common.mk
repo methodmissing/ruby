@@ -127,9 +127,7 @@ COMPILE_PRELUDE = $(MINIRUBY) -I$(srcdir) -I. -rrbconfig $(srcdir)/tool/compile_
 all: dtrace encs exts main docs
 
 dtrace:
-	if ENABLE_DTRACE
-	dtrace -h -s dtrace.d -o include/ruby/dtrace.h 
-	end
+	dtrace -h -s dtrace.d -o include/ruby/dtrace.h
 
 main: encs exts
 	@$(RUNCMD) $(MKMAIN_CMD) $(MAKE)

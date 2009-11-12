@@ -1070,7 +1070,7 @@ rb_newobj(void)
 #else
     rb_objspace_t *objspace = &rb_objspace;
 #endif
-    LINE_PROBE(NEWOBJ_LOCATION);
+    PROBE_LOCATION(NEWOBJ);
     if (during_gc) {
 	dont_gc = 1;
 	during_gc = 0;
