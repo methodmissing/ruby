@@ -381,13 +381,13 @@ str_alloc(VALUE klass)
     str->as.heap.ptr = 0;
     str->as.heap.len = 0;
     str->as.heap.aux.capa = 0;
-
     return (VALUE)str;
 }
 
 static VALUE
 str_new(VALUE klass, const char *ptr, long len)
 {
+    PROBE_STRING_BEGIN(NEW,ptr,len);
     VALUE str;
 
     if (len < 0) {
@@ -404,10 +404,11 @@ str_new(VALUE klass, const char *ptr, long len)
 	ENC_CODERANGE_SET(str, ENC_CODERANGE_7BIT);
     }
     if (ptr) {
-	memcpy(RSTRING_PTR(str), ptr, len);
+	memcpy(RSTRING_PTR(str),ptr, len);
     }
     STR_SET_LEN(str, len);
     RSTRING_PTR(str)[len] = '\0';
+    PROBE_STRING_END(NEW,ptr,len);
     return str;
 }
 
@@ -538,15 +539,18 @@ rb_str_conv_enc(VALUE str, rb_encoding *from, rb_encoding *to)
 VALUE
 rb_external_str_new_with_enc(const char *ptr, long len, rb_encoding *eenc)
 {
+    PROBE_STRING_BEGIN(NEW_EXTERNAL,ptr,len);
     VALUE str;
 
     str = rb_tainted_str_new(ptr, len);
     if (eenc == rb_usascii_encoding() &&
 	rb_enc_str_coderange(str) != ENC_CODERANGE_7BIT) {
 	rb_enc_associate(str, rb_ascii8bit_encoding());
+    PROBE_STRING_END(NEW_EXTERNAL,ptr,len);
 	return str;
     }
     rb_enc_associate(str, eenc);
+    PROBE_STRING_END(NEW_EXTERNAL,ptr,len);
     return rb_str_conv_enc(str, eenc, rb_default_internal_encoding());
 }
 
@@ -607,6 +611,7 @@ rb_str_export_to_enc(VALUE str, rb_encoding *enc)
 static VALUE
 str_replace_shared(VALUE str2, VALUE str)
 {
+    PROBE_STRING_BEGIN(NEW_SHARED,RSTRING_PTR(str),RSTRING_LEN(str));
     if (RSTRING_LEN(str) <= RSTRING_EMBED_LEN_MAX) {
 	STR_SET_EMBED(str2);
 	memcpy(RSTRING_PTR(str2), RSTRING_PTR(str), RSTRING_LEN(str)+1);
@@ -621,7 +626,7 @@ str_replace_shared(VALUE str2, VALUE str)
 	FL_SET(str2, ELTS_SHARED);
     }
     rb_enc_cr_str_exact_copy(str2, str);
-
+    PROBE_STRING_END(NEW_SHARED,RSTRING_PTR(str),RSTRING_LEN(str));
     return str2;
 }
 
