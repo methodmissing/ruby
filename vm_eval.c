@@ -377,9 +377,9 @@ static inline VALUE
 rb_call(VALUE recv, ID mid, int argc, const VALUE *argv, call_type scope)
 {
     VALUE res;
-    PROBE_CALL_BEGIN();    
+    PROBE_METHOD_CALL_BEGIN();    
     res = rb_call0(recv, mid, argc, argv, scope, Qundef);
-    PROBE_CALL_END();
+    PROBE_METHOD_CALL_END();
     return res;
 }
 
@@ -679,7 +679,11 @@ rb_f_public_send(int argc, VALUE *argv, VALUE recv)
 static inline VALUE
 rb_yield_0(int argc, const VALUE * argv)
 {
-    return vm_yield(GET_THREAD(), argc, argv);
+    VALUE res;
+    PROBE_YIELD_BEGIN();    
+    res = vm_yield(GET_THREAD(), argc, argv);
+    PROBE_YIELD_END();
+    return res;
 }
 
 VALUE
@@ -736,9 +740,11 @@ rb_yield_splat(VALUE values)
 static VALUE
 loop_i(void)
 {
+    PROBE_LOOP_BEGIN();
     for (;;) {
 	rb_yield_0(0, 0);
     }
+    PROBE_END_BEGIN();
     return Qnil;
 }
 
@@ -849,12 +855,16 @@ rb_block_call(VALUE obj, ID mid, int argc, VALUE * argv,
 	      VALUE (*bl_proc) (ANYARGS), VALUE data2)
 {
     struct iter_method_arg arg;
+    VALUE res;
 
     arg.obj = obj;
     arg.mid = mid;
     arg.argc = argc;
     arg.argv = argv;
-    return rb_iterate(iterate_method, (VALUE)&arg, bl_proc, data2);
+    PROBE_BLOCK_CALL_BEGIN();
+    res = rb_iterate(iterate_method, (VALUE)&arg, bl_proc, data2);
+    PROBE_BLOCK_CALL_END();  
+    return res;
 }
 
 VALUE
