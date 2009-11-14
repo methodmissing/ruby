@@ -186,8 +186,12 @@ vm_call_super(rb_thread_t *th, int argc, const VALUE *argv)
 VALUE
 rb_call_super(int argc, const VALUE *argv)
 {
+    VALUE res;
+    PROBE_SUPER_BEGIN(); 
     PASS_PASSED_BLOCK();
-    return vm_call_super(GET_THREAD(), argc, argv);
+    res = vm_call_super(GET_THREAD(), argc, argv);
+    PROBE_SUPER_END(); 
+    return res;
 }
 
 static inline void
@@ -372,7 +376,11 @@ rb_method_call_status(rb_thread_t *th, rb_method_entry_t *me, call_type scope, V
 static inline VALUE
 rb_call(VALUE recv, ID mid, int argc, const VALUE *argv, call_type scope)
 {
-    return rb_call0(recv, mid, argc, argv, scope, Qundef);
+    VALUE res;
+    PROBE_CALL_BEGIN();    
+    res = rb_call0(recv, mid, argc, argv, scope, Qundef);
+    PROBE_CALL_END();
+    return res;
 }
 
 NORETURN(static void raise_method_missing(rb_thread_t *th, int argc, const VALUE *argv,
@@ -414,8 +422,10 @@ NORETURN(static void raise_method_missing(rb_thread_t *th, int argc, const VALUE
 static VALUE
 rb_method_missing(int argc, const VALUE *argv, VALUE obj)
 {
+    PROBE_METHOD_MISSING_BEGIN();
     rb_thread_t *th = GET_THREAD();
     raise_method_missing(th, argc, argv, obj, th->method_missing_reason);
+    PROBE_METHOD_MISSING_BEGIN();
     return Qnil;		/* not reached */
 }
 
@@ -1331,9 +1341,10 @@ static VALUE
 rb_f_throw(int argc, VALUE *argv)
 {
     VALUE tag, value;
-
+    PROBE_THROW_BEGIN();
     rb_scan_args(argc, argv, "11", &tag, &value);
     rb_throw_obj(tag, value);
+    PROBE_THROW_END();
     return Qnil;		/* not reached */
 }
 
@@ -1412,15 +1423,17 @@ catch_i(VALUE tag, VALUE data)
 static VALUE
 rb_f_catch(int argc, VALUE *argv)
 {
-    VALUE tag;
-
+    VALUE tag, res;
+    PROBE_CATCH_BEGIN();
     if (argc == 0) {
 	tag = rb_obj_alloc(rb_cObject);
     }
     else {
 	rb_scan_args(argc, argv, "01", &tag);
     }
-    return rb_catch_obj(tag, catch_i, 0);
+    res = rb_catch_obj(tag, catch_i, 0);
+    PROBE_CATCH_END();
+    return res;
 }
 
 VALUE
@@ -1487,9 +1500,9 @@ rb_catch_obj(VALUE tag, VALUE (*func)(), VALUE data)
 static VALUE
 rb_f_caller(int argc, VALUE *argv)
 {
-    VALUE level;
+    VALUE level, res;
     int lev;
-
+    PROBE_CALLER_BEGIN();
     rb_scan_args(argc, argv, "01", &level);
 
     if (NIL_P(level))
@@ -1499,7 +1512,9 @@ rb_f_caller(int argc, VALUE *argv)
     if (lev < 0)
 	rb_raise(rb_eArgError, "negative level (%d)", lev);
 
-    return vm_backtrace(GET_THREAD(), lev);
+    res = vm_backtrace(GET_THREAD(), lev);
+    PROBE_CALLER_END();
+    return res;
 }
 
 static int
@@ -1627,6 +1642,7 @@ rb_f_local_variables(void)
 VALUE
 rb_f_block_given_p(void)
 {
+    PROBE_BLOCK_GIVEN_BEGIN();
     rb_thread_t *th = GET_THREAD();
     rb_control_frame_t *cfp = th->cfp;
     cfp = vm_get_ruby_level_caller_cfp(th, RUBY_VM_PREVIOUS_CONTROL_FRAME(cfp));
@@ -1634,9 +1650,11 @@ rb_f_block_given_p(void)
     if (cfp != 0 &&
 	(cfp->lfp[0] & 0x02) == 0 &&
 	GC_GUARDED_PTR_REF(cfp->lfp[0])) {
+    PROBE_BLOCK_GIVEN_END();
 	return Qtrue;
     }
     else {
+    PROBE_BLOCK_GIVEN_END();	
 	return Qfalse;
     }
 }

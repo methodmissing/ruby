@@ -18,6 +18,20 @@ provider ruby {
     probe module__exec__end();
     probe send__begin();
     probe send__end();
+    probe caller__begin();
+    probe caller__end();
+    probe block__given__begin();
+    probe block__given__end();
+    probe catch__begin();
+    probe catch__end();
+    probe throw__begin();
+    probe throw__end();
+    probe call__begin();
+    probe call__end();
+    probe super__begin();
+    probe super__end();
+    probe method__missing__begin();
+    probe method__missing__end();
 };
 
 #pragma D attributes Evolving/Evolving/Common provider ruby provider
