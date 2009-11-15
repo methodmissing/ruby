@@ -4,6 +4,7 @@
 
 #ifndef RUBY_ST_H
 #define RUBY_ST_H 1
+#include "probes.h"
 
 #if defined(__cplusplus)
 extern "C" {
