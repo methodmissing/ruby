@@ -235,7 +235,7 @@ VALUE
 rb_obj_clone(VALUE obj)
 {
     VALUE clone;
-
+    PROBE_OBJ_CLONE_BEGIN(obj);
     if (rb_special_const_p(obj)) {
         rb_raise(rb_eTypeError, "can't clone %s", rb_obj_classname(obj));
     }
@@ -244,7 +244,7 @@ rb_obj_clone(VALUE obj)
     RBASIC(clone)->flags = (RBASIC(obj)->flags | FL_TEST(clone, FL_TAINT) | FL_TEST(clone, FL_UNTRUSTED)) & ~(FL_FREEZE|FL_FINALIZE);
     init_copy(clone, obj);
     RBASIC(clone)->flags |= RBASIC(obj)->flags & FL_FREEZE;
-
+    PROBE_OBJ_CLONE_END(obj);
     return clone;
 }
 
@@ -270,13 +270,13 @@ VALUE
 rb_obj_dup(VALUE obj)
 {
     VALUE dup;
-
+    PROBE_OBJ_DUP_BEGIN(obj);
     if (rb_special_const_p(obj)) {
         rb_raise(rb_eTypeError, "can't dup %s", rb_obj_classname(obj));
     }
     dup = rb_obj_alloc(rb_obj_class(obj));
     init_copy(dup, obj);
-
+    PROBE_OBJ_DUP_END(obj);
     return dup;
 }
 
@@ -381,6 +381,7 @@ extern int rb_obj_basic_to_s_p(VALUE);
 static VALUE
 rb_obj_inspect(VALUE obj)
 {
+    PROBE_OBJ_INSPECT_BEGIN(obj);
     if (TYPE(obj) == T_OBJECT && rb_obj_basic_to_s_p(obj)) {
         int has_ivar = 0;
         VALUE *ptr = ROBJECT_IVPTR(obj);
@@ -399,10 +400,13 @@ rb_obj_inspect(VALUE obj)
             const char *c = rb_obj_classname(obj);
 
             str = rb_sprintf("-<%s:%p", c, (void*)obj);
+            PROBE_OBJ_INSPECT_END(obj);
             return rb_exec_recursive(inspect_obj, obj, str);
         }
+    PROBE_OBJ_INSPECT_END(obj);
 	return rb_any_to_s(obj);
     }
+    PROBE_OBJ_INSPECT_END(obj);
     return rb_funcall(obj, rb_intern("to_s"), 0, 0);
 }
 
@@ -418,6 +422,7 @@ rb_obj_inspect(VALUE obj)
 VALUE
 rb_obj_is_instance_of(VALUE obj, VALUE c)
 {
+    PROBE_OBJ_INSTANCE_OF_BEGIN(obj,c);
     switch (TYPE(c)) {
       case T_MODULE:
       case T_CLASS:
@@ -427,7 +432,11 @@ rb_obj_is_instance_of(VALUE obj, VALUE c)
 	rb_raise(rb_eTypeError, "class or module required");
     }
 
-    if (rb_obj_class(obj) == c) return Qtrue;
+    if (rb_obj_class(obj) == c){ 
+      PROBE_OBJ_INSTANCE_OF_END(obj,c);
+      return Qtrue;
+    }
+    PROBE_OBJ_INSTANCE_OF_END(obj,c);
     return Qfalse;
 }
 
@@ -461,6 +470,7 @@ rb_obj_is_instance_of(VALUE obj, VALUE c)
 VALUE
 rb_obj_is_kind_of(VALUE obj, VALUE c)
 {
+    PROBE_OBJ_KIND_OF_BEGIN(obj,c);
     VALUE cl = CLASS_OF(obj);
 
     switch (TYPE(c)) {
@@ -474,10 +484,13 @@ rb_obj_is_kind_of(VALUE obj, VALUE c)
     }
 
     while (cl) {
-	if (cl == c || RCLASS_M_TBL(cl) == RCLASS_M_TBL(c))
+	if (cl == c || RCLASS_M_TBL(cl) == RCLASS_M_TBL(c)){
+        PROBE_OBJ_KIND_OF_END(obj,c);
 	    return Qtrue;
+	}
 	cl = RCLASS_SUPER(cl);
     }
+    PROBE_OBJ_KIND_OF_END(obj,c);
     return Qfalse;
 }
 
@@ -790,6 +803,7 @@ static st_table *immediate_frozen_tbl = 0;
 VALUE
 rb_obj_freeze(VALUE obj)
 {
+    PROBE_OBJ_FREEZE_BEGIN(obj);
     if (!OBJ_FROZEN(obj)) {
 	if (rb_safe_level() >= 4 && !OBJ_UNTRUSTED(obj)) {
 	    rb_raise(rb_eSecurityError, "Insecure: can't freeze object");
@@ -802,6 +816,7 @@ rb_obj_freeze(VALUE obj)
 	    st_insert(immediate_frozen_tbl, obj, (st_data_t)Qtrue);
 	}
     }
+    PROBE_OBJ_FREEZE_END(obj);
     return obj;
 }
 
@@ -819,10 +834,20 @@ rb_obj_freeze(VALUE obj)
 VALUE
 rb_obj_frozen_p(VALUE obj)
 {
-    if (OBJ_FROZEN(obj)) return Qtrue;
+    PROBE_OBJ_FROZEN_BEGIN(obj);
+    if (OBJ_FROZEN(obj)) { 
+       PROBE_OBJ_FROZEN_END(obj);
+       return Qtrue;
+    }
     if (SPECIAL_CONST_P(obj)) {
-	if (!immediate_frozen_tbl) return Qfalse;
-	if (st_lookup(immediate_frozen_tbl, obj, 0)) return Qtrue;
+	if (!immediate_frozen_tbl) {
+        PROBE_OBJ_FROZEN_END(obj);
+		return Qfalse;
+	}
+	if (st_lookup(immediate_frozen_tbl, obj, 0)) {
+        PROBE_OBJ_FROZEN_END(obj);
+		return Qtrue;
+	}
     }
     return Qfalse;
 }
@@ -1397,10 +1422,11 @@ static VALUE
 rb_mod_initialize(VALUE module)
 {
     extern VALUE rb_mod_module_exec(int argc, VALUE *argv, VALUE mod);
-
+    PROBE_MOD_INITIALIZE_BEGIN(module);
     if (rb_block_given_p()) {
 	rb_mod_module_exec(1, &module, module);
     }
+    PROBE_MOD_INITIALIZE_END(module);
     return Qnil;
 }
 
@@ -1418,7 +1444,7 @@ static VALUE
 rb_class_initialize(int argc, VALUE *argv, VALUE klass)
 {
     VALUE super;
-
+    PROBE_CLASS_INITIALIZE_BEGIN(klass);
     if (RCLASS_SUPER(klass) != 0) {
 	rb_raise(rb_eTypeError, "already initialized class");
     }
@@ -1433,7 +1459,7 @@ rb_class_initialize(int argc, VALUE *argv, VALUE klass)
     rb_make_metaclass(klass, RBASIC(super)->klass);
     rb_class_inherited(super, klass);
     rb_mod_initialize(klass);
-
+    PROBE_CLASS_INITIALIZE_END(klass);
     return klass;
 }
 
@@ -1463,7 +1489,7 @@ VALUE
 rb_obj_alloc(VALUE klass)
 {
     VALUE obj;
-
+    PROBE_OBJ_ALLOC_BEGIN(klass);
     if (RCLASS_SUPER(klass) == 0 && klass != rb_cBasicObject) {
 	rb_raise(rb_eTypeError, "can't instantiate uninitialized class");
     }
@@ -1474,6 +1500,7 @@ rb_obj_alloc(VALUE klass)
     if (rb_obj_class(obj) != rb_class_real(klass)) {
 	rb_raise(rb_eTypeError, "wrong instance allocation");
     }
+    PROBE_OBJ_ALLOC_END(klass);
     return obj;
 }
 
@@ -1530,18 +1557,24 @@ rb_class_new_instance(int argc, VALUE *argv, VALUE klass)
 static VALUE
 rb_class_superclass(VALUE klass)
 {
+    PROBE_CLASS_SUPERCLASS_BEGIN(klass);
     VALUE super = RCLASS_SUPER(klass);
 
     if (!super) {
-	if (klass == rb_cBasicObject) return Qnil;
+	if (klass == rb_cBasicObject) {
+      PROBE_CLASS_SUPERCLASS_END(klass);
+      return Qnil;
+	}
 	rb_raise(rb_eTypeError, "uninitialized class");
     }
     while (TYPE(super) == T_ICLASS) {
 	super = RCLASS_SUPER(super);
     }
     if (!super) {
+    PROBE_CLASS_SUPERCLASS_END(klass);
 	return Qnil;
     }
+    PROBE_CLASS_SUPERCLASS_END(klass);
     return super;
 }
 
@@ -1637,9 +1670,9 @@ rb_mod_attr_accessor(int argc, VALUE *argv, VALUE klass)
 static VALUE
 rb_mod_const_get(int argc, VALUE *argv, VALUE mod)
 {
-    VALUE name, recur;
+    VALUE name, recur, res;
     ID id;
-
+    PROBE_MOD_CONST_GET_BEGIN(mod);
     if (argc == 1) {
 	name = argv[0];
 	recur = Qtrue;
@@ -1651,7 +1684,9 @@ rb_mod_const_get(int argc, VALUE *argv, VALUE mod)
     if (!rb_is_const_id(id)) {
 	rb_name_error(id, "wrong constant name %s", rb_id2name(id));
     }
-    return RTEST(recur) ? rb_const_get(mod, id) : rb_const_get_at(mod, id);
+    res = RTEST(recur) ? rb_const_get(mod, id) : rb_const_get_at(mod, id);
+    PROBE_MOD_CONST_GET_END(mod);    
+    return res;
 }
 
 /*
@@ -1669,12 +1704,14 @@ rb_mod_const_get(int argc, VALUE *argv, VALUE mod)
 static VALUE
 rb_mod_const_set(VALUE mod, VALUE name, VALUE value)
 {
+    PROBE_MOD_CONST_SET_BEGIN(mod,name,value);
     ID id = rb_to_id(name);
 
     if (!rb_is_const_id(id)) {
 	rb_name_error(id, "wrong constant name %s", rb_id2name(id));
     }
     rb_const_set(mod, id, value);
+    PROBE_MOD_CONST_SET_END(mod,name,value);
     return value;
 }
 
@@ -1693,9 +1730,9 @@ rb_mod_const_set(VALUE mod, VALUE name, VALUE value)
 static VALUE
 rb_mod_const_defined(int argc, VALUE *argv, VALUE mod)
 {
-    VALUE name, recur;
+    VALUE name, recur, res;
     ID id;
-
+    PROBE_MOD_CONST_DEFINED_BEGIN(mod);
     if (argc == 1) {
 	name = argv[0];
 	recur = Qtrue;
@@ -1707,7 +1744,9 @@ rb_mod_const_defined(int argc, VALUE *argv, VALUE mod)
     if (!rb_is_const_id(id)) {
 	rb_name_error(id, "wrong constant name %s", rb_id2name(id));
     }
-    return RTEST(recur) ? rb_const_defined(mod, id) : rb_const_defined_at(mod, id);
+    res = RTEST(recur) ? rb_const_defined(mod, id) : rb_const_defined_at(mod, id);
+    PROBE_MOD_CONST_DEFINED_END(mod);
+    return res;
 }
 
 /*
@@ -1732,12 +1771,16 @@ rb_mod_const_defined(int argc, VALUE *argv, VALUE mod)
 static VALUE
 rb_obj_methods(int argc, VALUE *argv, VALUE obj)
 {
+  VALUE res;
+  PROBE_OBJ_METHODS_BEGIN(obj);
   retry:
     if (argc == 0) {
 	VALUE args[1];
 
 	args[0] = Qtrue;
-	return rb_class_instance_methods(1, args, CLASS_OF(obj));
+	res = rb_class_instance_methods(1, args, CLASS_OF(obj));
+    PROBE_OBJ_METHODS_END(obj);
+    return res;
     }
     else {
 	VALUE recur;
@@ -1747,7 +1790,9 @@ rb_obj_methods(int argc, VALUE *argv, VALUE obj)
 	    argc = 0;
 	    goto retry;
 	}
-	return rb_obj_singleton_methods(argc, argv, obj);
+	res = rb_obj_singleton_methods(argc, argv, obj);
+    PROBE_OBJ_METHODS_END(obj);
+    return res;
     }
 }
 
@@ -1763,13 +1808,19 @@ rb_obj_methods(int argc, VALUE *argv, VALUE obj)
 static VALUE
 rb_obj_protected_methods(int argc, VALUE *argv, VALUE obj)
 {
+    VALUE res;
+    PROBE_OBJ_PROTECTED_METHODS_BEGIN(obj);
     if (argc == 0) {		/* hack to stop warning */
 	VALUE args[1];
 
 	args[0] = Qtrue;
-	return rb_class_protected_instance_methods(1, args, CLASS_OF(obj));
+	res = rb_class_protected_instance_methods(1, args, CLASS_OF(obj));
+    PROBE_OBJ_PROTECTED_METHODS_END(obj);
+    return res;
     }
-    return rb_class_protected_instance_methods(argc, argv, CLASS_OF(obj));
+    res = rb_class_protected_instance_methods(argc, argv, CLASS_OF(obj));
+    PROBE_OBJ_PROTECTED_METHODS_END(obj);
+    return res;
 }
 
 /*
@@ -1784,13 +1835,19 @@ rb_obj_protected_methods(int argc, VALUE *argv, VALUE obj)
 static VALUE
 rb_obj_private_methods(int argc, VALUE *argv, VALUE obj)
 {
+    VALUE res;
+    PROBE_OBJ_PRIVATE_METHODS_BEGIN(obj);
     if (argc == 0) {		/* hack to stop warning */
 	VALUE args[1];
 
 	args[0] = Qtrue;
-	return rb_class_private_instance_methods(1, args, CLASS_OF(obj));
+	res = rb_class_private_instance_methods(1, args, CLASS_OF(obj));
+    PROBE_OBJ_PRIVATE_METHODS_END(obj);
+    return res;
     }
-    return rb_class_private_instance_methods(argc, argv, CLASS_OF(obj));
+    res = rb_class_private_instance_methods(argc, argv, CLASS_OF(obj));
+    PROBE_OBJ_PRIVATE_METHODS_END(obj);
+    return res;
 }
 
 /*
@@ -1805,13 +1862,19 @@ rb_obj_private_methods(int argc, VALUE *argv, VALUE obj)
 static VALUE
 rb_obj_public_methods(int argc, VALUE *argv, VALUE obj)
 {
+    VALUE res;
+    PROBE_OBJ_PUBLIC_METHODS_BEGIN(obj);
     if (argc == 0) {		/* hack to stop warning */
 	VALUE args[1];
 
 	args[0] = Qtrue;
-	return rb_class_public_instance_methods(1, args, CLASS_OF(obj));
+	res = rb_class_public_instance_methods(1, args, CLASS_OF(obj));
+    PROBE_OBJ_PUBLIC_METHODS_END(obj);
+    return res;
     }
-    return rb_class_public_instance_methods(argc, argv, CLASS_OF(obj));
+    res = rb_class_public_instance_methods(argc, argv, CLASS_OF(obj));
+    PROBE_OBJ_PUBLIC_METHODS_END(obj);
+    return res;
 }
 
 /*
@@ -1837,12 +1900,16 @@ rb_obj_public_methods(int argc, VALUE *argv, VALUE obj)
 static VALUE
 rb_obj_ivar_get(VALUE obj, VALUE iv)
 {
+    VALUE res;
+    PROBE_OBJ_IVAR_GET_BEGIN(obj,iv);
     ID id = rb_to_id(iv);
 
     if (!rb_is_instance_id(id)) {
 	rb_name_error(id, "`%s' is not allowed as an instance variable name", rb_id2name(id));
     }
-    return rb_ivar_get(obj, id);
+    res = rb_ivar_get(obj, id);
+    PROBE_OBJ_IVAR_GET_END(obj,iv);   
+    return res;
 }
 
 /*
@@ -1868,12 +1935,16 @@ rb_obj_ivar_get(VALUE obj, VALUE iv)
 static VALUE
 rb_obj_ivar_set(VALUE obj, VALUE iv, VALUE val)
 {
+    VALUE res;
+    PROBE_OBJ_IVAR_SET_BEGIN(obj,iv,val);
     ID id = rb_to_id(iv);
 
     if (!rb_is_instance_id(id)) {
 	rb_name_error(id, "`%s' is not allowed as an instance variable name", rb_id2name(id));
     }
-    return rb_ivar_set(obj, id, val);
+    res = rb_ivar_set(obj, id, val);
+    PROBE_OBJ_IVAR_SET_END(obj,iv,val);
+    return res;
 }
 
 /*
@@ -1897,12 +1968,16 @@ rb_obj_ivar_set(VALUE obj, VALUE iv, VALUE val)
 static VALUE
 rb_obj_ivar_defined(VALUE obj, VALUE iv)
 {
+    VALUE res;
+    PROBE_OBJ_IVAR_DEFINED_BEGIN(obj,iv);
     ID id = rb_to_id(iv);
 
     if (!rb_is_instance_id(id)) {
 	rb_name_error(id, "`%s' is not allowed as an instance variable name", rb_id2name(id));
     }
-    return rb_ivar_defined(obj, id);
+    res = rb_ivar_defined(obj, id);
+    PROBE_OBJ_IVAR_DEFINED_END(obj,iv);
+    return res;
 }
 
 /*
@@ -1922,12 +1997,16 @@ rb_obj_ivar_defined(VALUE obj, VALUE iv)
 static VALUE
 rb_mod_cvar_get(VALUE obj, VALUE iv)
 {
+    VALUE res;
+    PROBE_MOD_CVAR_GET_BEGIN(obj,iv);
     ID id = rb_to_id(iv);
 
     if (!rb_is_class_id(id)) {
 	rb_name_error(id, "`%s' is not allowed as a class variable name", rb_id2name(id));
     }
-    return rb_cvar_get(obj, id);
+    res = rb_cvar_get(obj, id);
+    PROBE_MOD_CVAR_GET_END(obj,iv);
+    return res;
 }
 
 /*
@@ -1950,12 +2029,14 @@ rb_mod_cvar_get(VALUE obj, VALUE iv)
 static VALUE
 rb_mod_cvar_set(VALUE obj, VALUE iv, VALUE val)
 {
+    PROBE_MOD_CVAR_SET_BEGIN(obj,iv,val);
     ID id = rb_to_id(iv);
 
     if (!rb_is_class_id(id)) {
 	rb_name_error(id, "`%s' is not allowed as a class variable name", rb_id2name(id));
     }
     rb_cvar_set(obj, id, val);
+    PROBE_MOD_CVAR_SET_END(obj,iv,val);
     return val;
 }
 
@@ -1976,12 +2057,16 @@ rb_mod_cvar_set(VALUE obj, VALUE iv, VALUE val)
 static VALUE
 rb_mod_cvar_defined(VALUE obj, VALUE iv)
 {
+    VALUE res;
+    PROBE_MOD_CVAR_DEFINED_BEGIN(obj,iv);
     ID id = rb_to_id(iv);
 
     if (!rb_is_class_id(id)) {
 	rb_name_error(id, "`%s' is not allowed as a class variable name", rb_id2name(id));
     }
-    return rb_cvar_defined(obj, id);
+    res = rb_cvar_defined(obj, id);
+    PROBE_MOD_CVAR_DEFINED_END(obj,iv);
+    return res;
 }
 
 static struct conv_method_tbl {
@@ -2034,14 +2119,18 @@ VALUE
 rb_convert_type(VALUE val, int type, const char *tname, const char *method)
 {
     VALUE v;
-
-    if (TYPE(val) == type) return val;
+    PROBE_CONVERT_TYPE_BEGIN(val, tname, method);
+    if (TYPE(val) == type) {
+      PROBE_CONVERT_TYPE_END(val, tname, method);
+      return val;
+    }
     v = convert_type(val, tname, method, TRUE);
     if (TYPE(v) != type) {
 	const char *cname = rb_obj_classname(val);
 	rb_raise(rb_eTypeError, "can't convert %s to %s (%s#%s gives %s)",
 		 cname, tname, cname, method, rb_obj_classname(v));
     }
+    PROBE_CONVERT_TYPE_END(val, tname, method);
     return v;
 }
 
@@ -2173,6 +2262,7 @@ rb_Integer(VALUE val)
 static VALUE
 rb_f_integer(int argc, VALUE *argv, VALUE obj)
 {
+    VALUE res;
     VALUE arg = Qnil;
     int base = 0;
 
@@ -2186,7 +2276,10 @@ rb_f_integer(int argc, VALUE *argv, VALUE obj)
 	/* should cause ArgumentError */
 	rb_scan_args(argc, argv, "11", NULL, NULL);
     }
-    return rb_convert_to_integer(arg, base);
+    PROBE_COERCE_INTEGER_BEGIN(arg);
+    res = rb_convert_to_integer(arg, base);
+    PROBE_COERCE_INTEGER_END(arg);
+    return res;
 }
 
 double
@@ -2327,7 +2420,11 @@ rb_Float(VALUE val)
 static VALUE
 rb_f_float(VALUE obj, VALUE arg)
 {
-    return rb_Float(arg);
+   VALUE res;
+   PROBE_COERCE_FLOAT_BEGIN(arg);
+   res = rb_Float(arg);
+   PROBE_COERCE_FLOAT_END(arg);
+   return res;
 }
 
 VALUE
@@ -2398,7 +2495,11 @@ rb_String(VALUE val)
 static VALUE
 rb_f_string(VALUE obj, VALUE arg)
 {
-    return rb_String(arg);
+    VALUE res;
+    PROBE_COERCE_STRING_BEGIN(arg);
+    res = rb_String(arg);
+    PROBE_COERCE_STRING_END(arg);
+    return res;
 }
 
 VALUE
@@ -2428,7 +2529,11 @@ rb_Array(VALUE val)
 static VALUE
 rb_f_array(VALUE obj, VALUE arg)
 {
-    return rb_Array(arg);
+    VALUE res;
+    PROBE_COERCE_ARRAY_BEGIN(arg);    
+    res = rb_Array(arg);
+    PROBE_COERCE_ARRAY_END(arg);
+    return res;
 }
 
 /*

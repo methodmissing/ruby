@@ -607,9 +607,10 @@ st_copy(st_table *old_table)
     st_table_entry *ptr, *entry, *prev, **tail;
     st_index_t num_bins = old_table->num_bins;
     st_index_t hash_val;
-
+    PROBE_ST_COPY_BEGIN(old_table);
     new_table = alloc(st_table);
     if (new_table == 0) {
+    PROBE_ST_COPY_END(old_table);
 	return 0;
     }
 
@@ -619,11 +620,13 @@ st_copy(st_table *old_table)
 
     if (new_table->bins == 0) {
 	free(new_table);
+    PROBE_ST_COPY_END(old_table);	
 	return 0;
     }
 
     if (old_table->entries_packed) {
         memcpy(new_table->bins, old_table->bins, sizeof(struct st_table_entry *) * old_table->num_bins);
+        PROBE_ST_COPY_END(old_table);
         return new_table;
     }
 
@@ -634,6 +637,7 @@ st_copy(st_table *old_table)
 	    entry = alloc(st_table_entry);
 	    if (entry == 0) {
 		st_free_table(new_table);
+        PROBE_ST_COPY_END(old_table);
 		return 0;
 	    }
 	    *entry = *ptr;
@@ -646,7 +650,7 @@ st_copy(st_table *old_table)
 	} while ((ptr = ptr->fore) != 0);
 	new_table->tail = prev;
     }
-
+    PROBE_ST_COPY_END(old_table);
     return new_table;
 }
 

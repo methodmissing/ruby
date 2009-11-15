@@ -90,6 +90,71 @@ provider ruby {
     probe st__add__direct__end(long bins, long entries, long memsize, long key, long value);
     probe st__get__key__begin(long bins, long entries, long memsize, long key);
     probe st__get__key__end(long bins, long entries, long memsize, long key);
+
+    probe obj__clone__begin(char *class);
+    probe obj__clone__end(char *class);
+    probe obj__dup__begin(char *class);
+    probe obj__dup__end(char *class);
+    probe obj__inspect__begin(char *class);
+    probe obj__inspect__end(char *class);
+    probe obj__instance__of__begin(char *class, char *oclass);
+    probe obj__instance__of__end(char *class, char *oclass);
+    probe obj__kind__of__begin(char *class, char *oclass);
+    probe obj__kind__of__end(char *class, char *oclass);
+    probe obj__freeze__begin(char *class);
+    probe obj__freeze__end(char *class);
+    probe obj__frozen__begin(char *class);
+    probe obj__frozen__end(char *class);
+
+    probe mod__initialize__begin(char *class);
+    probe mod__initialize__end(char *class);
+    probe class__initialize__begin(char *class);
+    probe class__initialize__end(char *class);
+    probe obj__alloc__begin(char *class);
+    probe obj__alloc__end(char *class);
+    probe class__superclass__begin(char *class);
+    probe class__superclass__end(char *class);
+
+    probe mod__const__get__begin(char *class);
+    probe mod__const__get__end(char *class);
+    probe mod__const__set__begin(char *class, char *const, char *val);
+    probe mod__const__set__end(char *class, char *const, char *val);
+    probe mod__const__defined__begin(char *class);
+    probe mod__const__defined__end(char *class);
+
+    probe obj__methods__begin(char *class);
+    probe obj__methods__end(char *class);
+    probe obj__private__methods__begin(char *class);
+    probe obj__private__methods__end(char *class);
+    probe obj__public__methods__begin(char *class);
+    probe obj__public__methods__end(char *class);
+    probe obj__protected__methods__begin(char *class);
+    probe obj__protected__methods__end(char *class);
+
+    probe obj__ivar__get__begin(char *class, char *var);
+    probe obj__ivar__get__end(char *class, char *var);
+    probe obj__ivar__set__begin(char *class, char *var, char *val);
+    probe obj__ivar__set__end(char *class, char *var, char *val);
+    probe obj__ivar__defined__begin(char *class, char *var);
+    probe obj__ivar__defined__end(char *class, char *var);
+
+    probe mod__cvar__get__begin(char *class, char *var);
+    probe mod__cvar__get__end(char *class, char *var);
+    probe mod__cvar__set__begin(char *class, char *var, char *val);
+    probe mod__cvar__set__end(char *class, char *var, char *val);
+    probe mod__cvar__defined__begin(char *class, char *var);
+    probe mod__cvar__defined__end(char *class, char *var);
+
+    probe convert__type__begin(char *class, char *type, char *method);
+    probe convert__type__end(char *class, char *type, char *method);
+    probe coerce__integer__begin(char *class);
+    probe coerce__integer__end(char *class);
+    probe coerce__float__begin(char *class);
+    probe coerce__float__end(char *class);
+    probe coerce__string__begin(char *class);
+    probe coerce__string__end(char *class);
+    probe coerce__array__begin(char *class);
+    probe coerce__array__end(char *class);
 };
 
 #pragma D attributes Evolving/Evolving/Common provider ruby provider
