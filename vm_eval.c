@@ -377,9 +377,9 @@ static inline VALUE
 rb_call(VALUE recv, ID mid, int argc, const VALUE *argv, call_type scope)
 {
     VALUE res;
-    PROBE_METHOD_CALL_BEGIN();    
+    PROBE_METHOD_CALL_BEGIN(recv,mid);    
     res = rb_call0(recv, mid, argc, argv, scope, Qundef);
-    PROBE_METHOD_CALL_END();
+    PROBE_METHOD_CALL_END(recv,mid);
     return res;
 }
 
@@ -861,9 +861,9 @@ rb_block_call(VALUE obj, ID mid, int argc, VALUE * argv,
     arg.mid = mid;
     arg.argc = argc;
     arg.argv = argv;
-    PROBE_BLOCK_CALL_BEGIN();
+    PROBE_BLOCK_CALL_BEGIN(obj,mid);
     res = rb_iterate(iterate_method, (VALUE)&arg, bl_proc, data2);
-    PROBE_BLOCK_CALL_END();  
+    PROBE_BLOCK_CALL_END(obj,mid);  
     return res;
 }
 
@@ -1016,7 +1016,7 @@ rb_f_eval(int argc, VALUE *argv, VALUE self)
     VALUE src, scope, vfile, vline, res;
     const char *file = "(eval)";
     int line = 1;
-    PROBE_EVALSTR_BEGIN();
+    PROBE_EVALSTR_BEGIN(self);
     rb_scan_args(argc, argv, "13", &src, &scope, &vfile, &vline);
     if (rb_safe_level() >= 4) {
 	StringValue(src);
@@ -1038,7 +1038,7 @@ rb_f_eval(int argc, VALUE *argv, VALUE self)
     if (!NIL_P(vfile))
 	file = RSTRING_PTR(vfile);
     res = eval_string(self, src, scope, file, line);
-    PROBE_EVALSTR_END();
+    PROBE_EVALSTR_END(self);
     return res;
 }
 
@@ -1225,7 +1225,7 @@ rb_obj_instance_eval(int argc, VALUE *argv, VALUE self)
 {
     VALUE klass, res;
 
-    PROBE_EVAL_BEGIN(INSTANCE);
+    PROBE_EVAL_BEGIN(INSTANCE,self);
     if (SPECIAL_CONST_P(self)) {
 	klass = Qnil;
     }
@@ -1233,7 +1233,7 @@ rb_obj_instance_eval(int argc, VALUE *argv, VALUE self)
 	klass = rb_singleton_class(self);
     }
     res = specific_eval(argc, argv, klass, self);
-    PROBE_EVAL_END(INSTANCE);
+    PROBE_EVAL_END(INSTANCE,self);
     return res;
 }
 
@@ -1259,7 +1259,7 @@ VALUE
 rb_obj_instance_exec(int argc, VALUE *argv, VALUE self)
 {
     VALUE klass, res;
-    PROBE_EXEC_BEGIN(INSTANCE);
+    PROBE_EXEC_BEGIN(INSTANCE,self);
     if (SPECIAL_CONST_P(self)) {
 	klass = Qnil;
     }
@@ -1267,7 +1267,7 @@ rb_obj_instance_exec(int argc, VALUE *argv, VALUE self)
 	klass = rb_singleton_class(self);
     }
     res = yield_under(klass, self, rb_ary_new4(argc, argv));
-    PROBE_EXEC_END(INSTANCE);
+    PROBE_EXEC_END(INSTANCE,self);
     return res;
 }
 
@@ -1299,9 +1299,9 @@ VALUE
 rb_mod_module_eval(int argc, VALUE *argv, VALUE mod)
 {
     VALUE res;
-    PROBE_EVAL_BEGIN(MODULE);
+    PROBE_EVAL_BEGIN(MODULE,mod);
     res = specific_eval(argc, argv, mod, mod);
-    PROBE_EVAL_END(MODULE);
+    PROBE_EVAL_END(MODULE,mod);
     return res;
 }
 
@@ -1329,9 +1329,9 @@ VALUE
 rb_mod_module_exec(int argc, VALUE *argv, VALUE mod)
 {
     VALUE res;
-    PROBE_EXEC_BEGIN(MODULE);
+    PROBE_EXEC_BEGIN(MODULE,mod);
     res = yield_under(mod, mod, rb_ary_new4(argc, argv));
-    PROBE_EXEC_END(MODULE);
+    PROBE_EXEC_END(MODULE,mod);
     return res;
 }
 

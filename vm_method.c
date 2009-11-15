@@ -26,10 +26,11 @@ void
 rb_clear_cache(void)
 {
     struct cache_entry *ent, *end;
-
+    PROBE_CLEAR_CACHE_BEGIN();
     rb_vm_change_state();
 
     if (!ruby_running)
+    PROBE_CLEAR_CACHE_END();
 	return;
     ent = cache;
     end = ent + CACHE_SIZE;
@@ -38,16 +39,18 @@ rb_clear_cache(void)
 	ent->mid = 0;
 	ent++;
     }
+    PROBE_CLEAR_CACHE_END();
 }
 
 static void
 rb_clear_cache_for_undef(VALUE klass, ID id)
 {
     struct cache_entry *ent, *end;
-
+    PROBE_CLEAR_CACHE_UNDEF_BEGIN(klass,id);
     rb_vm_change_state();
 
     if (!ruby_running)
+    PROBE_CLEAR_CACHE_UNDEF_END(klass,id);
 	return;
     ent = cache;
     end = ent + CACHE_SIZE;
@@ -58,13 +61,14 @@ rb_clear_cache_for_undef(VALUE klass, ID id)
 	}
 	ent++;
     }
+    PROBE_CLEAR_CACHE_UNDEF_END(klass,id);
 }
 
 static void
 rb_clear_cache_by_id(ID id)
 {
     struct cache_entry *ent, *end;
-
+    PROBE_CLEAR_CACHE_ID_BEGIN(id);
     rb_vm_change_state();
 
     if (!ruby_running)
@@ -78,16 +82,18 @@ rb_clear_cache_by_id(ID id)
 	}
 	ent++;
     }
+    PROBE_CLEAR_CACHE_ID_END(id);
 }
 
 void
 rb_clear_cache_by_class(VALUE klass)
 {
     struct cache_entry *ent, *end;
-
+    PROBE_CLEAR_CACHE_CLASS_BEGIN(klass);
     rb_vm_change_state();
 
     if (!ruby_running)
+    PROBE_CLEAR_CACHE_CLASS_END(klass);
 	return;
     ent = cache;
     end = ent + CACHE_SIZE;
@@ -98,6 +104,7 @@ rb_clear_cache_by_class(VALUE klass)
 	}
 	ent++;
     }
+    PROBE_CLEAR_CACHE_CLASS_END(klass);
 }
 
 VALUE
@@ -260,6 +267,7 @@ method_added(VALUE klass, ID mid)
 rb_method_entry_t *
 rb_add_method(VALUE klass, ID mid, rb_method_type_t type, void *opts, rb_method_flag_t noex)
 {
+    PROBE_ADD_METHOD_BEGIN(klass,mid);
     rb_method_entry_t *me = rb_add_method_def(klass, mid, type, 0, noex);
     rb_method_definition_t *def = ALLOC(rb_method_definition_t);
     me->def = def;
@@ -294,6 +302,7 @@ rb_add_method(VALUE klass, ID mid, rb_method_type_t type, void *opts, rb_method_
 	rb_bug("rb_add_method: unsupported method type (%d)\n", type);
     }
     method_added(klass, mid);
+    PROBE_ADD_METHOD_END(klass,mid);
     return me;
 }
 
@@ -387,14 +396,18 @@ rb_get_method_entry(VALUE klass, ID id)
 rb_method_entry_t *
 rb_method_entry(VALUE klass, ID id)
 {
+    rb_method_entry_t * res;
     struct cache_entry *ent;
-
+    PROBE_METHOD_ENTRY_BEGIN(klass,id);
     ent = cache + EXPR1(klass, id);
     if (ent->mid == id && ent->klass == klass) {
+    PROBE_METHOD_ENTRY_END(klass,id);
 	return ent->me;
     }
 
-    return rb_get_method_entry(klass, id);
+    res = rb_get_method_entry(klass, id);
+    PROBE_METHOD_ENTRY_END(klass,id);
+    return res;
 }
 
 static void
@@ -402,7 +415,7 @@ remove_method(VALUE klass, ID mid)
 {
     st_data_t data;
     rb_method_entry_t *me = 0;
-
+    PROBE_REMOVE_METHOD_BEGIN(klass,mid);
     if (klass == rb_cObject) {
 	rb_secure(4);
     }
@@ -426,7 +439,7 @@ remove_method(VALUE klass, ID mid)
     rb_vm_check_redefinition_opt_method(me);
     rb_clear_cache_for_undef(klass, mid);
     rb_free_method_entry(me);
-
+    PROBE_REMOVE_METHOD_END(klass,mid);
     CALL_METHOD_HOOK(klass, removed, mid);
 }
 
