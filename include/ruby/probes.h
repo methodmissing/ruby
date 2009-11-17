@@ -5,9 +5,13 @@
   if (RUBY_##probe##_BEGIN_ENABLED())\
    RUBY_##probe##_BEGIN();\
 } while (0)
-#define PROBE_BEGIN_INT(probe,val) do {\
+#define PROBE_INT_BEGIN(probe,val) do {\
   if (RUBY_##probe##_BEGIN_ENABLED())\
-   RUBY_##probe##_BEGIN((int)val);\
+    RUBY_##probe##_BEGIN((int)val);\
+} while (0)
+#define PROBE_INT1_BEGIN(probe,val,val1) do {\
+  if (RUBY_##probe##_BEGIN_ENABLED())\
+    RUBY_##probe##_BEGIN((int)val,(int)val1);\
 } while (0)
 #define PROBE_ID_BEGIN(probe,id) do {\
   if (RUBY_##probe##_BEGIN_ENABLED())\
@@ -69,9 +73,13 @@
   if (RUBY_##probe##_END_ENABLED())\
    RUBY_##probe##_END();\
 } while (0)
-#define PROBE_END_INT(probe,val) do {\
+#define PROBE_INT_END(probe,val) do {\
   if (RUBY_##probe##_END_ENABLED())\
-   RUBY_##probe##_END((int)val);\
+    RUBY_##probe##_END((int)val);\
+} while (0)
+#define PROBE_INT1_END(probe,val,val1) do {\
+  if (RUBY_##probe##_END_ENABLED())\
+    RUBY_##probe##_END((int)val,(int)val1);\
 } while (0)
 #define PROBE_ID_END(probe,id) do {\
   if (RUBY_##probe##_END_ENABLED())\
@@ -135,10 +143,14 @@
 #include "probes/eval.h"
 #include "probes/st.h"
 #include "probes/object.h"
+#include "probes/mem.h"
+#include "probes/gc.h"
 #else
 #include "noop_probes/string.h"
 #include "noop_probes/method.h"
 #include "noop_probes/eval.h"
 #include "noop_probes/st.h"
 #include "noop_probes/object.h"
+#include "noop_probes/mem.h"
+#include "probes/gc.h"
 #endif

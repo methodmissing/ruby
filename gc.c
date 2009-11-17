@@ -372,17 +372,19 @@ static void rb_objspace_call_finalizer(rb_objspace_t *objspace);
 rb_objspace_t *
 rb_objspace_alloc(void)
 {
+    PROBE_GC_OBJSPACE_ALLOC_BEGIN();
     rb_objspace_t *objspace = malloc(sizeof(rb_objspace_t));
     memset(objspace, 0, sizeof(*objspace));
     malloc_limit = GC_MALLOC_LIMIT;
     ruby_gc_stress = ruby_initial_gc_stress;
-
+    PROBE_GC_OBJSPACE_ALLOC_END(objspace);
     return objspace;
 }
 
 void
 rb_objspace_free(rb_objspace_t *objspace)
 {
+    PROBE_GC_OBJSPACE_FREE_BEGIN(objspace);
     rb_objspace_call_finalizer(objspace);
     if (objspace->profile.record) {
 	free(objspace->profile.record);
@@ -405,6 +407,7 @@ rb_objspace_free(rb_objspace_t *objspace)
 	heaps = 0;
     }
     free(objspace);
+    PROBE_GC_OBJSPACE_FREE_END();
 }
 #endif
 
@@ -734,49 +737,68 @@ vm_xfree(rb_objspace_t *objspace, void *ptr)
 void *
 ruby_xmalloc(size_t size)
 {
-    return vm_xmalloc(&rb_objspace, size);
+    void *res;
+    PROBE_XMALLOC_BEGIN(size);
+    res = vm_xmalloc(&rb_objspace, size);
+    PROBE_XMALLOC_END(size);
+    return res;
 }
 
 void *
 ruby_xmalloc2(size_t n, size_t size)
 {
+    void *res;
+    PROBE_XMALLOC2_BEGIN(n,size);
     size_t len = size * n;
     if (n != 0 && size != len / n) {
 	rb_raise(rb_eArgError, "malloc: possible integer overflow");
     }
-    return vm_xmalloc(&rb_objspace, len);
+    res = vm_xmalloc(&rb_objspace, len);
+    PROBE_XMALLOC2_END(n,size);
+    return res;
 }
 
 void *
 ruby_xcalloc(size_t n, size_t size)
 {
+    PROBE_XCALLOC_BEGIN(n,size);
     void *mem = ruby_xmalloc2(n, size);
     memset(mem, 0, n * size);
-
+    PROBE_XCALLOC_END(n,size);
     return mem;
 }
 
 void *
 ruby_xrealloc(void *ptr, size_t size)
 {
-    return vm_xrealloc(&rb_objspace, ptr, size);
+    void *res;
+    PROBE_XREALLOC_BEGIN(size);
+    res = vm_xrealloc(&rb_objspace, ptr, size);
+    PROBE_XREALLOC_END(size);
+    return res;
 }
 
 void *
 ruby_xrealloc2(void *ptr, size_t n, size_t size)
 {
+    void *res;
+    PROBE_XREALLOC2_BEGIN(n,size);
     size_t len = size * n;
     if (n != 0 && size != len / n) {
 	rb_raise(rb_eArgError, "realloc: possible integer overflow");
     }
-    return ruby_xrealloc(ptr, len);
+    res = ruby_xrealloc(ptr, len);
+    PROBE_XREALLOC2_END(n,size);
+    return res;
 }
 
 void
 ruby_xfree(void *x)
 {
+    PROBE_XFREE_BEGIN();
     if (x)
 	vm_xfree(&rb_objspace, x);
+    PROBE_XFREE_END();
 }
 
 
@@ -1279,13 +1301,19 @@ gc_mark_rest(rb_objspace_t *objspace)
 static inline int
 is_pointer_to_heap(rb_objspace_t *objspace, void *ptr)
 {
+    PROBE_GC_IS_POINTER_TO_HEAP_BEGIN(objspace,ptr);
     register RVALUE *p = RANY(ptr);
     register struct heaps_slot *heap;
     register size_t hi, lo, mid;
 
-    if (p < lomem || p > himem) return FALSE;
-    if ((VALUE)p % sizeof(RVALUE) != 0) return FALSE;
-
+    if (p < lomem || p > himem){ 
+      PROBE_GC_IS_POINTER_TO_HEAP_END(objspace,ptr);
+      return FALSE;
+    }
+    if ((VALUE)p % sizeof(RVALUE) != 0){ 
+      PROBE_GC_IS_POINTER_TO_HEAP_END(objspace,ptr);
+      return FALSE;
+    }
     /* check if p looks like a pointer using bsearch*/
     lo = 0;
     hi = heaps_used;
@@ -1293,14 +1321,17 @@ is_pointer_to_heap(rb_objspace_t *objspace, void *ptr)
 	mid = (lo + hi) / 2;
 	heap = &heaps[mid];
 	if (heap->slot <= p) {
-	    if (p < heap->slot + heap->limit)
-		return TRUE;
+	    if (p < heap->slot + heap->limit){
+          PROBE_GC_IS_POINTER_TO_HEAP_END(objspace,ptr);
+		  return TRUE;
+		}
 	    lo = mid + 1;
 	}
 	else {
 	    hi = mid;
 	}
     }
+    PROBE_GC_IS_POINTER_TO_HEAP_END(objspace,ptr);
     return FALSE;
 }
 
@@ -1484,12 +1515,22 @@ rb_gc_mark_maybe(VALUE obj)
 static void
 gc_mark(rb_objspace_t *objspace, VALUE ptr, int lev)
 {
+    PROBE_GC_MARK_BEGIN(objspace,ptr,lev);
     register RVALUE *obj;
 
     obj = RANY(ptr);
-    if (rb_special_const_p(ptr)) return; /* special const not marked */
-    if (obj->as.basic.flags == 0) return;       /* free cell */
-    if (obj->as.basic.flags & FL_MARK) return;  /* already marked */
+    if (rb_special_const_p(ptr)){ 
+      PROBE_GC_MARK_END(objspace,ptr,lev);
+      return; /* special const not marked */
+    } 
+    if (obj->as.basic.flags == 0){ 
+      PROBE_GC_MARK_END(objspace,ptr,lev);
+      return;       /* free cell */
+    } 
+    if (obj->as.basic.flags & FL_MARK){ 
+      PROBE_GC_MARK_END(objspace,ptr,lev);
+      return;  /* already marked */
+    }
     obj->as.basic.flags |= FL_MARK;
 
     if (lev > GC_LEVEL_MAX || (lev == 0 && stack_check())) {
@@ -1502,9 +1543,11 @@ gc_mark(rb_objspace_t *objspace, VALUE ptr, int lev)
 		mark_stack_overflow = 1;
 	    }
 	}
+    PROBE_GC_MARK_END(objspace,ptr,lev);
 	return;
     }
     gc_mark_children(objspace, ptr, lev+1);
+    PROBE_GC_MARK_END(objspace,ptr,lev);
 }
 
 void
@@ -1516,15 +1559,25 @@ rb_gc_mark(VALUE ptr)
 static void
 gc_mark_children(rb_objspace_t *objspace, VALUE ptr, int lev)
 {
+    PROBE_GC_MARK_CHILDREN_BEGIN(objspace,ptr,lev);
     register RVALUE *obj = RANY(ptr);
 
     goto marking;		/* skip */
 
   again:
     obj = RANY(ptr);
-    if (rb_special_const_p(ptr)) return; /* special const not marked */
-    if (obj->as.basic.flags == 0) return;       /* free cell */
-    if (obj->as.basic.flags & FL_MARK) return;  /* already marked */
+    if (rb_special_const_p(ptr)){ 
+      PROBE_GC_MARK_CHILDREN_END(objspace,ptr,lev);
+      return; /* special const not marked */
+    }
+    if (obj->as.basic.flags == 0){ 
+      PROBE_GC_MARK_CHILDREN_END(objspace,ptr,lev);
+      return;       /* free cell */
+    }
+    if (obj->as.basic.flags & FL_MARK){ 
+      PROBE_GC_MARK_CHILDREN_END(objspace,ptr,lev);
+      return;  /* already marked */
+    }  
     obj->as.basic.flags |= FL_MARK;
 
   marking:
@@ -1667,6 +1720,7 @@ gc_mark_children(rb_objspace_t *objspace, VALUE ptr, int lev)
 		gc_mark(objspace, (VALUE)obj->as.node.u3.node, lev);
 	    }
 	}
+    PROBE_GC_MARK_CHILDREN_END(objspace,ptr,lev);
 	return;			/* no need to mark class. */
     }
 
@@ -1692,6 +1746,7 @@ gc_mark_children(rb_objspace_t *objspace, VALUE ptr, int lev)
 		gc_mark(objspace, *ptr++, lev);
 	    }
 	}
+    PROBE_GC_MARK_CHILDREN_END(objspace,ptr,lev);
 	break;
 
       case T_HASH:
@@ -1780,6 +1835,7 @@ gc_mark_children(rb_objspace_t *objspace, VALUE ptr, int lev)
 	       BUILTIN_TYPE(obj), (void *)obj,
 	       is_pointer_to_heap(objspace, obj) ? "corrupted object" : "non object");
     }
+    PROBE_GC_MARK_CHILDREN_END(objspace,ptr,lev);
 }
 
 static int obj_free(rb_objspace_t *, VALUE);
@@ -1787,10 +1843,12 @@ static int obj_free(rb_objspace_t *, VALUE);
 static inline void
 add_freelist(rb_objspace_t *objspace, RVALUE *p)
 {
+    PROBE_GC_ADD_FREELIST_BEGIN(objspace,p);
     VALGRIND_MAKE_MEM_UNDEFINED((void*)p, sizeof(RVALUE));
     p->as.free.flags = 0;
     p->as.free.next = freelist;
     freelist = p;
+    PROBE_GC_ADD_FREELIST_END(objspace,p);
 }
 
 static void
@@ -1813,6 +1871,7 @@ finalize_list(rb_objspace_t *objspace, RVALUE *p)
 static void
 free_unused_heaps(rb_objspace_t *objspace)
 {
+    PROBE_GC_FREE_UNUSED_HEAPS_BEGIN(objspace);
     size_t i, j;
     RVALUE *last = 0;
 
@@ -1842,11 +1901,13 @@ free_unused_heaps(rb_objspace_t *objspace)
 	    free(last);
 	}
     }
+    PROBE_GC_FREE_UNUSED_HEAPS_END(objspace);
 }
 
 static void
 gc_sweep(rb_objspace_t *objspace)
 {
+    PROBE_GC_SWEEP_BEGIN(objspace);
     RVALUE *p, *pend, *final_list;
     size_t freed = 0;
     size_t i;
@@ -1936,6 +1997,7 @@ gc_sweep(rb_objspace_t *objspace)
 	free_unused_heaps(objspace);
 	GC_PROF_SET_HEAP_INFO;
     }
+    PROBE_GC_SWEEP_END(objspace);
 }
 
 void
@@ -1963,6 +2025,7 @@ make_io_deferred(RVALUE *p)
 static int
 obj_free(rb_objspace_t *objspace, VALUE obj)
 {
+    PROBE_GC_OBJ_FREE_BEGIN(objspace, obj);
     switch (BUILTIN_TYPE(obj)) {
       case T_NIL:
       case T_FIXNUM:
@@ -2038,6 +2101,7 @@ obj_free(rb_objspace_t *objspace, VALUE obj)
       case T_FILE:
 	if (RANY(obj)->as.file.fptr) {
 	    make_io_deferred(RANY(obj));
+        PROBE_GC_OBJ_FREE_END(objspace, obj);
 	    return 1;
 	}
 	break;
@@ -2080,7 +2144,8 @@ obj_free(rb_objspace_t *objspace, VALUE obj)
 	rb_bug("gc_sweep(): unknown data type 0x%x(%p)",
 	       BUILTIN_TYPE(obj), (void*)obj);
     }
-
+    
+    PROBE_GC_OBJ_FREE_END(objspace, obj);
     return 0;
 }
 
@@ -2130,6 +2195,7 @@ void rb_gc_mark_encodings(void);
 static int
 garbage_collect(rb_objspace_t *objspace)
 {
+    PROBE_GC_GARBAGE_COLLECT_BEGIN(objspace);
     struct gc_list *list;
     rb_thread_t *th = GET_THREAD();
     INIT_GC_PROF_PARAMS;
@@ -2137,6 +2203,7 @@ garbage_collect(rb_objspace_t *objspace)
     if (GC_NOTIFY) printf("start garbage_collect()\n");
 
     if (!heaps) {
+    PROBE_GC_GARBAGE_COLLECT_END(objspace);
 	return FALSE;
     }
 
@@ -2147,6 +2214,7 @@ garbage_collect(rb_objspace_t *objspace)
                 heaps_increment(objspace);
             }
 	}
+    PROBE_GC_GARBAGE_COLLECT_END(objspace);	
 	return TRUE;
     }
     during_gc++;
@@ -2201,6 +2269,7 @@ garbage_collect(rb_objspace_t *objspace)
 
     GC_PROF_TIMER_STOP;
     if (GC_NOTIFY) printf("end garbage_collect()\n");
+    PROBE_GC_GARBAGE_COLLECT_END(objspace);
     return TRUE;
 }
 

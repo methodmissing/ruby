@@ -155,6 +155,40 @@ provider ruby {
     probe coerce__string__end(char *class);
     probe coerce__array__begin(char *class);
     probe coerce__array__end(char *class);
+
+    probe xfree__begin();
+    probe xfree__end();
+    probe xmalloc__begin(long size);
+    probe xmalloc__end(long size);
+    probe xrealloc__begin(long size);
+    probe xrealloc__end(long size);
+    probe xmalloc2__begin(long slots, long size);
+    probe xmalloc2__end(long slots, long size);
+    probe xcalloc__begin(long slots, long size);
+    probe xcalloc__end(long slots, long size);
+    probe xcalloc2__begin(long slots, long size);
+    probe xcalloc2__end(long slots, long size);
+
+    probe gc__objspace__alloc__begin();
+    probe gc__objspace__alloc__end(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
+    probe gc__objspace__free__begin(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
+    probe gc__objspace__free__end();
+    probe gc__is__pointer__to__heap__begin(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer);
+    probe gc__is__pointer__to__heap__end(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer);
+    probe gc__obj__free__begin(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, char *class);
+    probe gc__obj_free__end(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, char *class);
+    probe gc__garbage__collect__begin(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
+    probe gc__garbage_collect__end(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
+    probe gc__sweep__begin(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
+    probe gc__sweep__end(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
+    probe gc__free__unused__heaps__begin(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
+    probe gc__free__unused__heaps__end(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
+    probe gc__add__freelist__begin(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer);
+    probe gc__add__freelist__end(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer);
+    probe gc__mark__begin(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer, int level);
+    probe gc__mark__end(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer, int level);
+    probe gc__mark__children__begin(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer, int level);
+    probe gc__mark__children__end(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer, int level);
 };
 
 #pragma D attributes Evolving/Evolving/Common provider ruby provider
