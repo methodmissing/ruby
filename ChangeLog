@@ -1,3 +1,80 @@
+Mon Nov 16 15:51:53 2009  Shugo Maeda  <shugo@ruby-lang.org>
+
+	* vm_insnhelper.c (vm_call_method): protected singleton methods of
+	  an object should not be able to called from other instances of the
+	  class of the object.  [ruby-core:26761]
+	
+	* vm_eval.c (rb_method_call_status): ditto.
+
+	* test/ruby/test_module.rb (test_protected_singleton_method): ditto.
+
+Mon Nov 16 14:03:53 2009  wanabe  <s.wanabe@gmail.com>
+
+	* io.c (read_all): shift read buffer if exception occured.
+	  pointed out in [ruby-dev:39702].
+
+Mon Nov 16 07:59:38 2009  wanabe  <s.wanabe@gmail.com>
+
+	* io.c (read_all): don't call io_shift_cbuf until bufffering enough or
+	  econv_finished.   [ruby-dev:39696]
+
+	* io.c (more_char): don't call clear_readconv to read buffer after
+	  econv_finished.
+
+	* io.c (appendline, rb_io_each_codepoint): clear readconv when done.
+
+Mon Nov 16 01:58:08 2009  Yusuke Endoh  <mame@tsg.ne.jp>
+
+	* include/ruby/ruby.h (rb_classext_t): annotate @internal.
+
+Mon Nov 16 01:35:34 2009  Tanaka Akira  <akr@fsij.org>
+
+	* encoding.c (rb_filesystem_encindex): use default external encoding
+	  instead of locale encoding in Unix.
+
+	* ruby.c (process_options): delay filesystem encoding
+	  initialization until default external encoding initialization.
+
+Mon Nov 16 00:06:26 2009  Yusuke Endoh  <mame@tsg.ne.jp>
+
+	* thread.c (thread_cleanup_func): delete locking_mutex when thread
+	  object become dummy because of fork.  [ruby-core:26744]
+	  [ruby-core:26745]
+
+	* bootstraptest/test_thread.rb: add a test for above.
+
+Sat Nov 14 21:54:46 2009  Yusuke Endoh  <mame@tsg.ne.jp>
+
+	* class.c (rb_mod_init_copy): fix memory leak of Class#dup.
+	  [ruby-dev:39687]
+
+Sat Nov 14 17:09:39 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* configure.in (--with-opt-dir): ignore and suppress a warning.
+	  [ruby-dev:39684]
+
+Sat Nov 14 16:43:24 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* hash.c (ruby_setenv): get rid of crash in Solaris 8 and 10.
+	  [ruby-core:26668]
+
+Sat Nov 14 09:16:54 2009  Marc-Andre Lafortune  <ruby-core@marc-andre.ca>
+
+	* ext/bigdecimal/bigdecimal.c (BigDecimalCmp): Fix comparisons
+	  [ruby-core:26646]
+	
+	* test/bigdecimal/test_bigdecimal.rb (class): Fix and improve tests.
+
+Sat Nov 14 04:07:06 2009  Hidetoshi NAGAI  <nagai@ai.kyutech.ac.jp>
+
+	* ext/tk/lib/tk/variable.rb (TkVariable::coerce): fix bug on a
+	  numeric value.
+
+Sat Nov 14 03:35:29 2009  Hidetoshi NAGAI  <nagai@ai.kyutech.ac.jp>
+
+	* ext/tk/lib/tk/variable.rb: TkVariable#*(other) and /(other) have a
+	  bug on handling of the "other" value.
+
 Fri Nov 13 21:18:15 2009  Yusuke Endoh  <mame@tsg.ne.jp>
 
 	* ext/zlib/zlib.c (rb_zlib_adler32): fix typo.
