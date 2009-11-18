@@ -1488,6 +1488,7 @@ str_utf8_nth(const char *p, const char *e, long nth)
 	} while (s < t && (int)sizeof(VALUE) <= nth);
 	p = (char *)s;
     }
+    if (p > e) return 0;
     while (p < e) {
 	if (is_utf8_lead_byte(*p)) {
 	    if (nth == 0) break;
