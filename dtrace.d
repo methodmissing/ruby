@@ -189,6 +189,9 @@ provider ruby {
     probe gc__mark__end(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer, int level);
     probe gc__mark__children__begin(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer, int level);
     probe gc__mark__children__end(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer, int level);
+
+    probe rb__trace__begin(char *id);
+    probe rb__trace__end(char *id);
 };
 
 #pragma D attributes Evolving/Evolving/Common provider ruby provider

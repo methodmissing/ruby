@@ -31,3 +31,4 @@ syslog
 #tk
 #win32ole
 zlib
+dtrace

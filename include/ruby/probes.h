@@ -9,6 +9,10 @@
   if (RUBY_##probe##_BEGIN_ENABLED())\
     RUBY_##probe##_BEGIN((int)val);\
 } while (0)
+#define PROBE_STR_BEGIN(probe,val) do {\
+  if (RUBY_##probe##_BEGIN_ENABLED())\
+    RUBY_##probe##_BEGIN((char*)val);\
+} while (0)
 #define PROBE_INT1_BEGIN(probe,val,val1) do {\
   if (RUBY_##probe##_BEGIN_ENABLED())\
     RUBY_##probe##_BEGIN((int)val,(int)val1);\
@@ -76,6 +80,10 @@
 #define PROBE_INT_END(probe,val) do {\
   if (RUBY_##probe##_END_ENABLED())\
     RUBY_##probe##_END((int)val);\
+} while (0)
+#define PROBE_STR_END(probe,val) do {\
+  if (RUBY_##probe##_END_ENABLED())\
+    RUBY_##probe##_END((char*)val);\
 } while (0)
 #define PROBE_INT1_END(probe,val,val1) do {\
   if (RUBY_##probe##_END_ENABLED())\
@@ -145,6 +153,7 @@
 #include "probes/object.h"
 #include "probes/mem.h"
 #include "probes/gc.h"
+#include "probes/trace.h"
 #else
 #include "noop_probes/string.h"
 #include "noop_probes/method.h"
@@ -153,4 +162,5 @@
 #include "noop_probes/object.h"
 #include "noop_probes/mem.h"
 #include "probes/gc.h"
+#include "probes/trace.h"
 #endif
