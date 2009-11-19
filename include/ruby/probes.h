@@ -73,6 +73,10 @@
   if (RUBY_##probe##_BEGIN_ENABLED())\
    RUBY_##probe##_BEGIN((char*)rb_obj_classname(class),(char*)rb_id2name(id));\
 } while (0)
+#define PROBE_FIBER_BEGIN(probe,fib) do {\
+  if (RUBY_##probe##_BEGIN_ENABLED())\
+   RUBY_##probe##_BEGIN((char*)rb_obj_classname(fib->prev),(int)fib->status);\
+} while (0)
 #define PROBE_END(probe) do {\
   if (RUBY_##probe##_END_ENABLED())\
    RUBY_##probe##_END();\
@@ -145,6 +149,10 @@
   if (RUBY_##probe##_END_ENABLED())\
    RUBY_##probe##_END((char*)rb_obj_classname(class),(char*)rb_id2name(id));\
 } while (0)
+#define PROBE_FIBER_END(probe,fib) do {\
+  if (RUBY_##probe##_END_ENABLED())\
+   RUBY_##probe##_END((char*)rb_obj_classname(fib->prev),(int)fib->status);\
+} while (0)
 
 #include "probes/string.h"
 #include "probes/method.h"
@@ -154,6 +162,7 @@
 #include "probes/mem.h"
 #include "probes/gc.h"
 #include "probes/trace.h"
+#include "probes/fiber.h"
 #else
 #include "noop_probes/string.h"
 #include "noop_probes/method.h"
@@ -163,4 +172,5 @@
 #include "noop_probes/mem.h"
 #include "probes/gc.h"
 #include "probes/trace.h"
+#include "probes/fiber.h"
 #endif

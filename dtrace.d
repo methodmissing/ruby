@@ -192,6 +192,17 @@ provider ruby {
 
     probe rb__trace__begin(char *id);
     probe rb__trace__end(char *id);
+
+    probe fiber__mark__begin(char *class, int status);
+    probe fiber__mark__end(char *class, int status);
+    probe fiber__free__begin(char *class, int status);
+    probe fiber__free__end(char *class, int status);
+    probe fiber__switch__begin(char *class, int status);
+    probe fiber__switch__end(char *class, int status);
+    probe fiber__start__begin(char *class, int status);
+    probe fiber__start__end(char *class, int status);
+    probe fiber__terminate__begin(char *class, int status);
+    probe fiber__terminate__end(char *class, int status);
 };
 
 #pragma D attributes Evolving/Evolving/Common provider ruby provider

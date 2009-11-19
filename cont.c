@@ -164,8 +164,10 @@ fiber_mark(void *ptr)
     RUBY_MARK_ENTER("cont");
     if (ptr) {
 	rb_fiber_t *fib = ptr;
+	PROBE_FIBER_MARK_BEGIN(fib);
 	rb_gc_mark(fib->prev);
 	cont_mark(&fib->cont);
+	PROBE_FIBER_MARK_END(fib);
     }
     RUBY_MARK_LEAVE("cont");
 }
@@ -197,7 +199,7 @@ fiber_free(void *ptr)
     RUBY_FREE_ENTER("fiber");
     if (ptr) {
 	rb_fiber_t *fib = ptr;
-
+    PROBE_FIBER_FREE_BEGIN(fib);
 	if (fib->cont.type != ROOT_FIBER_CONTEXT &&
 	    fib->cont.saved_thread.local_storage) {
 	    st_free_table(fib->cont.saved_thread.local_storage);
@@ -205,6 +207,7 @@ fiber_free(void *ptr)
 	fiber_link_remove(fib);
 
 	cont_free(&fib->cont);
+    PROBE_FIBER_FREE_END(fib);
     }
     RUBY_FREE_LEAVE("fiber");
 }
@@ -823,9 +826,11 @@ VALUE rb_fiber_transfer(VALUE fib, int argc, VALUE *argv);
 static void
 rb_fiber_terminate(rb_fiber_t *fib)
 {
+    PROBE_FIBER_TERMINATE_BEGIN(fib);
     VALUE value = fib->cont.value;
     fib->status = TERMINATED;
     rb_fiber_transfer(return_fiber(), 1, &value);
+    PROBE_FIBER_TERMINATE_END(fib);
 }
 
 void
@@ -838,6 +843,7 @@ rb_fiber_start(void)
     int state;
 
     GetFiberPtr(th->fiber, fib);
+    PROBE_FIBER_START_BEGIN(fib);
     cont = &fib->cont;
 
     TH_PUSH_TAG(th);
@@ -866,6 +872,7 @@ rb_fiber_start(void)
 	      rb_vm_make_jump_tag_but_local_jump(state, th->errinfo);
 	}
 	RUBY_VM_SET_INTERRUPT(th);
+    PROBE_FIBER_START_END(fib);
     }
 
     rb_fiber_terminate(fib);
@@ -935,7 +942,8 @@ fiber_switch(VALUE fibval, int argc, VALUE *argv, int is_resume)
     rb_thread_t *th = GET_THREAD();
 
     GetFiberPtr(fibval, fib);
-    cont = &fib->cont;
+    PROBE_FIBER_SWITCH_BEGIN(fib); 
+   cont = &fib->cont;
 
     if (cont->saved_thread.self != th->self) {
 	rb_raise(rb_eFiberError, "fiber called across threads");
@@ -968,7 +976,7 @@ fiber_switch(VALUE fibval, int argc, VALUE *argv, int is_resume)
     }
 
     RUBY_VM_CHECK_INTS();
-
+    PROBE_FIBER_SWITCH_END(fib);
     return value;
 }
 
