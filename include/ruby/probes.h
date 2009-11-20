@@ -13,6 +13,10 @@
   if (RUBY_##probe##_BEGIN_ENABLED())\
     RUBY_##probe##_BEGIN((char*)val);\
 } while (0)
+#define PROBE_STR_INT_BEGIN(probe,val,ival) do {\
+  if (RUBY_##probe##_BEGIN_ENABLED())\
+    RUBY_##probe##_BEGIN((char*)val,(int)ival);\
+} while (0)
 #define PROBE_INT1_BEGIN(probe,val,val1) do {\
   if (RUBY_##probe##_BEGIN_ENABLED())\
     RUBY_##probe##_BEGIN((int)val,(int)val1);\
@@ -88,6 +92,10 @@
 #define PROBE_STR_END(probe,val) do {\
   if (RUBY_##probe##_END_ENABLED())\
     RUBY_##probe##_END((char*)val);\
+} while (0)
+#define PROBE_STR_INT_END(probe,val,ival) do {\
+  if (RUBY_##probe##_END_ENABLED())\
+    RUBY_##probe##_END((char*)val,(int)ival);\
 } while (0)
 #define PROBE_INT1_END(probe,val,val1) do {\
   if (RUBY_##probe##_END_ENABLED())\

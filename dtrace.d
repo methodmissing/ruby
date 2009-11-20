@@ -1,10 +1,26 @@
 provider ruby {
-    probe string__new__begin(char *, int);
-    probe string__new__end(char *, int);
-    probe string__new__external__begin(char *, int);
-    probe string__new__external__end(char *, int);
-    probe string__new__shared__begin(char *, int);
-    probe string__new__shared__end(char *, int);    
+    probe str__set__length__begin(char *, int);
+    probe str__set__length__end(char *, int);
+    probe str__dec__length__begin(char *);
+    probe str__dec__length__end(char *);
+    probe str__resize__capacity__begin(char *, int);
+    probe str__resize__capacity__end(char *, int);
+    probe str__replace__begin(char *, char *);
+    probe str__replace__end(char *, char *);
+    probe str__shared__replace__begin(char *, char *);
+    probe str__shared__replace__end(char *, char *);
+    probe str__buf__new__begin(int);
+    probe str__buf__new__end(int);
+    probe str__buf__cstr__new__begin(char *);
+    probe str__buf__cstr__new__end(char *);
+    probe str__new__begin(char *, int);
+    probe str__new__end(char *, int);
+    probe str__new__shared__begin(char *);
+    probe str__new__shared__end(char *);    
+    probe str__free__begin(char *);
+    probe str__free__end(char *);
+    probe str__dup__begin(char *);
+    probe str__dup__end(char *);
 
     probe evalstr__begin(char *obj);
     probe evalstr__end(char *obj);
