@@ -591,22 +591,6 @@ do { \
 } while (0)
 #define	RUBY_GC_SWEEP_END_ENABLED() \
 	__dtrace_isenabled$ruby$gc__sweep__end$v1()
-#define	RUBY_INS_CHECK_ENV_BEGIN() \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__check__env__begin$v1(); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_INS_CHECK_ENV_BEGIN_ENABLED() \
-	__dtrace_isenabled$ruby$ins__check__env__begin$v1()
-#define	RUBY_INS_CHECK_ENV_END() \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__check__env__end$v1(); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_INS_CHECK_ENV_END_ENABLED() \
-	__dtrace_isenabled$ruby$ins__check__env__end$v1()
 #define	RUBY_INS_GETDYNAMIC_BEGIN(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
@@ -623,10 +607,10 @@ do { \
 } while (0)
 #define	RUBY_INS_GETDYNAMIC_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__getdynamic__end$v1()
-#define	RUBY_INS_GETINLINECACHE_BEGIN(arg0, arg1) \
+#define	RUBY_INS_GETINLINECACHE_BEGIN(arg0) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__getinlinecache__begin$v1$6c6f6e67$6c6f6e67(arg0, arg1); \
+	__dtrace_probe$ruby$ins__getinlinecache__begin$v1$6c6f6e67(arg0); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_GETINLINECACHE_BEGIN_ENABLED() \
@@ -655,10 +639,10 @@ do { \
 } while (0)
 #define	RUBY_INS_GETLOCAL_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__getlocal__end$v1()
-#define	RUBY_INS_ONCEINLINECACHE_BEGIN(arg0, arg1) \
+#define	RUBY_INS_ONCEINLINECACHE_BEGIN(arg0) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__onceinlinecache__begin$v1$6c6f6e67$6c6f6e67(arg0, arg1); \
+	__dtrace_probe$ruby$ins__onceinlinecache__begin$v1$6c6f6e67(arg0); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_ONCEINLINECACHE_BEGIN_ENABLED() \
@@ -671,10 +655,10 @@ do { \
 } while (0)
 #define	RUBY_INS_ONCEINLINECACHE_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__onceinlinecache__end$v1()
-#define	RUBY_INS_OPT_AREF_BEGIN(arg0, arg1, arg2) \
+#define	RUBY_INS_OPT_AREF_BEGIN(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__aref__begin$v1$6c6f6e67$63686172202a$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__opt__aref__begin$v1$63686172202a$63686172202a(arg0, arg1); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_AREF_BEGIN_ENABLED() \
@@ -687,10 +671,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_AREF_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__aref__end$v1()
-#define	RUBY_INS_OPT_ASET_BEGIN(arg0, arg1, arg2, arg3) \
+#define	RUBY_INS_OPT_ASET_BEGIN(arg0, arg1, arg2) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__aset__begin$v1$6c6f6e67$63686172202a$63686172202a$63686172202a(arg0, arg1, arg2, arg3); \
+	__dtrace_probe$ruby$ins__opt__aset__begin$v1$63686172202a$63686172202a$63686172202a(arg0, arg1, arg2); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_ASET_BEGIN_ENABLED() \
@@ -751,10 +735,26 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_CHECK_ENV_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__check__env__end$v1()
-#define	RUBY_INS_OPT_DIV_BEGIN(arg0, arg1, arg2) \
+#define	RUBY_INS_OPT_CHECKENV_BEGIN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__div__begin$v1$6c6f6e67$63686172202a$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__opt__checkenv__begin$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_OPT_CHECKENV_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__opt__checkenv__begin$v1()
+#define	RUBY_INS_OPT_CHECKENV_END() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__opt__checkenv__end$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_OPT_CHECKENV_END_ENABLED() \
+	__dtrace_isenabled$ruby$ins__opt__checkenv__end$v1()
+#define	RUBY_INS_OPT_DIV_BEGIN(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__opt__div__begin$v1$63686172202a$63686172202a(arg0, arg1); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_DIV_BEGIN_ENABLED() \
@@ -767,10 +767,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_DIV_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__div__end$v1()
-#define	RUBY_INS_OPT_EQ_BEGIN(arg0, arg1, arg2) \
+#define	RUBY_INS_OPT_EQ_BEGIN(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__eq__begin$v1$6c6f6e67$63686172202a$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__opt__eq__begin$v1$63686172202a$63686172202a(arg0, arg1); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_EQ_BEGIN_ENABLED() \
@@ -783,10 +783,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_EQ_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__eq__end$v1()
-#define	RUBY_INS_OPT_GE_BEGIN(arg0, arg1, arg2) \
+#define	RUBY_INS_OPT_GE_BEGIN(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__ge__begin$v1$6c6f6e67$63686172202a$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__opt__ge__begin$v1$63686172202a$63686172202a(arg0, arg1); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_GE_BEGIN_ENABLED() \
@@ -799,10 +799,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_GE_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__ge__end$v1()
-#define	RUBY_INS_OPT_GT_BEGIN(arg0, arg1, arg2) \
+#define	RUBY_INS_OPT_GT_BEGIN(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__gt__begin$v1$6c6f6e67$63686172202a$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__opt__gt__begin$v1$63686172202a$63686172202a(arg0, arg1); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_GT_BEGIN_ENABLED() \
@@ -815,10 +815,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_GT_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__gt__end$v1()
-#define	RUBY_INS_OPT_LE_BEGIN(arg0, arg1, arg2) \
+#define	RUBY_INS_OPT_LE_BEGIN(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__le__begin$v1$6c6f6e67$63686172202a$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__opt__le__begin$v1$63686172202a$63686172202a(arg0, arg1); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_LE_BEGIN_ENABLED() \
@@ -831,10 +831,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_LE_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__le__end$v1()
-#define	RUBY_INS_OPT_LENGTH_BEGIN(arg0, arg1) \
+#define	RUBY_INS_OPT_LENGTH_BEGIN(arg0) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__length__begin$v1$6c6f6e67$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__length__begin$v1$63686172202a(arg0); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_LENGTH_BEGIN_ENABLED() \
@@ -847,10 +847,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_LENGTH_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__length__end$v1()
-#define	RUBY_INS_OPT_LT_BEGIN(arg0, arg1, arg2) \
+#define	RUBY_INS_OPT_LT_BEGIN(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__lt__begin$v1$6c6f6e67$63686172202a$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__opt__lt__begin$v1$63686172202a$63686172202a(arg0, arg1); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_LT_BEGIN_ENABLED() \
@@ -863,10 +863,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_LT_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__lt__end$v1()
-#define	RUBY_INS_OPT_LTLT_BEGIN(arg0, arg1, arg2) \
+#define	RUBY_INS_OPT_LTLT_BEGIN(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__ltlt__begin$v1$6c6f6e67$63686172202a$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__opt__ltlt__begin$v1$63686172202a$63686172202a(arg0, arg1); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_LTLT_BEGIN_ENABLED() \
@@ -879,10 +879,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_LTLT_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__ltlt__end$v1()
-#define	RUBY_INS_OPT_MINUS_BEGIN(arg0, arg1, arg2) \
+#define	RUBY_INS_OPT_MINUS_BEGIN(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__minus__begin$v1$6c6f6e67$63686172202a$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__opt__minus__begin$v1$63686172202a$63686172202a(arg0, arg1); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_MINUS_BEGIN_ENABLED() \
@@ -895,10 +895,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_MINUS_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__minus__end$v1()
-#define	RUBY_INS_OPT_MOD_BEGIN(arg0, arg1, arg2) \
+#define	RUBY_INS_OPT_MOD_BEGIN(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__mod__begin$v1$6c6f6e67$63686172202a$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__opt__mod__begin$v1$63686172202a$63686172202a(arg0, arg1); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_MOD_BEGIN_ENABLED() \
@@ -911,10 +911,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_MOD_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__mod__end$v1()
-#define	RUBY_INS_OPT_MULT_BEGIN(arg0, arg1, arg2) \
+#define	RUBY_INS_OPT_MULT_BEGIN(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__mult__begin$v1$6c6f6e67$63686172202a$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__opt__mult__begin$v1$63686172202a$63686172202a(arg0, arg1); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_MULT_BEGIN_ENABLED() \
@@ -927,10 +927,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_MULT_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__mult__end$v1()
-#define	RUBY_INS_OPT_NEQ_BEGIN(arg0, arg1, arg2, arg3) \
+#define	RUBY_INS_OPT_NEQ_BEGIN(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__neq__begin$v1$6c6f6e67$6c6f6e67$63686172202a$63686172202a(arg0, arg1, arg2, arg3); \
+	__dtrace_probe$ruby$ins__opt__neq__begin$v1$63686172202a$63686172202a(arg0, arg1); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_NEQ_BEGIN_ENABLED() \
@@ -943,10 +943,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_NEQ_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__neq__end$v1()
-#define	RUBY_INS_OPT_NOT_BEGIN(arg0, arg1) \
+#define	RUBY_INS_OPT_NOT_BEGIN(arg0) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__not__begin$v1$6c6f6e67$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__not__begin$v1$63686172202a(arg0); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_NOT_BEGIN_ENABLED() \
@@ -959,10 +959,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_NOT_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__not__end$v1()
-#define	RUBY_INS_OPT_PLUS_BEGIN(arg0, arg1, arg2) \
+#define	RUBY_INS_OPT_PLUS_BEGIN(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__plus__begin$v1$6c6f6e67$63686172202a$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__opt__plus__begin$v1$63686172202a$63686172202a(arg0, arg1); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_PLUS_BEGIN_ENABLED() \
@@ -1007,10 +1007,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_REGEXPMATCH2_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__regexpmatch2__end$v1()
-#define	RUBY_INS_OPT_SIZE_BEGIN(arg0, arg1) \
+#define	RUBY_INS_OPT_SIZE_BEGIN(arg0) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__size__begin$v1$6c6f6e67$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__size__begin$v1$63686172202a(arg0); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_SIZE_BEGIN_ENABLED() \
@@ -1023,10 +1023,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_SIZE_END_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__size__end$v1()
-#define	RUBY_INS_OPT_SUCC_BEGIN(arg0, arg1) \
+#define	RUBY_INS_OPT_SUCC_BEGIN(arg0) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__succ__begin$v1$6c6f6e67$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__succ__begin$v1$63686172202a(arg0); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_SUCC_BEGIN_ENABLED() \
@@ -2449,15 +2449,11 @@ extern void __dtrace_probe$ruby$gc__sweep__begin$v1$6c6f6e67$6c6f6e67$6c6f6e67$6
 extern int __dtrace_isenabled$ruby$gc__sweep__begin$v1(void);
 extern void __dtrace_probe$ruby$gc__sweep__end$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74(long, long, long, long, long, unsigned int);
 extern int __dtrace_isenabled$ruby$gc__sweep__end$v1(void);
-extern void __dtrace_probe$ruby$ins__check__env__begin$v1(void);
-extern int __dtrace_isenabled$ruby$ins__check__env__begin$v1(void);
-extern void __dtrace_probe$ruby$ins__check__env__end$v1(void);
-extern int __dtrace_isenabled$ruby$ins__check__env__end$v1(void);
 extern void __dtrace_probe$ruby$ins__getdynamic__begin$v1$756e7369676e6564206c6f6e67$756e7369676e6564206c6f6e67(unsigned long, unsigned long);
 extern int __dtrace_isenabled$ruby$ins__getdynamic__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__getdynamic__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__getdynamic__end$v1(void);
-extern void __dtrace_probe$ruby$ins__getinlinecache__begin$v1$6c6f6e67$6c6f6e67(long, long);
+extern void __dtrace_probe$ruby$ins__getinlinecache__begin$v1$6c6f6e67(long);
 extern int __dtrace_isenabled$ruby$ins__getinlinecache__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__getinlinecache__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__getinlinecache__end$v1(void);
@@ -2465,15 +2461,15 @@ extern void __dtrace_probe$ruby$ins__getlocal__begin$v1$756e7369676e6564206c6f6e
 extern int __dtrace_isenabled$ruby$ins__getlocal__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__getlocal__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__getlocal__end$v1(void);
-extern void __dtrace_probe$ruby$ins__onceinlinecache__begin$v1$6c6f6e67$6c6f6e67(long, long);
+extern void __dtrace_probe$ruby$ins__onceinlinecache__begin$v1$6c6f6e67(long);
 extern int __dtrace_isenabled$ruby$ins__onceinlinecache__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__onceinlinecache__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__onceinlinecache__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__aref__begin$v1$6c6f6e67$63686172202a$63686172202a(long, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__aref__begin$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$ins__opt__aref__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__aref__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__aref__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__aset__begin$v1$6c6f6e67$63686172202a$63686172202a$63686172202a(long, char *, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__aset__begin$v1$63686172202a$63686172202a$63686172202a(char *, char *, char *);
 extern int __dtrace_isenabled$ruby$ins__opt__aset__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__aset__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__aset__end$v1(void);
@@ -2489,59 +2485,63 @@ extern void __dtrace_probe$ruby$ins__opt__check__env__begin$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__check__env__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__check__env__end$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__check__env__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__div__begin$v1$6c6f6e67$63686172202a$63686172202a(long, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__checkenv__begin$v1(void);
+extern int __dtrace_isenabled$ruby$ins__opt__checkenv__begin$v1(void);
+extern void __dtrace_probe$ruby$ins__opt__checkenv__end$v1(void);
+extern int __dtrace_isenabled$ruby$ins__opt__checkenv__end$v1(void);
+extern void __dtrace_probe$ruby$ins__opt__div__begin$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$ins__opt__div__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__div__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__div__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__eq__begin$v1$6c6f6e67$63686172202a$63686172202a(long, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__eq__begin$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$ins__opt__eq__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__eq__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__eq__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__ge__begin$v1$6c6f6e67$63686172202a$63686172202a(long, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__ge__begin$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$ins__opt__ge__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__ge__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__ge__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__gt__begin$v1$6c6f6e67$63686172202a$63686172202a(long, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__gt__begin$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$ins__opt__gt__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__gt__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__gt__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__le__begin$v1$6c6f6e67$63686172202a$63686172202a(long, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__le__begin$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$ins__opt__le__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__le__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__le__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__length__begin$v1$6c6f6e67$63686172202a(long, char *);
+extern void __dtrace_probe$ruby$ins__opt__length__begin$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__length__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__length__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__length__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__lt__begin$v1$6c6f6e67$63686172202a$63686172202a(long, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__lt__begin$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$ins__opt__lt__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__lt__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__lt__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__ltlt__begin$v1$6c6f6e67$63686172202a$63686172202a(long, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__ltlt__begin$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$ins__opt__ltlt__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__ltlt__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__ltlt__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__minus__begin$v1$6c6f6e67$63686172202a$63686172202a(long, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__minus__begin$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$ins__opt__minus__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__minus__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__minus__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__mod__begin$v1$6c6f6e67$63686172202a$63686172202a(long, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__mod__begin$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$ins__opt__mod__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__mod__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__mod__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__mult__begin$v1$6c6f6e67$63686172202a$63686172202a(long, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__mult__begin$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$ins__opt__mult__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__mult__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__mult__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__neq__begin$v1$6c6f6e67$6c6f6e67$63686172202a$63686172202a(long, long, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__neq__begin$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$ins__opt__neq__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__neq__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__neq__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__not__begin$v1$6c6f6e67$63686172202a(long, char *);
+extern void __dtrace_probe$ruby$ins__opt__not__begin$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__not__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__not__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__not__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__plus__begin$v1$6c6f6e67$63686172202a$63686172202a(long, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__plus__begin$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$ins__opt__plus__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__plus__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__plus__end$v1(void);
@@ -2553,11 +2553,11 @@ extern void __dtrace_probe$ruby$ins__opt__regexpmatch2__begin$v1$63686172202a$63
 extern int __dtrace_isenabled$ruby$ins__opt__regexpmatch2__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__regexpmatch2__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__regexpmatch2__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__size__begin$v1$6c6f6e67$63686172202a(long, char *);
+extern void __dtrace_probe$ruby$ins__opt__size__begin$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__size__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__size__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__size__end$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__succ__begin$v1$6c6f6e67$63686172202a(long, char *);
+extern void __dtrace_probe$ruby$ins__opt__succ__begin$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__succ__begin$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__succ__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$ins__opt__succ__end$v1(void);

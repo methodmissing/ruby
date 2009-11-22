@@ -1181,7 +1181,7 @@ getinlinecache
 ()
 (VALUE val)
 {
-    PROBE_INS_GETINLINECACHE_BEGIN(dst,ic);
+    PROBE_INS_GETINLINECACHE_BEGIN(dst);
     if (ic->ic_vmstat == GET_VM_STATE_VERSION()) {
 	val = ic->ic_value.value;
 	JUMP(dst);
@@ -1204,7 +1204,7 @@ onceinlinecache
 ()
 (VALUE val)
 {
-    PROBE_INS_ONCEINLINECACHE_BEGIN(dst,ic);
+    PROBE_INS_ONCEINLINECACHE_BEGIN(dst);
     if (ic->ic_vmstat) {
 	val = ic->ic_value.value;
 	JUMP(dst);
@@ -1313,7 +1313,7 @@ opt_plus
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_PLUS_BEGIN(ic,recv,obj);
+    PROBE_INS_OPT_PLUS_BEGIN(recv,obj);
     if (0) {
 
     }
@@ -1391,7 +1391,7 @@ opt_minus
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_MINUS_BEGIN(ic,recv,obj);
+    PROBE_INS_OPT_MINUS_BEGIN(recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_MINUS)) {
 	long a, b, c;
@@ -1442,7 +1442,7 @@ opt_mult
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_MULT_BEGIN(ic,recv,obj);
+    PROBE_INS_OPT_MULT_BEGIN(recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_MULT)) {
 	long a, b, c;
@@ -1497,7 +1497,7 @@ opt_div
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_DIV_BEGIN(ic,recv,obj);
+    PROBE_INS_OPT_DIV_BEGIN(recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_DIV)) {
 	long x, y, div;
@@ -1563,7 +1563,7 @@ opt_mod
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_MOD_BEGIN(ic,recv,obj);
+    PROBE_INS_OPT_MOD_BEGIN(recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_MOD)) {
 	long x, y, mod;
@@ -1644,7 +1644,7 @@ opt_eq
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_EQ_BEGIN(ic,recv,obj);
+    PROBE_INS_OPT_EQ_BEGIN(recv,obj);
     val = opt_eq_func(recv, obj, ic);
 
     if (val == Qundef) {
@@ -1667,7 +1667,7 @@ opt_neq
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_NEQ_BEGIN(ic,ic_eq,recv,obj);
+    PROBE_INS_OPT_NEQ_BEGIN(recv,obj);
     extern VALUE rb_obj_not_equal(VALUE obj1, VALUE obj2);
     const rb_method_entry_t *me = vm_method_search(idNeq, CLASS_OF(recv), ic);
     val = Qundef;
@@ -1700,7 +1700,7 @@ opt_lt
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_LT_BEGIN(ic,recv,obj);
+    PROBE_INS_OPT_LT_BEGIN(recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_LT)) {
 	SIGNED_VALUE a = recv, b = obj;
@@ -1752,7 +1752,7 @@ opt_le
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_LE_BEGIN(ic,recv,obj);
+    PROBE_INS_OPT_LE_BEGIN(recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_LE)) {
 	SIGNED_VALUE a = recv, b = obj;
@@ -1784,7 +1784,7 @@ opt_gt
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_GT_BEGIN(ic,recv,obj);
+    PROBE_INS_OPT_GT_BEGIN(recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_GT)) {
 	SIGNED_VALUE a = recv, b = obj;
@@ -1836,7 +1836,7 @@ opt_ge
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_GE_BEGIN(ic,recv,obj);
+    PROBE_INS_OPT_GE_BEGIN(recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_GE)) {
 	SIGNED_VALUE a = recv, b = obj;
@@ -1867,7 +1867,7 @@ opt_ltlt
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_LTLT_BEGIN(ic,recv,obj);
+    PROBE_INS_OPT_LTLT_BEGIN(recv,obj);
     if (!SPECIAL_CONST_P(recv)) {
 	if (0) {
 	}
@@ -1903,7 +1903,7 @@ opt_aref
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_AREF_BEGIN(ic,recv,obj);
+    PROBE_INS_OPT_AREF_BEGIN(recv,obj);
     if (!SPECIAL_CONST_P(recv) && BASIC_OP_UNREDEFINED_P(BOP_AREF)) {
 	if (HEAP_CLASS_OF(recv) == rb_cArray && FIXNUM_P(obj)) {
 	    val = rb_ary_entry(recv, FIX2LONG(obj));
@@ -1935,7 +1935,7 @@ opt_aset
 (VALUE recv, VALUE obj, VALUE set)
 (VALUE val)
 {
-    PROBE_INS_OPT_ASET_BEGIN(ic,recv,obj,set);
+    PROBE_INS_OPT_ASET_BEGIN(recv,obj,set);
     if (!SPECIAL_CONST_P(recv) &&
 	BASIC_OP_UNREDEFINED_P(BOP_ASET)) {
 	if (HEAP_CLASS_OF(recv) == rb_cArray && FIXNUM_P(obj)) {
@@ -1971,7 +1971,7 @@ opt_length
 (VALUE recv)
 (VALUE val)
 {
-    PROBE_INS_OPT_LENGTH_BEGIN(ic,recv);
+    PROBE_INS_OPT_LENGTH_BEGIN(recv);
     if (LIKELY(!SPECIAL_CONST_P(recv) &&
 	       BASIC_OP_UNREDEFINED_P(BOP_LENGTH))) {
 	if (HEAP_CLASS_OF(recv) == rb_cString) {
@@ -2006,7 +2006,7 @@ opt_size
 (VALUE recv)
 (VALUE val)
 {
-    PROBE_INS_OPT_SIZE_BEGIN(ic,recv);
+    PROBE_INS_OPT_SIZE_BEGIN(recv);
     if (LIKELY(BASIC_OP_UNREDEFINED_P(BOP_SIZE) &&
 	       !SPECIAL_CONST_P(recv))) {
 	if (HEAP_CLASS_OF(recv) == rb_cString) {
@@ -2041,7 +2041,7 @@ opt_succ
 (VALUE recv)
 (VALUE val)
 {
-    PROBE_INS_OPT_SUCC_BEGIN(ic,recv);
+    PROBE_INS_OPT_SUCC_BEGIN(recv);
     if (SPECIAL_CONST_P(recv)) {
 	if (FIXNUM_P(recv) &&
 	    BASIC_OP_UNREDEFINED_P(BOP_SUCC)) {
@@ -2090,7 +2090,7 @@ opt_not
 (VALUE recv)
 (VALUE val)
 {
-    PROBE_INS_OPT_NOT_BEGIN(ic,recv);
+    PROBE_INS_OPT_NOT_BEGIN(recv);
     extern VALUE rb_obj_not(VALUE obj);
     const rb_method_entry_t *me = vm_method_search(idNot, CLASS_OF(recv), ic);
 
