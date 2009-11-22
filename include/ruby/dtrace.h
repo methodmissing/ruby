@@ -15,22 +15,6 @@ extern "C" {
 
 #define RUBY_TYPEDEFS "___dtrace_typedefs$ruby$v2"
 
-#define	RUBY_ADD_METHOD_BEGIN(arg0, arg1) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$add__method__begin$v1$63686172202a$63686172202a(arg0, arg1); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_ADD_METHOD_BEGIN_ENABLED() \
-	__dtrace_isenabled$ruby$add__method__begin$v1()
-#define	RUBY_ADD_METHOD_END(arg0, arg1) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$add__method__end$v1$63686172202a$63686172202a(arg0, arg1); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_ADD_METHOD_END_ENABLED() \
-	__dtrace_isenabled$ruby$add__method__end$v1()
 #define	RUBY_BINDING_DUP_BEGIN(arg0) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
@@ -191,70 +175,6 @@ do { \
 } while (0)
 #define	RUBY_CLASS_SUPERCLASS_END_ENABLED() \
 	__dtrace_isenabled$ruby$class__superclass__end$v1()
-#define	RUBY_CLEAR_CACHE_BEGIN() \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$clear__cache__begin$v1(); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_CLEAR_CACHE_BEGIN_ENABLED() \
-	__dtrace_isenabled$ruby$clear__cache__begin$v1()
-#define	RUBY_CLEAR_CACHE_CLASS_BEGIN(arg0) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$clear__cache__class__begin$v1$63686172202a(arg0); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_CLEAR_CACHE_CLASS_BEGIN_ENABLED() \
-	__dtrace_isenabled$ruby$clear__cache__class__begin$v1()
-#define	RUBY_CLEAR_CACHE_CLASS_END(arg0) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$clear__cache__class__end$v1$63686172202a(arg0); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_CLEAR_CACHE_CLASS_END_ENABLED() \
-	__dtrace_isenabled$ruby$clear__cache__class__end$v1()
-#define	RUBY_CLEAR_CACHE_END() \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$clear__cache__end$v1(); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_CLEAR_CACHE_END_ENABLED() \
-	__dtrace_isenabled$ruby$clear__cache__end$v1()
-#define	RUBY_CLEAR_CACHE_ID_BEGIN(arg0) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$clear__cache__id__begin$v1$63686172202a(arg0); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_CLEAR_CACHE_ID_BEGIN_ENABLED() \
-	__dtrace_isenabled$ruby$clear__cache__id__begin$v1()
-#define	RUBY_CLEAR_CACHE_ID_END(arg0) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$clear__cache__id__end$v1$63686172202a(arg0); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_CLEAR_CACHE_ID_END_ENABLED() \
-	__dtrace_isenabled$ruby$clear__cache__id__end$v1()
-#define	RUBY_CLEAR_CACHE_UNDEF_BEGIN(arg0, arg1) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$clear__cache__undef__begin$v1$63686172202a$63686172202a(arg0, arg1); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_CLEAR_CACHE_UNDEF_BEGIN_ENABLED() \
-	__dtrace_isenabled$ruby$clear__cache__undef__begin$v1()
-#define	RUBY_CLEAR_CACHE_UNDEF_END(arg0, arg1) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$clear__cache__undef__end$v1$63686172202a$63686172202a(arg0, arg1); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_CLEAR_CACHE_UNDEF_END_ENABLED() \
-	__dtrace_isenabled$ruby$clear__cache__undef__end$v1()
 #define	RUBY_COERCE_ARRAY_BEGIN(arg0) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
@@ -1247,22 +1167,6 @@ do { \
 } while (0)
 #define	RUBY_METHOD_CALL_END_ENABLED() \
 	__dtrace_isenabled$ruby$method__call__end$v1()
-#define	RUBY_METHOD_ENTRY_BEGIN(arg0, arg1) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$method__entry__begin$v1$63686172202a$63686172202a(arg0, arg1); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_METHOD_ENTRY_BEGIN_ENABLED() \
-	__dtrace_isenabled$ruby$method__entry__begin$v1()
-#define	RUBY_METHOD_ENTRY_END(arg0, arg1) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$method__entry__end$v1$63686172202a$63686172202a(arg0, arg1); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_METHOD_ENTRY_END_ENABLED() \
-	__dtrace_isenabled$ruby$method__entry__end$v1()
 #define	RUBY_METHOD_MISSING_BEGIN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
@@ -1423,6 +1327,134 @@ do { \
 } while (0)
 #define	RUBY_MODULE_EXEC_END_ENABLED() \
 	__dtrace_isenabled$ruby$module__exec__end$v1()
+#define	RUBY_MT_ADD_METHOD_BEGIN(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__add__method__begin$v1$63686172202a$63686172202a(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_ADD_METHOD_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$mt__add__method__begin$v1()
+#define	RUBY_MT_ADD_METHOD_END(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__add__method__end$v1$63686172202a$63686172202a(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_ADD_METHOD_END_ENABLED() \
+	__dtrace_isenabled$ruby$mt__add__method__end$v1()
+#define	RUBY_MT_CLEAR_CACHE_BEGIN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__clear__cache__begin$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_CLEAR_CACHE_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$mt__clear__cache__begin$v1()
+#define	RUBY_MT_CLEAR_CACHE_CLASS_BEGIN(arg0) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__clear__cache__class__begin$v1$63686172202a(arg0); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_CLEAR_CACHE_CLASS_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$mt__clear__cache__class__begin$v1()
+#define	RUBY_MT_CLEAR_CACHE_CLASS_END(arg0) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__clear__cache__class__end$v1$63686172202a(arg0); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_CLEAR_CACHE_CLASS_END_ENABLED() \
+	__dtrace_isenabled$ruby$mt__clear__cache__class__end$v1()
+#define	RUBY_MT_CLEAR_CACHE_END() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__clear__cache__end$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_CLEAR_CACHE_END_ENABLED() \
+	__dtrace_isenabled$ruby$mt__clear__cache__end$v1()
+#define	RUBY_MT_CLEAR_CACHE_ID_BEGIN(arg0) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__clear__cache__id__begin$v1$63686172202a(arg0); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_CLEAR_CACHE_ID_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$mt__clear__cache__id__begin$v1()
+#define	RUBY_MT_CLEAR_CACHE_ID_END(arg0) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__clear__cache__id__end$v1$63686172202a(arg0); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_CLEAR_CACHE_ID_END_ENABLED() \
+	__dtrace_isenabled$ruby$mt__clear__cache__id__end$v1()
+#define	RUBY_MT_CLEAR_CACHE_UNDEF_BEGIN(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__clear__cache__undef__begin$v1$63686172202a$63686172202a(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_CLEAR_CACHE_UNDEF_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$mt__clear__cache__undef__begin$v1()
+#define	RUBY_MT_CLEAR_CACHE_UNDEF_END(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__clear__cache__undef__end$v1$63686172202a$63686172202a(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_CLEAR_CACHE_UNDEF_END_ENABLED() \
+	__dtrace_isenabled$ruby$mt__clear__cache__undef__end$v1()
+#define	RUBY_MT_GET_METHOD_ENTRY_BEGIN(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__get__method__entry__begin$v1$63686172202a$63686172202a(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_GET_METHOD_ENTRY_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$mt__get__method__entry__begin$v1()
+#define	RUBY_MT_GET_METHOD_ENTRY_END(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__get__method__entry__end$v1$63686172202a$63686172202a(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_GET_METHOD_ENTRY_END_ENABLED() \
+	__dtrace_isenabled$ruby$mt__get__method__entry__end$v1()
+#define	RUBY_MT_METHOD_ENTRY_BEGIN(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__method__entry__begin$v1$63686172202a$63686172202a(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_METHOD_ENTRY_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$mt__method__entry__begin$v1()
+#define	RUBY_MT_METHOD_ENTRY_END(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__method__entry__end$v1$63686172202a$63686172202a(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_METHOD_ENTRY_END_ENABLED() \
+	__dtrace_isenabled$ruby$mt__method__entry__end$v1()
+#define	RUBY_MT_REMOVE_METHOD_BEGIN(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__remove__method__begin$v1$63686172202a$63686172202a(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_REMOVE_METHOD_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$mt__remove__method__begin$v1()
+#define	RUBY_MT_REMOVE_METHOD_END(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mt__remove__method__end$v1$63686172202a$63686172202a(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MT_REMOVE_METHOD_END_ENABLED() \
+	__dtrace_isenabled$ruby$mt__remove__method__end$v1()
 #define	RUBY_OBJ_ALLOC_BEGIN(arg0) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
@@ -1759,22 +1791,6 @@ do { \
 } while (0)
 #define	RUBY_RB_TRACE_END_ENABLED() \
 	__dtrace_isenabled$ruby$rb__trace__end$v1()
-#define	RUBY_REMOVE_METHOD_BEGIN(arg0, arg1) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$remove__method__begin$v1$63686172202a$63686172202a(arg0, arg1); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_REMOVE_METHOD_BEGIN_ENABLED() \
-	__dtrace_isenabled$ruby$remove__method__begin$v1()
-#define	RUBY_REMOVE_METHOD_END(arg0, arg1) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$remove__method__end$v1$63686172202a$63686172202a(arg0, arg1); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_REMOVE_METHOD_END_ENABLED() \
-	__dtrace_isenabled$ruby$remove__method__end$v1()
 #define	RUBY_SEND_BEGIN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
@@ -2305,10 +2321,6 @@ do { \
 	__dtrace_isenabled$ruby$yield__end$v1()
 
 
-extern void __dtrace_probe$ruby$add__method__begin$v1$63686172202a$63686172202a(char *, char *);
-extern int __dtrace_isenabled$ruby$add__method__begin$v1(void);
-extern void __dtrace_probe$ruby$add__method__end$v1$63686172202a$63686172202a(char *, char *);
-extern int __dtrace_isenabled$ruby$add__method__end$v1(void);
 extern void __dtrace_probe$ruby$binding__dup__begin$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$binding__dup__begin$v1(void);
 extern void __dtrace_probe$ruby$binding__dup__end$v1$63686172202a(char *);
@@ -2349,22 +2361,6 @@ extern void __dtrace_probe$ruby$class__superclass__begin$v1$63686172202a(char *)
 extern int __dtrace_isenabled$ruby$class__superclass__begin$v1(void);
 extern void __dtrace_probe$ruby$class__superclass__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$class__superclass__end$v1(void);
-extern void __dtrace_probe$ruby$clear__cache__begin$v1(void);
-extern int __dtrace_isenabled$ruby$clear__cache__begin$v1(void);
-extern void __dtrace_probe$ruby$clear__cache__class__begin$v1$63686172202a(char *);
-extern int __dtrace_isenabled$ruby$clear__cache__class__begin$v1(void);
-extern void __dtrace_probe$ruby$clear__cache__class__end$v1$63686172202a(char *);
-extern int __dtrace_isenabled$ruby$clear__cache__class__end$v1(void);
-extern void __dtrace_probe$ruby$clear__cache__end$v1(void);
-extern int __dtrace_isenabled$ruby$clear__cache__end$v1(void);
-extern void __dtrace_probe$ruby$clear__cache__id__begin$v1$63686172202a(char *);
-extern int __dtrace_isenabled$ruby$clear__cache__id__begin$v1(void);
-extern void __dtrace_probe$ruby$clear__cache__id__end$v1$63686172202a(char *);
-extern int __dtrace_isenabled$ruby$clear__cache__id__end$v1(void);
-extern void __dtrace_probe$ruby$clear__cache__undef__begin$v1$63686172202a$63686172202a(char *, char *);
-extern int __dtrace_isenabled$ruby$clear__cache__undef__begin$v1(void);
-extern void __dtrace_probe$ruby$clear__cache__undef__end$v1$63686172202a$63686172202a(char *, char *);
-extern int __dtrace_isenabled$ruby$clear__cache__undef__end$v1(void);
 extern void __dtrace_probe$ruby$coerce__array__begin$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$coerce__array__begin$v1(void);
 extern void __dtrace_probe$ruby$coerce__array__end$v1$63686172202a(char *);
@@ -2613,10 +2609,6 @@ extern void __dtrace_probe$ruby$method__call__begin$v1$63686172202a$63686172202a
 extern int __dtrace_isenabled$ruby$method__call__begin$v1(void);
 extern void __dtrace_probe$ruby$method__call__end$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$method__call__end$v1(void);
-extern void __dtrace_probe$ruby$method__entry__begin$v1$63686172202a$63686172202a(char *, char *);
-extern int __dtrace_isenabled$ruby$method__entry__begin$v1(void);
-extern void __dtrace_probe$ruby$method__entry__end$v1$63686172202a$63686172202a(char *, char *);
-extern int __dtrace_isenabled$ruby$method__entry__end$v1(void);
 extern void __dtrace_probe$ruby$method__missing__begin$v1(void);
 extern int __dtrace_isenabled$ruby$method__missing__begin$v1(void);
 extern void __dtrace_probe$ruby$method__missing__end$v1(void);
@@ -2657,6 +2649,38 @@ extern void __dtrace_probe$ruby$module__exec__begin$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$module__exec__begin$v1(void);
 extern void __dtrace_probe$ruby$module__exec__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$module__exec__end$v1(void);
+extern void __dtrace_probe$ruby$mt__add__method__begin$v1$63686172202a$63686172202a(char *, char *);
+extern int __dtrace_isenabled$ruby$mt__add__method__begin$v1(void);
+extern void __dtrace_probe$ruby$mt__add__method__end$v1$63686172202a$63686172202a(char *, char *);
+extern int __dtrace_isenabled$ruby$mt__add__method__end$v1(void);
+extern void __dtrace_probe$ruby$mt__clear__cache__begin$v1(void);
+extern int __dtrace_isenabled$ruby$mt__clear__cache__begin$v1(void);
+extern void __dtrace_probe$ruby$mt__clear__cache__class__begin$v1$63686172202a(char *);
+extern int __dtrace_isenabled$ruby$mt__clear__cache__class__begin$v1(void);
+extern void __dtrace_probe$ruby$mt__clear__cache__class__end$v1$63686172202a(char *);
+extern int __dtrace_isenabled$ruby$mt__clear__cache__class__end$v1(void);
+extern void __dtrace_probe$ruby$mt__clear__cache__end$v1(void);
+extern int __dtrace_isenabled$ruby$mt__clear__cache__end$v1(void);
+extern void __dtrace_probe$ruby$mt__clear__cache__id__begin$v1$63686172202a(char *);
+extern int __dtrace_isenabled$ruby$mt__clear__cache__id__begin$v1(void);
+extern void __dtrace_probe$ruby$mt__clear__cache__id__end$v1$63686172202a(char *);
+extern int __dtrace_isenabled$ruby$mt__clear__cache__id__end$v1(void);
+extern void __dtrace_probe$ruby$mt__clear__cache__undef__begin$v1$63686172202a$63686172202a(char *, char *);
+extern int __dtrace_isenabled$ruby$mt__clear__cache__undef__begin$v1(void);
+extern void __dtrace_probe$ruby$mt__clear__cache__undef__end$v1$63686172202a$63686172202a(char *, char *);
+extern int __dtrace_isenabled$ruby$mt__clear__cache__undef__end$v1(void);
+extern void __dtrace_probe$ruby$mt__get__method__entry__begin$v1$63686172202a$63686172202a(char *, char *);
+extern int __dtrace_isenabled$ruby$mt__get__method__entry__begin$v1(void);
+extern void __dtrace_probe$ruby$mt__get__method__entry__end$v1$63686172202a$63686172202a(char *, char *);
+extern int __dtrace_isenabled$ruby$mt__get__method__entry__end$v1(void);
+extern void __dtrace_probe$ruby$mt__method__entry__begin$v1$63686172202a$63686172202a(char *, char *);
+extern int __dtrace_isenabled$ruby$mt__method__entry__begin$v1(void);
+extern void __dtrace_probe$ruby$mt__method__entry__end$v1$63686172202a$63686172202a(char *, char *);
+extern int __dtrace_isenabled$ruby$mt__method__entry__end$v1(void);
+extern void __dtrace_probe$ruby$mt__remove__method__begin$v1$63686172202a$63686172202a(char *, char *);
+extern int __dtrace_isenabled$ruby$mt__remove__method__begin$v1(void);
+extern void __dtrace_probe$ruby$mt__remove__method__end$v1$63686172202a$63686172202a(char *, char *);
+extern int __dtrace_isenabled$ruby$mt__remove__method__end$v1(void);
 extern void __dtrace_probe$ruby$obj__alloc__begin$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$obj__alloc__begin$v1(void);
 extern void __dtrace_probe$ruby$obj__alloc__end$v1$63686172202a(char *);
@@ -2741,10 +2765,6 @@ extern void __dtrace_probe$ruby$rb__trace__begin$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$rb__trace__begin$v1(void);
 extern void __dtrace_probe$ruby$rb__trace__end$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$rb__trace__end$v1(void);
-extern void __dtrace_probe$ruby$remove__method__begin$v1$63686172202a$63686172202a(char *, char *);
-extern int __dtrace_isenabled$ruby$remove__method__begin$v1(void);
-extern void __dtrace_probe$ruby$remove__method__end$v1$63686172202a$63686172202a(char *, char *);
-extern int __dtrace_isenabled$ruby$remove__method__end$v1(void);
 extern void __dtrace_probe$ruby$send__begin$v1(void);
 extern int __dtrace_isenabled$ruby$send__begin$v1(void);
 extern void __dtrace_probe$ruby$send__end$v1(void);

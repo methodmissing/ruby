@@ -55,22 +55,25 @@ provider ruby {
     probe block__call__begin(char *klass, char *method);
     probe block__call__end(char *klass, char *method);
 
-    probe clear__cache__begin();
-    probe clear__cache__end();
-    probe clear__cache__undef__begin(char *klass, char *method);
-    probe clear__cache__undef__end(char *klass, char *method);
-    probe clear__cache__id__begin(char *method);
-    probe clear__cache__id__end(char *method);
-    probe clear__cache__class__begin(char *klass);
-    probe clear__cache__class__end(char *klass);
+    probe mt__clear__cache__begin();
+    probe mt__clear__cache__end();
+    probe mt__clear__cache__undef__begin(char *klass, char *method);
+    probe mt__clear__cache__undef__end(char *klass, char *method);
+    probe mt__clear__cache__id__begin(char *method);
+    probe mt__clear__cache__id__end(char *method);
+    probe mt__clear__cache__class__begin(char *klass);
+    probe mt__clear__cache__class__end(char *klass);
+    probe mt__add__method__begin(char *klass, char *method);
+    probe mt__add__method__end(char *klass, char *method);
+    probe mt__remove__method__begin(char *klass, char *method);
+    probe mt__remove__method__end(char *klass, char *method);
+    probe mt__get__method__entry__begin(char *klass, char *method);
+    probe mt__get__method__entry__end(char *klass, char *method);
+    probe mt__method__entry__begin(char *klass, char *method);
+    probe mt__method__entry__end(char *klass, char *method);
+
     probe vm__change__state__begin(int v);
     probe vm__change__state__end(int v);
-    probe add__method__begin(char *klass, char *method);
-    probe add__method__end(char *klass, char *method);
-    probe remove__method__begin(char *klass, char *method);
-    probe remove__method__end(char *klass, char *method);
-    probe method__entry__begin(char *klass, char *method);
-    probe method__entry__end(char *klass, char *method);
 
     probe st__init__numtable__begin();
     probe st__init__numtable__end();

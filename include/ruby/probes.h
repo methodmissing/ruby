@@ -211,7 +211,7 @@
 } while (0)
 
 #include "probes/string.h"
-#include "probes/method.h"
+#include "probes/method_table.h"
 #include "probes/eval.h"
 #include "probes/st.h"
 #include "probes/object.h"
@@ -221,9 +221,10 @@
 #include "probes/fiber.h"
 #include "probes/ins.h"
 #include "probes/proc.h"
+#include "probes/vm.h"
 #else
 #include "noop_probes/string.h"
-#include "noop_probes/method.h"
+#include "noop_probes/method_table.h"
 #include "noop_probes/eval.h"
 #include "noop_probes/st.h"
 #include "noop_probes/object.h"
@@ -233,4 +234,5 @@
 #include "noop_probes/fiber.h"
 #include "noop_probes/ins.h"
 #include "noop_probes/proc.h"
+#include "noop_probes/vm.h"
 #endif
