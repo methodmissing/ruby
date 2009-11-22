@@ -738,9 +738,9 @@ void *
 ruby_xmalloc(size_t size)
 {
     void *res;
-    PROBE_XMALLOC_BEGIN(size);
+    PROBE_MEM_XMALLOC_BEGIN(size);
     res = vm_xmalloc(&rb_objspace, size);
-    PROBE_XMALLOC_END(size);
+    PROBE_MEM_XMALLOC_END(size);
     return res;
 }
 
@@ -748,23 +748,23 @@ void *
 ruby_xmalloc2(size_t n, size_t size)
 {
     void *res;
-    PROBE_XMALLOC2_BEGIN(n,size);
+    PROBE_MEM_XMALLOC2_BEGIN(n,size);
     size_t len = size * n;
     if (n != 0 && size != len / n) {
 	rb_raise(rb_eArgError, "malloc: possible integer overflow");
     }
     res = vm_xmalloc(&rb_objspace, len);
-    PROBE_XMALLOC2_END(n,size);
+    PROBE_MEM_XMALLOC2_END(n,size);
     return res;
 }
 
 void *
 ruby_xcalloc(size_t n, size_t size)
 {
-    PROBE_XCALLOC_BEGIN(n,size);
+    PROBE_MEM_XCALLOC_BEGIN(n,size);
     void *mem = ruby_xmalloc2(n, size);
     memset(mem, 0, n * size);
-    PROBE_XCALLOC_END(n,size);
+    PROBE_MEM_XCALLOC_END(n,size);
     return mem;
 }
 
@@ -772,9 +772,9 @@ void *
 ruby_xrealloc(void *ptr, size_t size)
 {
     void *res;
-    PROBE_XREALLOC_BEGIN(size);
+    PROBE_MEM_XREALLOC_BEGIN(size);
     res = vm_xrealloc(&rb_objspace, ptr, size);
-    PROBE_XREALLOC_END(size);
+    PROBE_MEM_XREALLOC_END(size);
     return res;
 }
 
@@ -782,23 +782,23 @@ void *
 ruby_xrealloc2(void *ptr, size_t n, size_t size)
 {
     void *res;
-    PROBE_XREALLOC2_BEGIN(n,size);
+    PROBE_MEM_XREALLOC2_BEGIN(n,size);
     size_t len = size * n;
     if (n != 0 && size != len / n) {
 	rb_raise(rb_eArgError, "realloc: possible integer overflow");
     }
     res = ruby_xrealloc(ptr, len);
-    PROBE_XREALLOC2_END(n,size);
+    PROBE_MEM_XREALLOC2_END(n,size);
     return res;
 }
 
 void
 ruby_xfree(void *x)
 {
-    PROBE_XFREE_BEGIN();
+    PROBE_MEM_XFREE_BEGIN();
     if (x)
 	vm_xfree(&rb_objspace, x);
-    PROBE_XFREE_END();
+    PROBE_MEM_XFREE_END();
 }
 
 

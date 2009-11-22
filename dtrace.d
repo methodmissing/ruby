@@ -172,18 +172,18 @@ provider ruby {
     probe coerce__array__begin(char *class);
     probe coerce__array__end(char *class);
 
-    probe xfree__begin();
-    probe xfree__end();
-    probe xmalloc__begin(long size);
-    probe xmalloc__end(long size);
-    probe xrealloc__begin(long size);
-    probe xrealloc__end(long size);
-    probe xmalloc2__begin(long slots, long size);
-    probe xmalloc2__end(long slots, long size);
-    probe xcalloc__begin(long slots, long size);
-    probe xcalloc__end(long slots, long size);
-    probe xcalloc2__begin(long slots, long size);
-    probe xcalloc2__end(long slots, long size);
+    probe mem__xfree__begin();
+    probe mem__xfree__end();
+    probe mem__xmalloc__begin(long size);
+    probe mem__xmalloc__end(long size);
+    probe mem__xrealloc__begin(long size);
+    probe mem__xrealloc__end(long size);
+    probe mem__xmalloc2__begin(long slots, long size);
+    probe mem__xmalloc2__end(long slots, long size);
+    probe mem__xcalloc__begin(long slots, long size);
+    probe mem__xcalloc__end(long slots, long size);
+    probe mem__xcalloc2__begin(long slots, long size);
+    probe mem__xcalloc2__end(long slots, long size);
 
     probe gc__objspace__alloc__begin();
     probe gc__objspace__alloc__end(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);

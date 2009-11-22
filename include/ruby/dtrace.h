@@ -1135,6 +1135,102 @@ do { \
 } while (0)
 #define	RUBY_LOOP_END_ENABLED() \
 	__dtrace_isenabled$ruby$loop__end$v1()
+#define	RUBY_MEM_XCALLOC_BEGIN(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mem__xcalloc__begin$v1$6c6f6e67$6c6f6e67(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MEM_XCALLOC_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$mem__xcalloc__begin$v1()
+#define	RUBY_MEM_XCALLOC_END(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mem__xcalloc__end$v1$6c6f6e67$6c6f6e67(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MEM_XCALLOC_END_ENABLED() \
+	__dtrace_isenabled$ruby$mem__xcalloc__end$v1()
+#define	RUBY_MEM_XCALLOC2_BEGIN(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mem__xcalloc2__begin$v1$6c6f6e67$6c6f6e67(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MEM_XCALLOC2_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$mem__xcalloc2__begin$v1()
+#define	RUBY_MEM_XCALLOC2_END(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mem__xcalloc2__end$v1$6c6f6e67$6c6f6e67(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MEM_XCALLOC2_END_ENABLED() \
+	__dtrace_isenabled$ruby$mem__xcalloc2__end$v1()
+#define	RUBY_MEM_XFREE_BEGIN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mem__xfree__begin$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MEM_XFREE_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$mem__xfree__begin$v1()
+#define	RUBY_MEM_XFREE_END() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mem__xfree__end$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MEM_XFREE_END_ENABLED() \
+	__dtrace_isenabled$ruby$mem__xfree__end$v1()
+#define	RUBY_MEM_XMALLOC_BEGIN(arg0) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mem__xmalloc__begin$v1$6c6f6e67(arg0); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MEM_XMALLOC_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$mem__xmalloc__begin$v1()
+#define	RUBY_MEM_XMALLOC_END(arg0) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mem__xmalloc__end$v1$6c6f6e67(arg0); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MEM_XMALLOC_END_ENABLED() \
+	__dtrace_isenabled$ruby$mem__xmalloc__end$v1()
+#define	RUBY_MEM_XMALLOC2_BEGIN(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mem__xmalloc2__begin$v1$6c6f6e67$6c6f6e67(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MEM_XMALLOC2_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$mem__xmalloc2__begin$v1()
+#define	RUBY_MEM_XMALLOC2_END(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mem__xmalloc2__end$v1$6c6f6e67$6c6f6e67(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MEM_XMALLOC2_END_ENABLED() \
+	__dtrace_isenabled$ruby$mem__xmalloc2__end$v1()
+#define	RUBY_MEM_XREALLOC_BEGIN(arg0) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mem__xrealloc__begin$v1$6c6f6e67(arg0); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MEM_XREALLOC_BEGIN_ENABLED() \
+	__dtrace_isenabled$ruby$mem__xrealloc__begin$v1()
+#define	RUBY_MEM_XREALLOC_END(arg0) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$mem__xrealloc__end$v1$6c6f6e67(arg0); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_MEM_XREALLOC_END_ENABLED() \
+	__dtrace_isenabled$ruby$mem__xrealloc__end$v1()
 #define	RUBY_METHOD_CALL_BEGIN(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
@@ -2191,102 +2287,6 @@ do { \
 } while (0)
 #define	RUBY_VM_CHANGE_STATE_END_ENABLED() \
 	__dtrace_isenabled$ruby$vm__change__state__end$v1()
-#define	RUBY_XCALLOC_BEGIN(arg0, arg1) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$xcalloc__begin$v1$6c6f6e67$6c6f6e67(arg0, arg1); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_XCALLOC_BEGIN_ENABLED() \
-	__dtrace_isenabled$ruby$xcalloc__begin$v1()
-#define	RUBY_XCALLOC_END(arg0, arg1) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$xcalloc__end$v1$6c6f6e67$6c6f6e67(arg0, arg1); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_XCALLOC_END_ENABLED() \
-	__dtrace_isenabled$ruby$xcalloc__end$v1()
-#define	RUBY_XCALLOC2_BEGIN(arg0, arg1) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$xcalloc2__begin$v1$6c6f6e67$6c6f6e67(arg0, arg1); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_XCALLOC2_BEGIN_ENABLED() \
-	__dtrace_isenabled$ruby$xcalloc2__begin$v1()
-#define	RUBY_XCALLOC2_END(arg0, arg1) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$xcalloc2__end$v1$6c6f6e67$6c6f6e67(arg0, arg1); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_XCALLOC2_END_ENABLED() \
-	__dtrace_isenabled$ruby$xcalloc2__end$v1()
-#define	RUBY_XFREE_BEGIN() \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$xfree__begin$v1(); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_XFREE_BEGIN_ENABLED() \
-	__dtrace_isenabled$ruby$xfree__begin$v1()
-#define	RUBY_XFREE_END() \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$xfree__end$v1(); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_XFREE_END_ENABLED() \
-	__dtrace_isenabled$ruby$xfree__end$v1()
-#define	RUBY_XMALLOC_BEGIN(arg0) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$xmalloc__begin$v1$6c6f6e67(arg0); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_XMALLOC_BEGIN_ENABLED() \
-	__dtrace_isenabled$ruby$xmalloc__begin$v1()
-#define	RUBY_XMALLOC_END(arg0) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$xmalloc__end$v1$6c6f6e67(arg0); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_XMALLOC_END_ENABLED() \
-	__dtrace_isenabled$ruby$xmalloc__end$v1()
-#define	RUBY_XMALLOC2_BEGIN(arg0, arg1) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$xmalloc2__begin$v1$6c6f6e67$6c6f6e67(arg0, arg1); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_XMALLOC2_BEGIN_ENABLED() \
-	__dtrace_isenabled$ruby$xmalloc2__begin$v1()
-#define	RUBY_XMALLOC2_END(arg0, arg1) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$xmalloc2__end$v1$6c6f6e67$6c6f6e67(arg0, arg1); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_XMALLOC2_END_ENABLED() \
-	__dtrace_isenabled$ruby$xmalloc2__end$v1()
-#define	RUBY_XREALLOC_BEGIN(arg0) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$xrealloc__begin$v1$6c6f6e67(arg0); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_XREALLOC_BEGIN_ENABLED() \
-	__dtrace_isenabled$ruby$xrealloc__begin$v1()
-#define	RUBY_XREALLOC_END(arg0) \
-do { \
-	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$xrealloc__end$v1$6c6f6e67(arg0); \
-	__asm__ volatile(".reference " RUBY_STABILITY); \
-} while (0)
-#define	RUBY_XREALLOC_END_ENABLED() \
-	__dtrace_isenabled$ruby$xrealloc__end$v1()
 #define	RUBY_YIELD_BEGIN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
@@ -2585,6 +2585,30 @@ extern void __dtrace_probe$ruby$loop__begin$v1(void);
 extern int __dtrace_isenabled$ruby$loop__begin$v1(void);
 extern void __dtrace_probe$ruby$loop__end$v1(void);
 extern int __dtrace_isenabled$ruby$loop__end$v1(void);
+extern void __dtrace_probe$ruby$mem__xcalloc__begin$v1$6c6f6e67$6c6f6e67(long, long);
+extern int __dtrace_isenabled$ruby$mem__xcalloc__begin$v1(void);
+extern void __dtrace_probe$ruby$mem__xcalloc__end$v1$6c6f6e67$6c6f6e67(long, long);
+extern int __dtrace_isenabled$ruby$mem__xcalloc__end$v1(void);
+extern void __dtrace_probe$ruby$mem__xcalloc2__begin$v1$6c6f6e67$6c6f6e67(long, long);
+extern int __dtrace_isenabled$ruby$mem__xcalloc2__begin$v1(void);
+extern void __dtrace_probe$ruby$mem__xcalloc2__end$v1$6c6f6e67$6c6f6e67(long, long);
+extern int __dtrace_isenabled$ruby$mem__xcalloc2__end$v1(void);
+extern void __dtrace_probe$ruby$mem__xfree__begin$v1(void);
+extern int __dtrace_isenabled$ruby$mem__xfree__begin$v1(void);
+extern void __dtrace_probe$ruby$mem__xfree__end$v1(void);
+extern int __dtrace_isenabled$ruby$mem__xfree__end$v1(void);
+extern void __dtrace_probe$ruby$mem__xmalloc__begin$v1$6c6f6e67(long);
+extern int __dtrace_isenabled$ruby$mem__xmalloc__begin$v1(void);
+extern void __dtrace_probe$ruby$mem__xmalloc__end$v1$6c6f6e67(long);
+extern int __dtrace_isenabled$ruby$mem__xmalloc__end$v1(void);
+extern void __dtrace_probe$ruby$mem__xmalloc2__begin$v1$6c6f6e67$6c6f6e67(long, long);
+extern int __dtrace_isenabled$ruby$mem__xmalloc2__begin$v1(void);
+extern void __dtrace_probe$ruby$mem__xmalloc2__end$v1$6c6f6e67$6c6f6e67(long, long);
+extern int __dtrace_isenabled$ruby$mem__xmalloc2__end$v1(void);
+extern void __dtrace_probe$ruby$mem__xrealloc__begin$v1$6c6f6e67(long);
+extern int __dtrace_isenabled$ruby$mem__xrealloc__begin$v1(void);
+extern void __dtrace_probe$ruby$mem__xrealloc__end$v1$6c6f6e67(long);
+extern int __dtrace_isenabled$ruby$mem__xrealloc__end$v1(void);
 extern void __dtrace_probe$ruby$method__call__begin$v1$63686172202a$63686172202a(char *, char *);
 extern int __dtrace_isenabled$ruby$method__call__begin$v1(void);
 extern void __dtrace_probe$ruby$method__call__end$v1$63686172202a$63686172202a(char *, char *);
@@ -2849,30 +2873,6 @@ extern void __dtrace_probe$ruby$vm__change__state__begin$v1$696e74(int);
 extern int __dtrace_isenabled$ruby$vm__change__state__begin$v1(void);
 extern void __dtrace_probe$ruby$vm__change__state__end$v1$696e74(int);
 extern int __dtrace_isenabled$ruby$vm__change__state__end$v1(void);
-extern void __dtrace_probe$ruby$xcalloc__begin$v1$6c6f6e67$6c6f6e67(long, long);
-extern int __dtrace_isenabled$ruby$xcalloc__begin$v1(void);
-extern void __dtrace_probe$ruby$xcalloc__end$v1$6c6f6e67$6c6f6e67(long, long);
-extern int __dtrace_isenabled$ruby$xcalloc__end$v1(void);
-extern void __dtrace_probe$ruby$xcalloc2__begin$v1$6c6f6e67$6c6f6e67(long, long);
-extern int __dtrace_isenabled$ruby$xcalloc2__begin$v1(void);
-extern void __dtrace_probe$ruby$xcalloc2__end$v1$6c6f6e67$6c6f6e67(long, long);
-extern int __dtrace_isenabled$ruby$xcalloc2__end$v1(void);
-extern void __dtrace_probe$ruby$xfree__begin$v1(void);
-extern int __dtrace_isenabled$ruby$xfree__begin$v1(void);
-extern void __dtrace_probe$ruby$xfree__end$v1(void);
-extern int __dtrace_isenabled$ruby$xfree__end$v1(void);
-extern void __dtrace_probe$ruby$xmalloc__begin$v1$6c6f6e67(long);
-extern int __dtrace_isenabled$ruby$xmalloc__begin$v1(void);
-extern void __dtrace_probe$ruby$xmalloc__end$v1$6c6f6e67(long);
-extern int __dtrace_isenabled$ruby$xmalloc__end$v1(void);
-extern void __dtrace_probe$ruby$xmalloc2__begin$v1$6c6f6e67$6c6f6e67(long, long);
-extern int __dtrace_isenabled$ruby$xmalloc2__begin$v1(void);
-extern void __dtrace_probe$ruby$xmalloc2__end$v1$6c6f6e67$6c6f6e67(long, long);
-extern int __dtrace_isenabled$ruby$xmalloc2__end$v1(void);
-extern void __dtrace_probe$ruby$xrealloc__begin$v1$6c6f6e67(long);
-extern int __dtrace_isenabled$ruby$xrealloc__begin$v1(void);
-extern void __dtrace_probe$ruby$xrealloc__end$v1$6c6f6e67(long);
-extern int __dtrace_isenabled$ruby$xrealloc__end$v1(void);
 extern void __dtrace_probe$ruby$yield__begin$v1(void);
 extern int __dtrace_isenabled$ruby$yield__begin$v1(void);
 extern void __dtrace_probe$ruby$yield__end$v1(void);
