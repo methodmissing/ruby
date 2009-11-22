@@ -38,17 +38,20 @@ rb_iseq_t *rb_method_get_iseq(VALUE method);
 static void
 proc_free(void *ptr)
 {
+    PROBE_PROC_FREE_BEGIN(ptr);
     RUBY_FREE_ENTER("proc");
     if (ptr) {
 	ruby_xfree(ptr);
     }
     RUBY_FREE_LEAVE("proc");
+    PROBE_PROC_FREE_END(ptr);
 }
 
 static void
 proc_mark(void *ptr)
 {
     rb_proc_t *proc;
+    PROBE_PROC_MARK_BEGIN(ptr);
     RUBY_MARK_ENTER("proc");
     if (ptr) {
 	proc = ptr;
@@ -61,6 +64,7 @@ proc_mark(void *ptr)
 	}
     }
     RUBY_MARK_LEAVE("proc");
+    PROBE_PROC_MARK_END(ptr);
 }
 
 static size_t
@@ -98,6 +102,7 @@ rb_obj_is_proc(VALUE proc)
 static VALUE
 proc_dup(VALUE self)
 {
+    PROBE_PROC_DUP_BEGIN(self);
     VALUE procval = rb_proc_alloc(rb_cProc);
     rb_proc_t *src, *dst;
     GetProcPtr(self, src);
@@ -108,7 +113,7 @@ proc_dup(VALUE self)
     dst->envval = src->envval;
     dst->safe_level = src->safe_level;
     dst->is_lambda = src->is_lambda;
-
+    PROBE_PROC_DUP_END(self);
     return procval;
 }
 
@@ -238,24 +243,28 @@ static void
 binding_free(void *ptr)
 {
     rb_binding_t *bind;
+    PROBE_BINDING_FREE_BEGIN(ptr);
     RUBY_FREE_ENTER("binding");
     if (ptr) {
 	bind = ptr;
 	ruby_xfree(ptr);
     }
     RUBY_FREE_LEAVE("binding");
+    PROBE_BINDING_FREE_END(ptr);
 }
 
 static void
 binding_mark(void *ptr)
 {
     rb_binding_t *bind;
+    PROBE_BINDING_MARK_BEGIN(ptr);
     RUBY_MARK_ENTER("binding");
     if (ptr) {
 	bind = ptr;
 	RUBY_MARK_UNLESS_NULL(bind->env);
     }
     RUBY_MARK_LEAVE("binding");
+    PROBE_BINDING_MARK_END(ptr);
 }
 
 static size_t
@@ -284,11 +293,13 @@ binding_alloc(VALUE klass)
 static VALUE
 binding_dup(VALUE self)
 {
+    PROBE_BINDING_DUP_BEGIN(self);
     VALUE bindval = binding_alloc(rb_cBinding);
     rb_binding_t *src, *dst;
     GetBindingPtr(self, src);
     GetBindingPtr(bindval, dst);
     dst->env = src->env;
+    PROBE_BINDING_DUP_END(self);
     return bindval;
 }
 
@@ -304,6 +315,7 @@ binding_clone(VALUE self)
 VALUE
 rb_binding_new(void)
 {
+    PROBE_BINDING_NEW_BEGIN();
     rb_thread_t *th = GET_THREAD();
     rb_control_frame_t *cfp = rb_vm_get_ruby_level_next_cfp(th, th->cfp);
     VALUE bindval = binding_alloc(rb_cBinding);
@@ -315,6 +327,7 @@ rb_binding_new(void)
 
     GetBindingPtr(bindval, bind);
     bind->env = rb_vm_make_env_object(th, cfp);
+    PROBE_BINDING_NEW_END();
     return bindval;
 }
 
@@ -369,6 +382,7 @@ bind_eval(int argc, VALUE *argv, VALUE bindval)
 static VALUE
 proc_new(VALUE klass, int is_lambda)
 {
+    PROBE_PROC_NEW_BEGIN(klass,is_lambda);
     VALUE procval = Qnil;
     rb_thread_t *th = GET_THREAD();
     rb_control_frame_t *cfp = th->cfp;
@@ -401,11 +415,13 @@ proc_new(VALUE klass, int is_lambda)
 
     if (procval) {
 	if (RBASIC(procval)->klass == klass) {
+        PROBE_PROC_NEW_END(klass,is_lambda);
 	    return procval;
 	}
 	else {
 	    VALUE newprocval = proc_dup(procval);
 	    RBASIC(newprocval)->klass = klass;
+        PROBE_PROC_NEW_END(klass,is_lambda);
 	    return newprocval;
 	}
     }
@@ -417,6 +433,7 @@ proc_new(VALUE klass, int is_lambda)
 	GetProcPtr(procval, proc);
 	proc->is_lambda = TRUE;
     }
+    PROBE_PROC_NEW_END(klass,is_lambda);
     return procval;
 }
 
@@ -533,9 +550,11 @@ proc_lambda(void)
 static VALUE
 proc_call(int argc, VALUE *argv, VALUE procval)
 {
+    VALUE res;
     rb_proc_t *proc;
     rb_block_t *blockptr = 0;
     rb_iseq_t *iseq;
+    PROBE_PROC_CALL_BEGIN(procval);
     GetProcPtr(procval, proc);
 
     iseq = proc->block.iseq;
@@ -549,8 +568,10 @@ proc_call(int argc, VALUE *argv, VALUE procval)
 	}
     }
 
-    return rb_vm_invoke_proc(GET_THREAD(), proc, proc->block.self,
+    res = rb_vm_invoke_proc(GET_THREAD(), proc, proc->block.self,
 			     argc, argv, blockptr);
+	PROBE_PROC_CALL_END(procval,res);
+    return res;
 }
 
 #if SIZEOF_LONG > SIZEOF_INT

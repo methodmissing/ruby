@@ -9,6 +9,26 @@
   if (RUBY_##probe##_BEGIN_ENABLED())\
     RUBY_##probe##_BEGIN((int)val);\
 } while (0)
+#define PROBE_PTR_BEGIN(probe,val) do {\
+  if (RUBY_##probe##_BEGIN_ENABLED())\
+    RUBY_##probe##_BEGIN(val);\
+} while (0)
+#define PROBE_ULONG_BEGIN(probe,val) do {\
+  if (RUBY_##probe##_BEGIN_ENABLED())\
+    RUBY_##probe##_BEGIN((unsigned long)val);\
+} while (0)
+#define PROBE_ULONG1_BEGIN(probe,val,val2) do {\
+  if (RUBY_##probe##_BEGIN_ENABLED())\
+    RUBY_##probe##_BEGIN((unsigned long)val,(unsigned long)val);\
+} while (0)
+#define PROBE_ULONG_OBJECT_BEGIN(probe,val,obj) do {\
+  if (RUBY_##probe##_BEGIN_ENABLED())\
+    RUBY_##probe##_BEGIN((unsigned long)val,(char*)rb_obj_classname(obj));\
+} while (0)
+#define PROBE_ULONG1_OBJECT_BEGIN(probe,val,val1,obj) do {\
+  if (RUBY_##probe##_BEGIN_ENABLED())\
+    RUBY_##probe##_BEGIN((unsigned long)val,(unsigned long)val1,(char*)rb_obj_classname(obj));\
+} while (0)
 #define PROBE_STR_BEGIN(probe,val) do {\
   if (RUBY_##probe##_BEGIN_ENABLED())\
     RUBY_##probe##_BEGIN((char*)val);\
@@ -28,6 +48,10 @@
 #define PROBE_CLASS_BEGIN(probe,class) do {\
   if (RUBY_##probe##_BEGIN_ENABLED())\
    RUBY_##probe##_BEGIN((char*)rb_class2name(class));\
+} while (0)
+#define PROBE_CLASS_INT_BEGIN(probe,class,val) do {\
+  if (RUBY_##probe##_BEGIN_ENABLED())\
+   RUBY_##probe##_BEGIN((char*)rb_class2name(class),(int)val);\
 } while (0)
 #define PROBE_CLASS1_BEGIN(probe,class,oclass) do {\
   if (RUBY_##probe##_BEGIN_ENABLED())\
@@ -77,10 +101,6 @@
   if (RUBY_##probe##_BEGIN_ENABLED())\
    RUBY_##probe##_BEGIN((char*)rb_obj_classname(class),(char*)rb_id2name(id));\
 } while (0)
-#define PROBE_FIBER_BEGIN(probe,fib) do {\
-  if (RUBY_##probe##_BEGIN_ENABLED())\
-   RUBY_##probe##_BEGIN((char*)rb_obj_classname(fib->prev),(int)fib->status);\
-} while (0)
 #define PROBE_END(probe) do {\
   if (RUBY_##probe##_END_ENABLED())\
    RUBY_##probe##_END();\
@@ -88,6 +108,26 @@
 #define PROBE_INT_END(probe,val) do {\
   if (RUBY_##probe##_END_ENABLED())\
     RUBY_##probe##_END((int)val);\
+} while (0)
+#define PROBE_PTR_END(probe,val) do {\
+  if (RUBY_##probe##_END_ENABLED())\
+    RUBY_##probe##_END(val);\
+} while (0)
+#define PROBE_ULONG_END(probe,val) do {\
+  if (RUBY_##probe##_END_ENABLED())\
+    RUBY_##probe##_END((unsigned long)val);\
+} while (0)
+#define PROBE_ULONG1_END(probe,val,val1) do {\
+  if (RUBY_##probe##_END_ENABLED())\
+    RUBY_##probe##_END((unsigned long)val,(unsigned long)val1);\
+} while (0)
+#define PROBE_ULONG_OBJECT_END(probe,val,obj) do {\
+  if (RUBY_##probe##_END_ENABLED())\
+    RUBY_##probe##_END((unsigned long)val,(char*)rb_obj_classname(obj));\
+} while (0)
+#define PROBE_ULONG1_OBJECT_END(probe,val,val1,obj) do {\
+  if (RUBY_##probe##_END_ENABLED())\
+    RUBY_##probe##_END((unsigned long)val,(unsigned long)val1,(char*)rb_obj_classname(obj));\
 } while (0)
 #define PROBE_STR_END(probe,val) do {\
   if (RUBY_##probe##_END_ENABLED())\
@@ -108,6 +148,10 @@
 #define PROBE_CLASS_END(probe,class) do {\
   if (RUBY_##probe##_END_ENABLED())\
    RUBY_##probe##_END((char*)rb_class2name(class));\
+} while (0)
+#define PROBE_CLASS_INT_END(probe,class,val) do {\
+  if (RUBY_##probe##_END_ENABLED())\
+   RUBY_##probe##_END((char*)rb_class2name(class),(int)val);\
 } while (0)
 #define PROBE_CLASS1_END(probe,class,oclass) do {\
   if (RUBY_##probe##_END_ENABLED())\
@@ -157,10 +201,6 @@
   if (RUBY_##probe##_END_ENABLED())\
    RUBY_##probe##_END((char*)rb_obj_classname(class),(char*)rb_id2name(id));\
 } while (0)
-#define PROBE_FIBER_END(probe,fib) do {\
-  if (RUBY_##probe##_END_ENABLED())\
-   RUBY_##probe##_END((char*)rb_obj_classname(fib->prev),(int)fib->status);\
-} while (0)
 
 #include "probes/string.h"
 #include "probes/method.h"
@@ -171,6 +211,8 @@
 #include "probes/gc.h"
 #include "probes/trace.h"
 #include "probes/fiber.h"
+#include "probes/ins.h"
+#include "probes/proc.h"
 #else
 #include "noop_probes/string.h"
 #include "noop_probes/method.h"
@@ -178,7 +220,9 @@
 #include "noop_probes/st.h"
 #include "noop_probes/object.h"
 #include "noop_probes/mem.h"
-#include "probes/gc.h"
-#include "probes/trace.h"
-#include "probes/fiber.h"
+#include "noop_probes/gc.h"
+#include "noop_probes/trace.h"
+#include "noop_probes/fiber.h"
+#include "noop_probes/ins.h"
+#include "noop_probes/proc.h"
 #endif

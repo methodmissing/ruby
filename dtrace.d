@@ -219,6 +219,34 @@ provider ruby {
     probe fiber__start__end(char *class, int status);
     probe fiber__terminate__begin(char *class, int status);
     probe fiber__terminate__end(char *class, int status);
+
+    probe proc__mark__begin(void *pointer);
+    probe proc__mark__end(void *pointer);
+    probe proc__free__begin(void *pointer);
+    probe proc__free__end(void *pointer);
+    probe proc__dup__begin(char *class);
+    probe proc__dup__end(char *class);
+    probe binding__mark__begin(void *pointer);
+    probe binding__mark__end(void *pointer);
+    probe binding__free__begin(void *pointer);
+    probe binding__free__end(void *pointer);
+    probe binding__dup__begin(char *class);
+    probe binding__dup__end(char *class);
+    probe binding__new__begin();
+    probe binding__new__end();
+    probe proc__new__begin(char *class,int lambda);
+    probe proc__new__end(char *class,int lambda);
+    probe proc__call__begin(char *class);
+    probe proc__call__end(char *class,char *class1);
+
+    probe ins__getlocal__begin(unsigned long);
+    probe ins__getlocal__end(char *class);
+    probe ins__setlocal__begin(unsigned long,char *class);
+    probe ins__setlocal__end();
+    probe ins__getdynamic__begin(unsigned long,unsigned long);
+    probe ins__getdynamic__end(char *class);
+    probe ins__setdynamic__begin(unsigned long,unsigned long,char *class);
+    probe ins__setdynamic__end();
 };
 
 #pragma D attributes Evolving/Evolving/Common provider ruby provider

@@ -47,7 +47,7 @@ nop
 /**
   @c variable
   @e get local variable value (which is pointed by idx).
-  @j idx ‚Åw’è‚³‚ê‚½ƒ[ƒJƒ‹•Ï”‚ğƒXƒ^ƒbƒN‚É’u‚­B
+  @j idx Ã‡â‰ˆÃ©wÃ­Ã‹Ã‡â‰¥Ã‡ÃÃ‡Î©Ã‰Ã§Ã…[Ã‰JÃ‰Ã£Ã¯Å“ÃªÃ®Ã‡ï£¿Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã­uÃ‡â‰ Ã…B
  */
 DEFINE_INSN
 getlocal
@@ -55,13 +55,15 @@ getlocal
 ()
 (VALUE val)
 {
+    PROBE_INS_GETLOCAL_BEGIN(idx);
     val = *(GET_LFP() - idx);
+    PROBE_INS_GETLOCAL_END(val);
 }
 
 /**
   @c variable
   @e set local variable value (which is pointed by idx) as val.
-  @j idx ‚Åw’è‚³‚ê‚½ƒ[ƒJƒ‹•Ï”‚ğ val ‚Éİ’è‚·‚éB
+  @j idx Ã‡â‰ˆÃ©wÃ­Ã‹Ã‡â‰¥Ã‡ÃÃ‡Î©Ã‰Ã§Ã…[Ã‰JÃ‰Ã£Ã¯Å“ÃªÃ®Ã‡ï£¿ val Ã‡â€¦Ãªâ€ºÃ­Ã‹Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 setlocal
@@ -69,13 +71,15 @@ setlocal
 (VALUE val)
 ()
 {
+    PROBE_INS_SETLOCAL_BEGIN(idx,val);
     (*(GET_LFP() - idx)) = val;
+    PROBE_INS_SETLOCAL_END();
 }
 
 /**
   @c variable
   @e get special local variable ($~, $_, ..) value.
-  @j “Áê‚Èƒ[ƒJƒ‹•Ï”i$~, $_, ...j‚Ì’l‚ğ“¾‚éB
+  @j Ã¬Â¡Ã©ÃÃ‡Â»Ã‰Ã§Ã…[Ã‰JÃ‰Ã£Ã¯Å“ÃªÃ®Ã…i$~, $_, ...Ã…jÃ‡ÃƒÃ­lÃ‡ï£¿Ã¬Ã¦Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 getspecial
@@ -89,7 +93,7 @@ getspecial
 /**
   @c variable
   @e set special local variable ($~, $_, ...) value as obj.
-  @j “Á•Ê‚Èƒ[ƒJƒ‹•Ï”i$~, $_, ...j‚Ì’l‚ğİ’è‚·‚éB
+  @j Ã¬Â¡Ã¯Â Ã‡Â»Ã‰Ã§Ã…[Ã‰JÃ‰Ã£Ã¯Å“ÃªÃ®Ã…i$~, $_, ...Ã…jÃ‡ÃƒÃ­lÃ‡ï£¿Ãªâ€ºÃ­Ã‹Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 setspecial
@@ -104,8 +108,8 @@ setspecial
   @c variable
   @e get block local variable(which is pointed by idx and level).
      level means nest level of block, and specify how above this variable.
-  @j level, idx ‚Åw’è‚³‚ê‚½ƒuƒƒbƒNƒ[ƒJƒ‹•Ï”‚Ì’l‚ğƒXƒ^ƒbƒN‚É’u‚­B
-     level ‚ÍƒuƒƒbƒN‚ÌƒlƒXƒgƒŒƒxƒ‹‚ÅA‰½’iã‚©‚ğ¦‚·B
+  @j level, idx Ã‡â‰ˆÃ©wÃ­Ã‹Ã‡â‰¥Ã‡ÃÃ‡Î©Ã‰uÃ‰Ã§Ã‰bÃ‰NÃ‰Ã§Ã…[Ã‰JÃ‰Ã£Ã¯Å“ÃªÃ®Ã‡ÃƒÃ­lÃ‡ï£¿Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã­uÃ‡â‰ Ã…B
+     level Ã‡Ã•Ã‰uÃ‰Ã§Ã‰bÃ‰NÃ‡ÃƒÃ‰lÃ‰XÃ‰gÃ‰Ã¥Ã‰xÃ‰Ã£Ã‡â‰ˆÃ…AÃ¢Î©Ã­iÃ¨â€Ã‡Â©Ã‡ï£¿Ã©Â¶Ã‡âˆ‘Ã…B
  */
 DEFINE_INSN
 getdynamic
@@ -114,19 +118,21 @@ getdynamic
 (VALUE val)
 {
     rb_num_t i;
+    PROBE_INS_GETDYNAMIC_BEGIN(idx,level);
     VALUE *dfp2 = GET_DFP();
     for (i = 0; i < level; i++) {
 	dfp2 = GET_PREV_DFP(dfp2);
     }
     val = *(dfp2 - idx);
+    PROBE_INS_GETDYNAMIC_END(val);
 }
 
 /**
   @c variable
   @e set block local variable(which is pointed by 'idx') as val.
      level means nest level of block, and specify how above this variable.
-  @j level, idx ‚Åw’è‚³‚ê‚½ƒuƒƒbƒNƒ[ƒJƒ‹•Ï”‚Ì’l‚ğ val ‚É‚·‚éB
-     level ‚ÍƒuƒƒbƒN‚ÌƒlƒXƒgƒŒƒxƒ‹‚ÅA‰½’iã‚©‚ğ¦‚·B
+  @j level, idx Ã‡â‰ˆÃ©wÃ­Ã‹Ã‡â‰¥Ã‡ÃÃ‡Î©Ã‰uÃ‰Ã§Ã‰bÃ‰NÃ‰Ã§Ã…[Ã‰JÃ‰Ã£Ã¯Å“ÃªÃ®Ã‡ÃƒÃ­lÃ‡ï£¿ val Ã‡â€¦Ã‡âˆ‘Ã‡ÃˆÃ…B
+     level Ã‡Ã•Ã‰uÃ‰Ã§Ã‰bÃ‰NÃ‡ÃƒÃ‰lÃ‰XÃ‰gÃ‰Ã¥Ã‰xÃ‰Ã£Ã‡â‰ˆÃ…AÃ¢Î©Ã­iÃ¨â€Ã‡Â©Ã‡ï£¿Ã©Â¶Ã‡âˆ‘Ã…B
  */
 DEFINE_INSN
 setdynamic
@@ -135,18 +141,20 @@ setdynamic
 ()
 {
     rb_num_t i;
+    PROBE_INS_SETDYNAMIC_BEGIN(idx,level,val);
     VALUE *dfp2 = GET_DFP();
     for (i = 0; i < level; i++) {
 	dfp2 = GET_PREV_DFP(dfp2);
     }
     *(dfp2 - idx) = val;
+    PROBE_INS_SETDYNAMIC_END();
 }
 
 /**
   @c variable
   @e get instance variable id of obj.
      if is_local is not 0, search as class local variable.
-  @j self ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX•Ï” id ‚Ì’l‚ğ“¾‚éB
+  @j self Ã‡ÃƒÃ‰CÃ‰Ã¬Ã‰XÃ‰^Ã‰Ã¬Ã‰XÃ¯Å“ÃªÃ® id Ã‡ÃƒÃ­lÃ‡ï£¿Ã¬Ã¦Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 getinstancevariable
@@ -161,7 +169,7 @@ getinstancevariable
   @c variable
   @e set instance variable id of obj as val.
      if is_local is not 0, search as class local variable.
-  @j self ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX•Ï” id ‚ğ val ‚É‚·‚éB
+  @j self Ã‡ÃƒÃ‰CÃ‰Ã¬Ã‰XÃ‰^Ã‰Ã¬Ã‰XÃ¯Å“ÃªÃ® id Ã‡ï£¿ val Ã‡â€¦Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 setinstancevariable
@@ -175,7 +183,7 @@ setinstancevariable
 /**
   @c variable
   @e get class variable id of klass as val.
-  @j Œ»İ‚ÌƒXƒR[ƒv‚ÌƒNƒ‰ƒX•Ï” id ‚Ì’l‚ğ“¾‚éB
+  @j Ã¥ÂªÃ§â€ºÃ‡ÃƒÃ‰XÃ‰RÃ…[Ã‰vÃ‡ÃƒÃ‰NÃ‰Ã¢Ã‰XÃ¯Å“ÃªÃ® id Ã‡ÃƒÃ­lÃ‡ï£¿Ã¬Ã¦Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 getclassvariable
@@ -190,7 +198,7 @@ getclassvariable
 /**
   @c variable
   @e set class variable id of klass as val.
-  @j klass ‚ÌƒNƒ‰ƒX•Ï” id ‚ğ val ‚É‚·‚éB
+  @j klass Ã‡ÃƒÃ‰NÃ‰Ã¢Ã‰XÃ¯Å“ÃªÃ® id Ã‡ï£¿ val Ã‡â€¦Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 setclassvariable
@@ -209,10 +217,10 @@ setclassvariable
    are searched in current scope. if klass is Qfalse, constant as
    top level constant. otherwise, get constant under klass
    class or module.
-  @j ’è” id ‚Ì’l‚ğ“¾‚éB
-   klass ‚ª Qnil ‚È‚çA‚»‚ÌƒXƒR[ƒv‚Å“¾‚ç‚ê‚é’è”‚Ì’l‚ğ“¾‚éB
-   Qfalse ‚È‚çAƒgƒbƒvƒŒƒxƒ‹ƒXƒR[ƒv‚ğ“¾‚éB
-   ‚»‚êˆÈŠO‚È‚çAklass ƒNƒ‰ƒX‚Ì‰º‚Ì’è”‚ğ“¾‚éB
+  @j Ã­Ã‹ÃªÃ® id Ã‡ÃƒÃ­lÃ‡ï£¿Ã¬Ã¦Ã‡ÃˆÃ…B
+   klass Ã‡â„¢ Qnil Ã‡Â»Ã‡ÃÃ…AÃ‡ÂªÃ‡ÃƒÃ‰XÃ‰RÃ…[Ã‰vÃ‡â‰ˆÃ¬Ã¦Ã‡ÃÃ‡ÃÃ‡ÃˆÃ­Ã‹ÃªÃ®Ã‡ÃƒÃ­lÃ‡ï£¿Ã¬Ã¦Ã‡ÃˆÃ…B
+   Qfalse Ã‡Â»Ã‡ÃÃ…AÃ‰gÃ‰bÃ‰vÃ‰Ã¥Ã‰xÃ‰Ã£Ã‰XÃ‰RÃ…[Ã‰vÃ‡ï£¿Ã¬Ã¦Ã‡ÃˆÃ…B
+   Ã‡ÂªÃ‡ÃÃ Â»Ã¤OÃ‡Â»Ã‡ÃÃ…Aklass Ã‰NÃ‰Ã¢Ã‰XÃ‡ÃƒÃ¢âˆ«Ã‡ÃƒÃ­Ã‹ÃªÃ®Ã‡ï£¿Ã¬Ã¦Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 getconstant
@@ -231,10 +239,10 @@ getconstant
    top level constant. otherwise, set constant under klass
    class or module.
 
-  @j ’è” id ‚Ì’l‚ğ val ‚É‚·‚éB
-   klass ‚ª Qfalse ‚È‚çA‚»‚ÌƒXƒR[ƒv‚Å“¾‚ç‚ê‚é’è” id ‚Ì’l‚ğİ’è‚·‚éB
-   Qnil ‚È‚çAƒgƒbƒvƒŒƒxƒ‹ƒXƒR[ƒv‚Ì’l‚ğİ’è‚·‚éB
-   ‚»‚êˆÈŠO‚È‚çAklass ƒNƒ‰ƒX‚Ì‰º‚Ì’è”‚ğİ’è‚·‚éB
+  @j Ã­Ã‹ÃªÃ® id Ã‡ÃƒÃ­lÃ‡ï£¿ val Ã‡â€¦Ã‡âˆ‘Ã‡ÃˆÃ…B
+   klass Ã‡â„¢ Qfalse Ã‡Â»Ã‡ÃÃ…AÃ‡ÂªÃ‡ÃƒÃ‰XÃ‰RÃ…[Ã‰vÃ‡â‰ˆÃ¬Ã¦Ã‡ÃÃ‡ÃÃ‡ÃˆÃ­Ã‹ÃªÃ® id Ã‡ÃƒÃ­lÃ‡ï£¿Ãªâ€ºÃ­Ã‹Ã‡âˆ‘Ã‡ÃˆÃ…B
+   Qnil Ã‡Â»Ã‡ÃÃ…AÃ‰gÃ‰bÃ‰vÃ‰Ã¥Ã‰xÃ‰Ã£Ã‰XÃ‰RÃ…[Ã‰vÃ‡ÃƒÃ­lÃ‡ï£¿Ãªâ€ºÃ­Ã‹Ã‡âˆ‘Ã‡ÃˆÃ…B
+   Ã‡ÂªÃ‡ÃÃ Â»Ã¤OÃ‡Â»Ã‡ÃÃ…Aklass Ã‰NÃ‰Ã¢Ã‰XÃ‡ÃƒÃ¢âˆ«Ã‡ÃƒÃ­Ã‹ÃªÃ®Ã‡ï£¿Ãªâ€ºÃ­Ã‹Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 setconstant
@@ -250,7 +258,7 @@ setconstant
 /**
   @c variable
   @e get global variable id.
-  @j ƒOƒ[ƒoƒ‹•Ï” id ‚Ì’l‚ğ“¾‚éB
+  @j Ã‰OÃ‰Ã§Ã…[Ã‰oÃ‰Ã£Ã¯Å“ÃªÃ® id Ã‡ÃƒÃ­lÃ‡ï£¿Ã¬Ã¦Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 getglobal
@@ -264,7 +272,7 @@ getglobal
 /**
   @c variable
   @e set global variable id as val.
-  @j ƒOƒ[ƒoƒ‹•Ï” id ‚Ì’l‚ğİ’è‚·‚éB
+  @j Ã‰OÃ‰Ã§Ã…[Ã‰oÃ‰Ã£Ã¯Å“ÃªÃ® id Ã‡ÃƒÃ­lÃ‡ï£¿Ãªâ€ºÃ­Ã‹Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 setglobal
@@ -283,7 +291,7 @@ setglobal
 /**
   @c put
   @e put nil to stack.
-  @j ƒXƒ^ƒbƒN‚É nil ‚ğƒvƒbƒVƒ…‚·‚éB
+  @j Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦ nil Ã‡ï£¿Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 putnil
@@ -297,7 +305,7 @@ putnil
 /**
   @c put
   @e put self.
-  @j ƒXƒ^ƒbƒN‚É self ‚ğƒvƒbƒVƒ…‚·‚éB
+  @j Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦ self Ã‡ï£¿Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 putself
@@ -312,7 +320,7 @@ putself
   @c put
   @e put some object.
      i.e. Fixnum, true, false, nil, and so on.
-  @j ƒIƒuƒWƒFƒNƒg val ‚ğƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚éB
+  @j Ã‰IÃ‰uÃ‰WÃ‰FÃ‰NÃ‰g val Ã‡ï£¿Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
      i.e. Fixnum, true, false, nil, and so on.
  */
 DEFINE_INSN
@@ -327,8 +335,8 @@ putobject
 /**
   @c put
   @e put special object.  "value_type" is for expansion.
-  @j “Á•Ê‚ÈƒIƒuƒWƒFƒNƒg val ‚ğƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚éB
-     ƒIƒuƒWƒFƒNƒg‚Ìí—Ş‚Í value_type ‚É‚æ‚éD
+  @j Ã¬Â¡Ã¯Â Ã‡Â»Ã‰IÃ‰uÃ‰WÃ‰FÃ‰NÃ‰g val Ã‡ï£¿Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
+     Ã‰IÃ‰uÃ‰WÃ‰FÃ‰NÃ‰gÃ‡ÃƒÃ©ÃŒÃ³ï¬Ã‡Ã• value_type Ã‡â€¦Ã‡ÃŠÃ‡ÃˆÃ…D
  */
 DEFINE_INSN
 putspecialobject
@@ -365,7 +373,7 @@ putiseq
 /**
   @c put
   @e put string val. string will be copied.
-  @j •¶š—ñ‚ğƒRƒs[‚µ‚ÄƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚éB
+  @j Ã¯âˆ‚Ã©Ã¶Ã³Ã’Ã‡ï£¿Ã‰RÃ‰sÃ…[Ã‡ÂµÃ‡Æ’Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 putstring
@@ -379,7 +387,7 @@ putstring
 /**
   @c put
   @e put concatenate strings
-  @j ƒXƒ^ƒbƒNƒgƒbƒv‚Ì•¶š—ñ‚ğ n ŒÂ˜AŒ‹‚µCŒ‹‰Ê‚ğƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚éB
+  @j Ã‰XÃ‰^Ã‰bÃ‰NÃ‰gÃ‰bÃ‰vÃ‡ÃƒÃ¯âˆ‚Ã©Ã¶Ã³Ã’Ã‡ï£¿ n Ã¥Â¬Ã²AÃ¥Ã£Ã‡ÂµÃ…CÃ¥Ã£Ã¢Â Ã‡ï£¿Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 concatstrings
@@ -400,7 +408,7 @@ concatstrings
 /**
   @c put
   @e to_str
-  @j to_str ‚ÌŒ‹‰Ê‚ğƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚éB
+  @j to_str Ã‡ÃƒÃ¥Ã£Ã¢Â Ã‡ï£¿Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 tostring
@@ -414,8 +422,8 @@ tostring
 /**
   @c put
   @e to Regexp
-  @j •¶š—ñ str ‚ğ³‹K•\Œ»‚ÉƒRƒ“ƒpƒCƒ‹‚µ‚ÄƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚éB
-     ƒRƒ“ƒpƒCƒ‹Copt ‚ğ³‹K•\Œ»‚ÌƒIƒvƒVƒ‡ƒ“‚Æ‚·‚éB
+  @j Ã¯âˆ‚Ã©Ã¶Ã³Ã’ str Ã‡ï£¿Ãªâ‰¥Ã£KÃ¯\Ã¥ÂªÃ‡â€¦Ã‰RÃ‰Ã¬Ã‰pÃ‰CÃ‰Ã£Ã‡ÂµÃ‡Æ’Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
+     Ã‰RÃ‰Ã¬Ã‰pÃ‰CÃ‰Ã£Ã©Ã»Ã…Copt Ã‡ï£¿Ãªâ‰¥Ã£KÃ¯\Ã¥ÂªÃ‡ÃƒÃ‰IÃ‰vÃ‰VÃ‰Ã¡Ã‰Ã¬Ã‡âˆ†Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 toregexp
@@ -437,7 +445,7 @@ toregexp
 /**
   @c put
   @e put new array.
-  @j V‚µ‚¢”z—ñ‚ğƒXƒ^ƒbƒNã‚Ì num ŒÂ‚Ì’l‚Å‰Šú‰»‚µ‚Ä¶¬‚µƒvƒbƒVƒ…‚·‚éB
+  @j ÃªVÃ‡ÂµÃ‡Â¢Ã®zÃ³Ã’Ã‡ï£¿Ã‰XÃ‰^Ã‰bÃ‰NÃ¨â€Ã‡Ãƒ num Ã¥Â¬Ã‡ÃƒÃ­lÃ‡â‰ˆÃ¨Ã¢Ã¤Ë™Ã¢ÂªÃ‡ÂµÃ‡Æ’Ãªâˆ‚ÃªÂ¨Ã‡ÂµÃ‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 newarray
@@ -452,7 +460,7 @@ newarray
 /**
   @c put
   @e dup array
-  @j ”z—ñ ary ‚ğ dup ‚µ‚ÄƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚éB
+  @j Ã®zÃ³Ã’ ary Ã‡ï£¿ dup Ã‡ÂµÃ‡Æ’Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 duparray
@@ -466,13 +474,13 @@ duparray
 /**
   @c put
   @e expand array to num objects.
-  @j ƒXƒ^ƒbƒNƒgƒbƒv‚ÌƒIƒuƒWƒFƒNƒg‚ª”z—ñ‚Å‚ ‚ê‚ÎA‚»‚ê‚ğ“WŠJ‚·‚éB
-     ”z—ñƒIƒuƒWƒFƒNƒg‚Ì—v‘f”‚ª numˆÈ‰º‚È‚ç‚ÎA‘ã‚í‚è‚É nil ‚ğÏ‚ŞBnumˆÈã‚È‚çA
-     numˆÈã‚Ì—v‘f‚ÍØ‚èÌ‚Ä‚éB
-     ”z—ñƒIƒuƒWƒFƒNƒg‚Å‚È‚¯‚ê‚ÎAnum - 1 ŒÂ‚Ì nil ‚ğÏ‚ŞB
-     ‚à‚µ flag ‚ª^‚È‚çAc‚è—v‘f‚Ì”z—ñ‚ğÏ‚Ş
-     flag: 0x01 - ÅŒã‚ğ”z—ñ‚É
-     flag: 0x02 - postarg —p
+  @j Ã‰XÃ‰^Ã‰bÃ‰NÃ‰gÃ‰bÃ‰vÃ‡ÃƒÃ‰IÃ‰uÃ‰WÃ‰FÃ‰NÃ‰gÃ‡â„¢Ã®zÃ³Ã’Ã‡â‰ˆÃ‡â€ Ã‡ÃÃ‡Å’Ã…AÃ‡ÂªÃ‡ÃÃ‡ï£¿Ã¬WÃ¤JÃ‡âˆ‘Ã‡ÃˆÃ…B
+     Ã®zÃ³Ã’Ã‰IÃ‰uÃ‰WÃ‰FÃ‰NÃ‰gÃ‡ÃƒÃ³vÃ«fÃªÃ®Ã‡â„¢ numÃ Â»Ã¢âˆ«Ã‡Â»Ã‡ÃÃ‡Å’Ã…AÃ«â€Ã‡ÃŒÃ‡Ã‹Ã‡â€¦ nil Ã‡ï£¿ÃªÅ“Ã‡ï¬Ã…BnumÃ Â»Ã¨â€Ã‡Â»Ã‡ÃÃ…A
+     numÃ Â»Ã¨â€Ã‡ÃƒÃ³vÃ«fÃ‡Ã•ÃªÃ¿Ã‡Ã‹Ã©ÃƒÃ‡Æ’Ã‡ÃˆÃ…B
+     Ã®zÃ³Ã’Ã‰IÃ‰uÃ‰WÃ‰FÃ‰NÃ‰gÃ‡â‰ˆÃ‡Â»Ã‡Ã˜Ã‡ÃÃ‡Å’Ã…Anum - 1 Ã¥Â¬Ã‡Ãƒ nil Ã‡ï£¿ÃªÅ“Ã‡ï¬Ã…B
+     Ã‡â€¡Ã‡Âµ flag Ã‡â„¢Ãª^Ã‡Â»Ã‡ÃÃ…AÃ©cÃ‡Ã‹Ã³vÃ«fÃ‡ÃƒÃ®zÃ³Ã’Ã‡ï£¿ÃªÅ“Ã‡ï¬
+     flag: 0x01 - Ã§â‰ˆÃ¥â€Ã‡ï£¿Ã®zÃ³Ã’Ã‡â€¦
+     flag: 0x02 - postarg Ã³p
      flag: 0x04 - reverse?
  */
 DEFINE_INSN
@@ -487,7 +495,7 @@ expandarray
 /**
   @c put
   @e concat two arrays
-  @j “ñ‚Â‚Ì”z—ñ ary1, ary2 ‚ğ˜AŒ‹‚µƒXƒ^ƒbƒN‚ÖƒvƒbƒVƒ…‚·‚éB
+  @j Ã¬Ã’Ã‡Â¬Ã‡ÃƒÃ®zÃ³Ã’ ary1, ary2 Ã‡ï£¿Ã²AÃ¥Ã£Ã‡ÂµÃ‰XÃ‰^Ã‰bÃ‰NÃ‡Ã·Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 concatarray
@@ -516,7 +524,7 @@ concatarray
 /**
   @c put
   @e splat array
-  @j ”z—ñ ary ‚É‘Î‚µ‚Ä to_a ‚ğŒÄ‚Ño‚·B
+  @j Ã®zÃ³Ã’ ary Ã‡â€¦Ã«Å’Ã‡ÂµÃ‡Æ’ to_a Ã‡ï£¿Ã¥Æ’Ã‡â€”Ã¨oÃ‡âˆ‘Ã…B
  */
 DEFINE_INSN
 splatarray
@@ -534,7 +542,7 @@ splatarray
 /**
   @c put
   @e check value is included in ary
-  @j ”z—ñ ary ‚É—v‘f obj ‚ª“ü‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©ƒ`ƒFƒbƒNBcase/when ‚Å—˜—p‚·‚éB
+  @j Ã®zÃ³Ã’ ary Ã‡â€¦Ã³vÃ«f obj Ã‡â„¢Ã¬Â¸Ã‡Â¡Ã‡Æ’Ã‡Â¢Ã‡ÃˆÃ‡Â©Ã‡Â«Ã‡Â§Ã‡Â©Ã‰`Ã‰FÃ‰bÃ‰NÃ…Bcase/when Ã‡â‰ˆÃ³Ã²Ã³pÃ‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 checkincludearray
@@ -574,8 +582,8 @@ checkincludearray
 /**
   @c put
   @e put new Hash.
-  @j V‚µ‚¢ƒnƒbƒVƒ…‚ğƒXƒ^ƒbƒNƒgƒbƒv‚Ì n ŒÂ‚ğ‰Šú’l‚Æ‚µ‚Ä¶¬‚·‚éB
-     n ‚ÍƒL[‚Æ’l‚ÌƒyƒA‚È‚Ì‚Å 2 ‚Ì”{”‚Å‚È‚¯‚ê‚Î‚È‚ç‚È‚¢B
+  @j ÃªVÃ‡ÂµÃ‡Â¢Ã‰nÃ‰bÃ‰VÃ‰Ã–Ã‡ï£¿Ã‰XÃ‰^Ã‰bÃ‰NÃ‰gÃ‰bÃ‰vÃ‡Ãƒ n Ã¥Â¬Ã‡ï£¿Ã¨Ã¢Ã¤Ë™Ã­lÃ‡âˆ†Ã‡ÂµÃ‡Æ’Ãªâˆ‚ÃªÂ¨Ã‡âˆ‘Ã‡ÃˆÃ…B
+     n Ã‡Ã•Ã‰LÃ…[Ã‡âˆ†Ã­lÃ‡ÃƒÃ‰yÃ‰AÃ‡Â»Ã‡ÃƒÃ‡â‰ˆ 2 Ã‡ÃƒÃ®{ÃªÃ®Ã‡â‰ˆÃ‡Â»Ã‡Ã˜Ã‡ÃÃ‡Å’Ã‡Â»Ã‡ÃÃ‡Â»Ã‡Â¢Ã…B
  */
 DEFINE_INSN
 newhash
@@ -597,7 +605,7 @@ newhash
 /**
   @c put
   @e put new Range object.(Range.new(low, high, flag))
-  @j Range.new(low, high, flag) ‚Ì‚æ‚¤‚ÈƒIƒuƒWƒFƒNƒg‚ğ¶¬‚µƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚éB
+  @j Range.new(low, high, flag) Ã‡ÃƒÃ‡ÃŠÃ‡Â§Ã‡Â»Ã‰IÃ‰uÃ‰WÃ‰FÃ‰NÃ‰gÃ‡ï£¿Ãªâˆ‚ÃªÂ¨Ã‡ÂµÃ‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 newrange
@@ -615,7 +623,7 @@ newrange
 /**
   @c stack
   @e pop from stack.
-  @j ƒXƒ^ƒbƒN‚©‚çˆê‚Âƒ|ƒbƒv‚·‚éB
+  @j Ã‰XÃ‰^Ã‰bÃ‰NÃ‡Â©Ã‡ÃÃ ÃÃ‡Â¬Ã‰|Ã‰bÃ‰vÃ‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 pop
@@ -630,7 +638,7 @@ pop
 /**
   @c stack
   @e duplicate stack top.
-  @j ƒXƒ^ƒbƒNƒgƒbƒv‚ğƒRƒs[‚µ‚ÄƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚éB
+  @j Ã‰XÃ‰^Ã‰bÃ‰NÃ‰gÃ‰bÃ‰vÃ‡ï£¿Ã‰RÃ‰sÃ…[Ã‡ÂµÃ‡Æ’Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 dup
@@ -644,7 +652,7 @@ dup
 /**
   @c stack
   @e duplicate stack top n elements
-  @j ƒXƒ^ƒbƒNƒgƒbƒv‚Ì n ŒÂ‚ğƒRƒs[‚µ‚ÄƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚éB
+  @j Ã‰XÃ‰^Ã‰bÃ‰NÃ‰gÃ‰bÃ‰vÃ‡Ãƒ n Ã¥Â¬Ã‡ï£¿Ã‰RÃ‰sÃ…[Ã‡ÂµÃ‡Æ’Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 dupn
@@ -664,7 +672,7 @@ dupn
 /**
   @c stack
   @e swap top 2 vals
-  @j ƒXƒ^ƒbƒNƒgƒbƒv‚Ì 2 ‚Â‚Ì’l‚ğŒğŠ·‚·‚éB
+  @j Ã‰XÃ‰^Ã‰bÃ‰NÃ‰gÃ‰bÃ‰vÃ‡Ãƒ 2 Ã‡Â¬Ã‡ÃƒÃ­lÃ‡ï£¿Ã¥ï£¿Ã¤âˆ‘Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 swap
@@ -678,7 +686,7 @@ swap
 /**
   @c stack
   @e for stack caching.
-  @j ƒXƒ^ƒbƒNƒLƒƒƒbƒVƒ“ƒO‚Ìó‘Ô‚ğ’²®‚·‚é‚½‚ß‚É•K—v‚È–½—ßB
+  @j Ã‰XÃ‰^Ã‰bÃ‰NÃ‰LÃ‰Ã‰Ã‰bÃ‰VÃ‰Ã¬Ã‰OÃ‡ÃƒÃ¨Ã›Ã«â€˜Ã‡ï£¿Ã­â‰¤ÃªÃ†Ã‡âˆ‘Ã‡ÃˆÃ‡Î©Ã‡ï¬‚Ã‡â€¦Ã¯KÃ³vÃ‡Â»Ã±Î©Ã³ï¬‚Ã…B
  */
 DEFINE_INSN
 reput
@@ -692,7 +700,7 @@ reput
 /**
   @c stack
   @e get nth stack value from stack top
-  @j ƒXƒ^ƒbƒNƒgƒbƒv‚©‚ç n ŒÂ–Ú‚ğƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚éB
+  @j Ã‰XÃ‰^Ã‰bÃ‰NÃ‰gÃ‰bÃ‰vÃ‡Â©Ã‡Ã n Ã¥Â¬Ã±â„Ã‡ï£¿Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 topn
@@ -706,7 +714,7 @@ topn
 /**
   @c stack
   @e set Nth stack entry to stack top
-  @j ƒXƒ^ƒbƒNƒgƒbƒv‚Ì’l‚ğ n ŒÂ–Ú‚ÌƒXƒ^ƒbƒN‚ÉƒRƒs[
+  @j Ã‰XÃ‰^Ã‰bÃ‰NÃ‰gÃ‰bÃ‰vÃ‡ÃƒÃ­lÃ‡ï£¿ n Ã¥Â¬Ã±â„Ã‡ÃƒÃ‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã‰RÃ‰sÃ…[
  */
 DEFINE_INSN
 setn
@@ -720,7 +728,7 @@ setn
 /**
   @c stack
   @e empt current stack
-  @j current stack ‚ğ‹ó‚É‚·‚éB
+  @j current stack Ã‡ï£¿Ã£Ã›Ã‡â€¦Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 adjuststack
@@ -739,7 +747,7 @@ adjuststack
 /**
   @c setting
   @e defined?
-  @j defined? ‚ğs‚¤B
+  @j defined? Ã‡ï£¿Ã§sÃ‡Â§Ã…B
  */
 DEFINE_INSN
 defined
@@ -843,7 +851,7 @@ defined
 /**
   @c setting
   @e trace
-  @j trace —p‚Ì–½—ßB
+  @j trace Ã³pÃ‡ÃƒÃ±Î©Ã³ï¬‚Ã…B
  */
 DEFINE_INSN
 trace
@@ -865,9 +873,9 @@ trace
   @e
    enter class definition scope. if super is Qfalse, and clsas
    "klass" is defined, it's redefine. otherwise, define "klass" class.
-  @j ƒNƒ‰ƒX’è‹`ƒXƒR[ƒv‚ÖˆÚs‚·‚éB
-   ‚à‚µ super ‚ª Qfalse ‚Å klassƒNƒ‰ƒX‚ª’è‹`‚³‚ê‚Ä‚¢‚ê‚ÎÄ’è‹`‚Å‚ ‚éB
-   ‚»‚¤‚Å‚È‚¯‚ê‚ÎAklass ƒNƒ‰ƒX‚ğ’è‹`‚·‚éB
+  @j Ã‰NÃ‰Ã¢Ã‰XÃ­Ã‹Ã£`Ã‰XÃ‰RÃ…[Ã‰vÃ‡Ã·Ã â„Ã§sÃ‡âˆ‘Ã‡ÃˆÃ…B
+   Ã‡â€¡Ã‡Âµ super Ã‡â„¢ Qfalse Ã‡â‰ˆ klassÃ‰NÃ‰Ã¢Ã‰XÃ‡â„¢Ã­Ã‹Ã£`Ã‡â‰¥Ã‡ÃÃ‡Æ’Ã‡Â¢Ã‡ÃÃ‡Å’Ã§Æ’Ã­Ã‹Ã£`Ã‡â‰ˆÃ‡â€ Ã‡ÃˆÃ…B
+   Ã‡ÂªÃ‡Â§Ã‡â‰ˆÃ‡Â»Ã‡Ã˜Ã‡ÃÃ‡Å’Ã…Aklass Ã‰NÃ‰Ã¢Ã‰XÃ‡ï£¿Ã­Ã‹Ã£`Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 defineclass
@@ -965,7 +973,7 @@ defineclass
 /**
   @c method/iterator
   @e obj.send(id, args..) # args.size => num
-  @j ƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ğs‚¤B
+  @j Ã‰Ã…Ã‰\Ã‰bÃ‰hÃ¥Æ’Ã‡â€”Ã¨oÃ‡ÂµÃ‡ï£¿Ã§sÃ‡Â§Ã…B
   obj.send(id, args..) # args.size => num
     flag & VM_CALL_ARGS_SPLAT_BIT    != 0 -> splat last arg
     flag & VM_CALL_ARGS_BLOCKARG_BIT != 0 -> Proc as Block
@@ -997,9 +1005,9 @@ send
 /**
   @c method/iterator
   @e super(args) # args.size => num
-  @j super ‚ğÀs‚·‚éB
+  @j super Ã‡ï£¿Ã©Â¿Ã§sÃ‡âˆ‘Ã‡ÃˆÃ…B
      super(args) # args.size => num
-     flag “™ƒIƒyƒ‰ƒ“ƒh‚ÌˆÓ–¡‚Í send ‚Æ“¯‚¶B
+     flag Ã¬Ã´Ã‰IÃ‰yÃ‰Ã¢Ã‰Ã¬Ã‰hÃ‡ÃƒÃ â€Ã±Â°Ã‡Ã• send Ã‡âˆ†Ã¬Ã˜Ã‡âˆ‚Ã…B
  */
 DEFINE_INSN
 invokesuper
@@ -1025,7 +1033,7 @@ invokesuper
 /**
   @c method/iterator
   @e yield(args) # args.size => num, flag shows expand argument or not
-  @j yield ‚ğÀs‚·‚éB
+  @j yield Ã‡ï£¿Ã©Â¿Ã§sÃ‡âˆ‘Ã‡ÃˆÃ…B
      yield(args) # args.size => num
  */
 DEFINE_INSN
@@ -1044,7 +1052,7 @@ invokeblock
 /**
   @c method/iterator
   @e return from this scope.
-  @j ‚±‚ÌƒXƒR[ƒv‚©‚ç”²‚¯‚éB
+  @j Ã‡Â±Ã‡ÃƒÃ‰XÃ‰RÃ…[Ã‰vÃ‡Â©Ã‡ÃÃ®â‰¤Ã‡Ã˜Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 leave
@@ -1067,7 +1075,7 @@ leave
 /**
   @c method/iterator
   @e return from this vm loop
-  @j VM loop ‚©‚ç”²‚¯‚éB
+  @j VM loop Ã‡Â©Ã‡ÃÃ®â‰¤Ã‡Ã˜Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 finish
@@ -1090,7 +1098,7 @@ finish
 /**
   @c exception
   @e longjump
-  @j ‘åˆæƒWƒƒƒ“ƒv‚ğs‚¤B
+  @j Ã«Ã‚Ã ÃŠÃ‰WÃ‰Ã‰Ã‰Ã¬Ã‰vÃ‡ï£¿Ã§sÃ‡Â§Ã…B
  */
 DEFINE_INSN
 throw
@@ -1111,7 +1119,7 @@ throw
 /**
   @c jump
   @e set PC to (PC + dst).
-  @j PC ‚ğ (PC + dst) ‚É‚·‚éB
+  @j PC Ã‡ï£¿ (PC + dst) Ã‡â€¦Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 jump
@@ -1126,7 +1134,7 @@ jump
 /**
   @c jump
   @e if val is not false or nil, set PC to (PC + dst).
-  @j ‚à‚µ val ‚ª false ‚© nil ‚Å‚È‚¯‚ê‚ÎAPC ‚ğ (PC + dst) ‚É‚·‚éB
+  @j Ã‡â€¡Ã‡Âµ val Ã‡â„¢ false Ã‡Â© nil Ã‡â‰ˆÃ‡Â»Ã‡Ã˜Ã‡ÃÃ‡Å’Ã…APC Ã‡ï£¿ (PC + dst) Ã‡â€¦Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 branchif
@@ -1143,7 +1151,7 @@ branchif
 /**
   @c jump
   @e if val is false or nil, set PC to (PC + dst).
-  @j ‚à‚µ val ‚ª false ‚© nil ‚È‚ç‚ÎAPC ‚ğ (PC + dst) ‚É‚·‚éB
+  @j Ã‡â€¡Ã‡Âµ val Ã‡â„¢ false Ã‡Â© nil Ã‡Â»Ã‡ÃÃ‡Å’Ã…APC Ã‡ï£¿ (PC + dst) Ã‡â€¦Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 branchunless
@@ -1165,7 +1173,7 @@ branchunless
 /**
   @c optimize
   @e inline cache
-  @j ƒCƒ“ƒ‰ƒCƒ“ƒLƒƒƒbƒVƒ…‚ª—LŒø‚È‚çA’l‚ğƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚µ‚Ä dst ‚ÖƒWƒƒƒ“ƒv‚·‚éB
+  @j Ã‰CÃ‰Ã¬Ã‰Ã¢Ã‰CÃ‰Ã¬Ã‰LÃ‰Ã‰Ã‰bÃ‰VÃ‰Ã–Ã‡â„¢Ã³LÃ¥Â¯Ã‡Â»Ã‡ÃÃ…AÃ­lÃ‡ï£¿Ã‰XÃ‰^Ã‰bÃ‰NÃ‡â€¦Ã‰vÃ‰bÃ‰VÃ‰Ã–Ã‡ÂµÃ‡Æ’ dst Ã‡Ã·Ã‰WÃ‰Ã‰Ã‰Ã¬Ã‰vÃ‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 getinlinecache
@@ -1186,7 +1194,7 @@ getinlinecache
 /**
   @c optimize
   @e inline cache (once)
-  @j once ‚ğÀŒ»‚·‚éB
+  @j once Ã‡ï£¿Ã©Â¿Ã¥ÂªÃ‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 onceinlinecache
@@ -1208,7 +1216,7 @@ onceinlinecache
 /**
   @c optimize
   @e set inline cache
-  @j ƒCƒ“ƒ‰ƒCƒ“ƒLƒƒƒbƒVƒ…‚Ì’l‚ğİ’è‚·‚éB
+  @j Ã‰CÃ‰Ã¬Ã‰Ã¢Ã‰CÃ‰Ã¬Ã‰LÃ‰Ã‰Ã‰bÃ‰VÃ‰Ã–Ã‡ÃƒÃ­lÃ‡ï£¿Ãªâ€ºÃ­Ã‹Ã‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 setinlinecache
@@ -1229,7 +1237,7 @@ setinlinecache
 /**
   @c optimize
   @e case dispatcher
-  @j case •¶‚ÅA‰Â”\‚È‚ç•\ˆø‚«‚ÅƒWƒƒƒ“ƒv‚·‚éB
+  @j case Ã¯âˆ‚Ã‡â‰ˆÃ…AÃ¢Â¬Ã®\Ã‡Â»Ã‡ÃÃ¯\Ã Â¯Ã‡Â´Ã‡â‰ˆÃ‰WÃ‰Ã‰Ã‰Ã¬Ã‰vÃ‡âˆ‘Ã‡ÃˆÃ…B
  */
 DEFINE_INSN
 opt_case_dispatch
@@ -1265,7 +1273,7 @@ opt_case_dispatch
 /**
   @c optimize
   @e check environment
-  @j «—ˆ‚ÌŠg’£—pB
+  @j Ã¨Â´Ã³Ã Ã‡ÃƒÃ¤gÃ­Â£Ã³pÃ…B
  */
 DEFINE_INSN
 opt_checkenv
@@ -1287,7 +1295,7 @@ opt_checkenv
 /**
   @c optimize
   @e optimized X+Y.
-  @j Å“K‰»‚³‚ê‚½ X+YB
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© X+YÃ…B
  */
 DEFINE_INSN
 opt_plus
@@ -1363,7 +1371,7 @@ opt_plus
 /**
   @c optimize
   @e optimized X-Y.
-  @j Å“K‰»‚³‚ê‚½ X-YB
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© X-YÃ…B
  */
 DEFINE_INSN
 opt_minus
@@ -1412,7 +1420,7 @@ opt_minus
 /**
   @c optimize
   @e optimized X*Y.
-  @j Å“K‰»‚³‚ê‚½ X*YB
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© X*YÃ…B
  */
 DEFINE_INSN
 opt_mult
@@ -1465,7 +1473,7 @@ opt_mult
 /**
   @c optimize
   @e optimized X/Y.
-  @j Å“K‰»‚³‚ê‚½ X/YB
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© X/YÃ…B
  */
 DEFINE_INSN
 opt_div
@@ -1529,7 +1537,7 @@ opt_div
 /**
   @c optimize
   @e optimized X%Y.
-  @j Å“K‰»‚³‚ê‚½ X%YB
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© X%YÃ…B
  */
 DEFINE_INSN
 opt_mod
@@ -1608,7 +1616,7 @@ opt_mod
 /**
   @c optimize
   @e optimized X==Y.
-  @j Å“K‰»‚³‚ê‚½ X==YB
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© X==YÃ…B
  */
 DEFINE_INSN
 opt_eq
@@ -1629,7 +1637,7 @@ opt_eq
 /**
   @c optimize
   @e optimized X!=Y.
-  @j Å“K‰»‚³‚ê‚½ X!=YB
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© X!=YÃ…B
  */
 DEFINE_INSN
 opt_neq
@@ -1660,7 +1668,7 @@ opt_neq
 /**
   @c optimize
   @e optimized X<Y.
-  @j Å“K‰»‚³‚ê‚½ X<YB
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© X<YÃ…B
  */
 DEFINE_INSN
 opt_lt
@@ -1710,7 +1718,7 @@ opt_lt
 /**
   @c optimize
   @e optimized X<=Y.
-  @j Å“K‰»‚³‚ê‚½ X<=YB
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© X<=YÃ…B
  */
 DEFINE_INSN
 opt_le
@@ -1740,7 +1748,7 @@ opt_le
 /**
   @c optimize
   @e optimized X>Y.
-  @j Å“K‰»‚³‚ê‚½ X>YB
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© X>YÃ…B
  */
 DEFINE_INSN
 opt_gt
@@ -1790,7 +1798,7 @@ opt_gt
 /**
   @c optimize
   @e optimized X>=Y.
-  @j Å“K‰»‚³‚ê‚½ X>=YB
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© X>=YÃ…B
  */
 DEFINE_INSN
 opt_ge
@@ -1819,7 +1827,7 @@ opt_ge
 /**
   @c optimize
   @e <<
-  @j Å“K‰»‚³‚ê‚½ X<<YB
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© X<<YÃ…B
  */
 DEFINE_INSN
 opt_ltlt
@@ -1853,7 +1861,7 @@ opt_ltlt
 /**
   @c optimize
   @e []
-  @j Å“K‰»‚³‚ê‚½ recv[obj]B
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© recv[obj]Ã…B
  */
 DEFINE_INSN
 opt_aref
@@ -1883,7 +1891,7 @@ opt_aref
 /**
   @c optimize
   @e recv[obj] = set
-  @j Å“K‰»‚³‚ê‚½ recv[obj] = setB
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© recv[obj] = setÃ…B
  */
 DEFINE_INSN
 opt_aset
@@ -1917,7 +1925,7 @@ opt_aset
 /**
   @c optimize
   @e optimized length
-  @j Å“K‰»‚³‚ê‚½ recv.length()B
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© recv.length()Ã…B
  */
 DEFINE_INSN
 opt_length
@@ -1950,7 +1958,7 @@ opt_length
 /**
   @c optimize
   @e optimized size
-  @j Å“K‰»‚³‚ê‚½ recv.size()B
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© recv.size()Ã…B
  */
 DEFINE_INSN
 opt_size
@@ -1983,7 +1991,7 @@ opt_size
 /**
   @c optimize
   @e optimized succ
-  @j Å“K‰»‚³‚ê‚½ recv.succ()B
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© recv.succ()Ã…B
  */
 DEFINE_INSN
 opt_succ
@@ -2030,7 +2038,7 @@ opt_succ
 /**
   @c optimize
   @e optimized not
-  @j Å“K‰»‚³‚ê‚½ recv.!()B
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î© recv.!()Ã…B
  */
 DEFINE_INSN
 opt_not
@@ -2054,7 +2062,7 @@ opt_not
 /**
   @c optimize
   @e optimized regexp match
-  @j Å“K‰»‚³‚ê‚½³‹K•\Œ»ƒ}ƒbƒ`B
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î©Ãªâ‰¥Ã£KÃ¯\Ã¥ÂªÃ‰}Ã‰bÃ‰`Ã…B
  */
 DEFINE_INSN
 opt_regexpmatch1
@@ -2068,7 +2076,7 @@ opt_regexpmatch1
 /**
   @c optimize
   @e optimized regexp match 2
-  @j Å“K‰»‚³‚ê‚½³‹K•\Œ»ƒ}ƒbƒ` 2
+  @j Ã§â‰ˆÃ¬KÃ¢ÂªÃ‡â‰¥Ã‡ÃÃ‡Î©Ãªâ‰¥Ã£KÃ¯\Ã¥ÂªÃ‰}Ã‰bÃ‰` 2
  */
 DEFINE_INSN
 opt_regexpmatch2
@@ -2087,7 +2095,7 @@ opt_regexpmatch2
 /**
   @c optimize
   @e call native compiled method
-  @j ƒlƒCƒeƒBƒuƒRƒ“ƒpƒCƒ‹‚µ‚½ƒƒ\ƒbƒh‚ğ‹N“®B
+  @j Ã‰lÃ‰CÃ‰eÃ‰BÃ‰uÃ‰RÃ‰Ã¬Ã‰pÃ‰CÃ‰Ã£Ã‡ÂµÃ‡Î©Ã‰Ã…Ã‰\Ã‰bÃ‰hÃ‡ï£¿Ã£NÃ¬Ã†Ã…B
  */
 DEFINE_INSN
 opt_call_c_function
@@ -2124,7 +2132,7 @@ bitblt
 /**
   @c joke
   @e The Answer to Life, the Universe, and Everything
-  @j l¶A‰F’ˆA‚·‚×‚Ä‚Ì“š‚¦B
+  @j ÃªlÃªâˆ‚Ã…AÃ¢FÃ­Ã Ã…AÃ‡âˆ‘Ã‡â—ŠÃ‡Æ’Ã‡ÃƒÃ¬Ã¶Ã‡Â¶Ã…B
  */
 DEFINE_INSN
 answer
