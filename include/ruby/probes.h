@@ -29,6 +29,10 @@
   if (RUBY_##probe##_BEGIN_ENABLED())\
     RUBY_##probe##_BEGIN((unsigned long)val,(unsigned long)val1,(char*)rb_obj_classname(obj));\
 } while (0)
+#define PROBE_ULONG1_OBJECT1_BEGIN(probe,val,val1,obj,obj1) do {\
+  if (RUBY_##probe##_BEGIN_ENABLED())\
+    RUBY_##probe##_BEGIN((unsigned long)val,(unsigned long)val1,(char*)rb_obj_classname(obj),(char*)rb_obj_classname(obj1));\
+} while (0)
 #define PROBE_STR_BEGIN(probe,val) do {\
   if (RUBY_##probe##_BEGIN_ENABLED())\
     RUBY_##probe##_BEGIN((char*)val);\
@@ -128,6 +132,10 @@
 #define PROBE_ULONG1_OBJECT_END(probe,val,val1,obj) do {\
   if (RUBY_##probe##_END_ENABLED())\
     RUBY_##probe##_END((unsigned long)val,(unsigned long)val1,(char*)rb_obj_classname(obj));\
+} while (0)
+#define PROBE_ULONG1_OBJECT1_END(probe,val,val1,obj,obj1) do {\
+  if (RUBY_##probe##_END_ENABLED())\
+    RUBY_##probe##_END((unsigned long)val,(unsigned long)val1,(char*)rb_obj_classname(obj),(char*)rb_obj_classname(obj1));\
 } while (0)
 #define PROBE_STR_END(probe,val) do {\
   if (RUBY_##probe##_END_ENABLED())\

@@ -1181,6 +1181,7 @@ getinlinecache
 ()
 (VALUE val)
 {
+    PROBE_INS_GETINLINECACHE_BEGIN(dst,ic);
     if (ic->ic_vmstat == GET_VM_STATE_VERSION()) {
 	val = ic->ic_value.value;
 	JUMP(dst);
@@ -1189,6 +1190,7 @@ getinlinecache
 	/* none */
 	val = Qnil;
     }
+    PROBE_INS_GETINLINECACHE_END(val);
 }
 
 /**
@@ -1202,6 +1204,7 @@ onceinlinecache
 ()
 (VALUE val)
 {
+    PROBE_INS_ONCEINLINECACHE_BEGIN(dst,ic);
     if (ic->ic_vmstat) {
 	val = ic->ic_value.value;
 	JUMP(dst);
@@ -1211,6 +1214,7 @@ onceinlinecache
 	ic->ic_value.value = Qundef;
 	val = Qnil;
     }
+    PROBE_INS_ONCEINLINECACHE_END(val);
 }
 
 /**
@@ -1224,6 +1228,7 @@ setinlinecache
 (VALUE val)
 (VALUE val)
 {
+    PROBE_INS_SETINLINECACHE_BEGIN(dst,val);
     IC ic = GET_CONST_INLINE_CACHE(dst);
 
     if (ic->ic_value.value == Qundef) {
@@ -1232,6 +1237,7 @@ setinlinecache
     ic->ic_value.value = val;
     ic->ic_vmstat = GET_VM_STATE_VERSION() - ruby_vm_const_missing_count;
     ruby_vm_const_missing_count = 0;
+    PROBE_INS_SETINLINECACHE_END(val);
 }
 
 /**
@@ -1245,6 +1251,7 @@ opt_case_dispatch
 (..., VALUE key)
 () // inc += -1;
 {
+    PROBE_INS_OPT_CASE_DISPATCH_BEGIN(hash,else_offset,key);
     if (BASIC_OP_UNREDEFINED_P(BOP_EQQ)) {
 	VALUE val;
 	if (st_lookup(RHASH_TBL(hash), key, &val)) {
@@ -1268,6 +1275,7 @@ opt_case_dispatch
 	    JUMP(else_offset);
 	}
     }
+    PROBE_INS_OPT_CASE_DISPATCH_END();
 }
 
 /**
@@ -1281,12 +1289,14 @@ opt_checkenv
 ()
 ()
 {
+    PROBE_INS_OPT_CHECKENV_BEGIN();
     if (GET_CFP()->bp != GET_DFP() + 1) {
 	VALUE *new_dfp = GET_CFP()->bp - 1;
 	/* TODO: copy env and clean stack at creating env? */
 	*new_dfp = *GET_DFP();
 	SET_DFP(new_dfp);
     }
+    PROBE_INS_OPT_CHECKENV_END();
 }
 
 
@@ -1303,6 +1313,7 @@ opt_plus
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
+    PROBE_INS_OPT_PLUS_BEGIN(ic,recv,obj);
     if (0) {
 
     }
@@ -1366,6 +1377,7 @@ opt_plus
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idPLUS, recv);
     }
+    PROBE_INS_OPT_PLUS_END(val);
 }
 
 /**
@@ -1379,6 +1391,7 @@ opt_minus
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
+    PROBE_INS_OPT_MINUS_BEGIN(ic,recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_MINUS)) {
 	long a, b, c;
@@ -1415,6 +1428,7 @@ opt_minus
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idMINUS, recv);
     }
+    PROBE_INS_OPT_MINUS_END(val);
 }
 
 /**
@@ -1428,6 +1442,7 @@ opt_mult
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
+    PROBE_INS_OPT_MULT_BEGIN(ic,recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_MULT)) {
 	long a, b, c;
@@ -1468,6 +1483,7 @@ opt_mult
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idMULT, recv);
     }
+    PROBE_INS_OPT_MULT_END(val);
 }
 
 /**
@@ -1481,6 +1497,7 @@ opt_div
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
+    PROBE_INS_OPT_DIV_BEGIN(ic,recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_DIV)) {
 	long x, y, div;
@@ -1532,6 +1549,7 @@ opt_div
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idDIV, recv);
     }
+    PROBE_INS_OPT_DIV_END(val);
 }
 
 /**
@@ -1545,6 +1563,7 @@ opt_mod
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
+    PROBE_INS_OPT_MOD_BEGIN(ic,recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_MOD)) {
 	long x, y, mod;
@@ -1611,6 +1630,7 @@ opt_mod
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idMOD, recv);
     }
+    PROBE_INS_OPT_MOD_END(val);
 }
 
 /**
@@ -1624,6 +1644,7 @@ opt_eq
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
+    PROBE_INS_OPT_EQ_BEGIN(ic,recv,obj);
     val = opt_eq_func(recv, obj, ic);
 
     if (val == Qundef) {
@@ -1632,6 +1653,7 @@ opt_eq
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idEq, recv);
     }
+    PROBE_INS_OPT_EQ_END(val);
 }
 
 /**
@@ -1645,6 +1667,7 @@ opt_neq
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
+    PROBE_INS_OPT_NEQ_BEGIN(ic,ic_eq,recv,obj);
     extern VALUE rb_obj_not_equal(VALUE obj1, VALUE obj2);
     const rb_method_entry_t *me = vm_method_search(idNeq, CLASS_OF(recv), ic);
     val = Qundef;
@@ -1663,6 +1686,7 @@ opt_neq
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idNeq, recv);
     }
+    PROBE_INS_OPT_NEQ_END(val);
 }
 
 /**
@@ -1676,6 +1700,7 @@ opt_lt
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
+    PROBE_INS_OPT_LT_BEGIN(ic,recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_LT)) {
 	SIGNED_VALUE a = recv, b = obj;
@@ -1713,6 +1738,7 @@ opt_lt
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idLT, recv);
     }
+    PROBE_INS_OPT_LT_END(val);
 }
 
 /**
@@ -1726,6 +1752,7 @@ opt_le
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
+    PROBE_INS_OPT_LE_BEGIN(ic,recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_LE)) {
 	SIGNED_VALUE a = recv, b = obj;
@@ -1743,6 +1770,7 @@ opt_le
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idLE, recv);
     }
+    PROBE_INS_OPT_LE_END(val);
 }
 
 /**
@@ -1756,6 +1784,7 @@ opt_gt
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
+    PROBE_INS_OPT_GT_BEGIN(ic,recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_GT)) {
 	SIGNED_VALUE a = recv, b = obj;
@@ -1793,6 +1822,7 @@ opt_gt
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idGT, recv);
     }
+    PROBE_INS_OPT_GT_END(val);
 }
 
 /**
@@ -1806,6 +1836,7 @@ opt_ge
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
+    PROBE_INS_OPT_GE_BEGIN(ic,recv,obj);
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_GE)) {
 	SIGNED_VALUE a = recv, b = obj;
@@ -1822,6 +1853,7 @@ opt_ge
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idGE, recv);
     }
+    PROBE_INS_OPT_GE_END(val);
 }
 
 /**
@@ -1835,6 +1867,7 @@ opt_ltlt
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
+    PROBE_INS_OPT_LTLT_BEGIN(ic,recv,obj);
     if (!SPECIAL_CONST_P(recv)) {
 	if (0) {
 	}
@@ -1856,6 +1889,7 @@ opt_ltlt
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idLTLT, recv);
     }
+    PROBE_INS_OPT_LTLT_END(val);
 }
 
 /**
@@ -1869,6 +1903,7 @@ opt_aref
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
+    PROBE_INS_OPT_AREF_BEGIN(ic,recv,obj);
     if (!SPECIAL_CONST_P(recv) && BASIC_OP_UNREDEFINED_P(BOP_AREF)) {
 	if (HEAP_CLASS_OF(recv) == rb_cArray && FIXNUM_P(obj)) {
 	    val = rb_ary_entry(recv, FIX2LONG(obj));
@@ -1886,6 +1921,7 @@ opt_aref
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idAREF, recv);
     }
+    PROBE_INS_OPT_AREF_END(val);
 }
 
 /**
@@ -1899,6 +1935,7 @@ opt_aset
 (VALUE recv, VALUE obj, VALUE set)
 (VALUE val)
 {
+    PROBE_INS_OPT_ASET_BEGIN(ic,recv,obj,set);
     if (!SPECIAL_CONST_P(recv) &&
 	BASIC_OP_UNREDEFINED_P(BOP_ASET)) {
 	if (HEAP_CLASS_OF(recv) == rb_cArray && FIXNUM_P(obj)) {
@@ -1920,6 +1957,7 @@ opt_aset
 	PUSH(set);
 	CALL_SIMPLE_METHOD(2, idASET, recv);
     }
+    PROBE_INS_OPT_ASET_END(val);
 }
 
 /**
@@ -1933,6 +1971,7 @@ opt_length
 (VALUE recv)
 (VALUE val)
 {
+    PROBE_INS_OPT_LENGTH_BEGIN(ic,recv);
     if (LIKELY(!SPECIAL_CONST_P(recv) &&
 	       BASIC_OP_UNREDEFINED_P(BOP_LENGTH))) {
 	if (HEAP_CLASS_OF(recv) == rb_cString) {
@@ -1953,6 +1992,7 @@ opt_length
 	PUSH(recv);
 	CALL_SIMPLE_METHOD(0, idLength, recv);
     }
+    PROBE_INS_OPT_LENGTH_END(val);
 }
 
 /**
@@ -1966,6 +2006,7 @@ opt_size
 (VALUE recv)
 (VALUE val)
 {
+    PROBE_INS_OPT_SIZE_BEGIN(ic,recv);
     if (LIKELY(BASIC_OP_UNREDEFINED_P(BOP_SIZE) &&
 	       !SPECIAL_CONST_P(recv))) {
 	if (HEAP_CLASS_OF(recv) == rb_cString) {
@@ -1986,6 +2027,7 @@ opt_size
 	PUSH(recv);
 	CALL_SIMPLE_METHOD(0, idSize, recv);
     }
+    PROBE_INS_OPT_SIZE_END(val);
 }
 
 /**
@@ -1999,6 +2041,7 @@ opt_succ
 (VALUE recv)
 (VALUE val)
 {
+    PROBE_INS_OPT_SUCC_BEGIN(ic,recv);
     if (SPECIAL_CONST_P(recv)) {
 	if (FIXNUM_P(recv) &&
 	    BASIC_OP_UNREDEFINED_P(BOP_SUCC)) {
@@ -2033,6 +2076,7 @@ opt_succ
 	PUSH(recv);
 	CALL_SIMPLE_METHOD(0, idSucc, recv);
     }
+    PROBE_INS_OPT_SUCC_END(val);
 }
 
 /**
@@ -2046,6 +2090,7 @@ opt_not
 (VALUE recv)
 (VALUE val)
 {
+    PROBE_INS_OPT_NOT_BEGIN(ic,recv);
     extern VALUE rb_obj_not(VALUE obj);
     const rb_method_entry_t *me = vm_method_search(idNot, CLASS_OF(recv), ic);
 
@@ -2056,6 +2101,7 @@ opt_not
 	PUSH(recv);
 	CALL_SIMPLE_METHOD(0, idNot, recv);
     }
+    PROBE_INS_OPT_NOT_END(val);
 }
 
 
@@ -2070,7 +2116,9 @@ opt_regexpmatch1
 (VALUE obj)
 (VALUE val)
 {
+    PROBE_INS_OPT_REGEXPMATCH1_BEGIN(r,obj);
     val = rb_reg_match(r, obj);
+    PROBE_INS_OPT_REGEXPMATCH1_END(val);
 }
 
 /**
@@ -2084,12 +2132,14 @@ opt_regexpmatch2
 (VALUE obj2, VALUE obj1)
 (VALUE val)
 {
+    PROBE_INS_OPT_REGEXPMATCH2_BEGIN(obj2,obj1);
     if (TYPE(obj2) == T_STRING) {
 	val = rb_reg_match(obj1, obj2);
     }
     else {
 	val = rb_funcall(obj2, idEqTilde, 1, obj1);
     }
+    PROBE_INS_OPT_REGEXPMATCH2_END(val);
 }
 
 /**
@@ -2103,6 +2153,7 @@ opt_call_c_function
 ()
 ()
 {
+    PROBE_INS_OPT_CALL_C_FUNCTION_BEGIN();
     reg_cfp = (funcptr)(th, reg_cfp);
 
     if (reg_cfp == 0) {
@@ -2113,6 +2164,7 @@ opt_call_c_function
 
     RESTORE_REGS();
     NEXT_INSN();
+    PROBE_INS_OPT_CALL_C_FUNCTION_END();
 }
 
 /**
