@@ -555,9 +555,9 @@ extern VALUE ruby_vm_global_state_version;
 
 #define GET_VM_STATE_VERSION() (ruby_vm_global_state_version)
 #define INC_VM_STATE_VERSION() do {\
-  PROBE_VM_CHANGE_STATE_BEGIN(GET_VM_STATE_VERSION());\
+  PROBE_VM_CHANGE_STATE_ENTRY(GET_VM_STATE_VERSION());\
   (ruby_vm_global_state_version = (ruby_vm_global_state_version+1) & 0x8fffffff);\
-  PROBE_VM_CHANGE_STATE_END(GET_VM_STATE_VERSION());\
+  PROBE_VM_CHANGE_STATE_RETURN(GET_VM_STATE_VERSION());\
 } while (0)
 void rb_vm_change_state(void);
 

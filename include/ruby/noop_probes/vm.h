@@ -1,2 +1,2 @@
-#define PROBE_VM_CHANGE_STATE_BEGIN(version)
-#define PROBE_VM_CHANGE_STATE_END(version)
+#define PROBE_VM_CHANGE_STATE_ENTRY(version)
+#define PROBE_VM_CHANGE_STATE_RETURN(version)

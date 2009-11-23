@@ -187,10 +187,10 @@ VALUE
 rb_call_super(int argc, const VALUE *argv)
 {
     VALUE res;
-    PROBE_SUPER_BEGIN(); 
+    PROBE_SUPER_ENTRY(); 
     PASS_PASSED_BLOCK();
     res = vm_call_super(GET_THREAD(), argc, argv);
-    PROBE_SUPER_END(); 
+    PROBE_SUPER_RETURN(); 
     return res;
 }
 
@@ -434,9 +434,9 @@ static inline VALUE
 rb_call(VALUE recv, ID mid, int argc, const VALUE *argv, call_type scope)
 {
     VALUE res;
-    PROBE_METHOD_CALL_BEGIN(recv,mid);    
+    PROBE_METHOD_CALL_ENTRY(recv,mid);    
     res = rb_call0(recv, mid, argc, argv, scope, Qundef);
-    PROBE_METHOD_CALL_END(recv,mid);
+    PROBE_METHOD_CALL_RETURN(recv,mid);
     return res;
 }
 
@@ -479,10 +479,10 @@ NORETURN(static void raise_method_missing(rb_thread_t *th, int argc, const VALUE
 static VALUE
 rb_method_missing(int argc, const VALUE *argv, VALUE obj)
 {
-    PROBE_METHOD_MISSING_BEGIN();
+    PROBE_METHOD_MISSING_ENTRY();
     rb_thread_t *th = GET_THREAD();
     raise_method_missing(th, argc, argv, obj, th->method_missing_reason);
-    PROBE_METHOD_MISSING_BEGIN();
+    PROBE_METHOD_MISSING_ENTRY();
     return Qnil;		/* not reached */
 }
 
@@ -708,9 +708,9 @@ VALUE
 rb_f_send(int argc, VALUE *argv, VALUE recv)
 {
     VALUE res;
-    PROBE_SEND_BEGIN();
+    PROBE_SEND_ENTRY();
     res = send_internal(argc, argv, recv, CALL_FCALL);
-    PROBE_SEND_END();
+    PROBE_SEND_RETURN();
     return res;
 }
 
@@ -737,9 +737,9 @@ static inline VALUE
 rb_yield_0(int argc, const VALUE * argv)
 {
     VALUE res;
-    PROBE_YIELD_BEGIN();    
+    PROBE_YIELD_ENTRY();    
     res = vm_yield(GET_THREAD(), argc, argv);
-    PROBE_YIELD_END();
+    PROBE_YIELD_RETURN();
     return res;
 }
 
@@ -797,11 +797,11 @@ rb_yield_splat(VALUE values)
 static VALUE
 loop_i(void)
 {
-    PROBE_LOOP_BEGIN();
+    PROBE_LOOP_ENTRY();
     for (;;) {
 	rb_yield_0(0, 0);
     }
-    PROBE_END_BEGIN();
+    PROBE_END_ENTRY();
     return Qnil;
 }
 
@@ -918,9 +918,9 @@ rb_block_call(VALUE obj, ID mid, int argc, VALUE * argv,
     arg.mid = mid;
     arg.argc = argc;
     arg.argv = argv;
-    PROBE_BLOCK_CALL_BEGIN(obj,mid);
+    PROBE_BLOCK_CALL_ENTRY(obj,mid);
     res = rb_iterate(iterate_method, (VALUE)&arg, bl_proc, data2);
-    PROBE_BLOCK_CALL_END(obj,mid);  
+    PROBE_BLOCK_CALL_RETURN(obj,mid);  
     return res;
 }
 
@@ -1073,7 +1073,7 @@ rb_f_eval(int argc, VALUE *argv, VALUE self)
     VALUE src, scope, vfile, vline, res;
     const char *file = "(eval)";
     int line = 1;
-    PROBE_EVALSTR_BEGIN(self);
+    PROBE_EVALSTR_ENTRY(self);
     rb_scan_args(argc, argv, "13", &src, &scope, &vfile, &vline);
     if (rb_safe_level() >= 4) {
 	StringValue(src);
@@ -1095,7 +1095,7 @@ rb_f_eval(int argc, VALUE *argv, VALUE self)
     if (!NIL_P(vfile))
 	file = RSTRING_PTR(vfile);
     res = eval_string(self, src, scope, file, line);
-    PROBE_EVALSTR_END(self);
+    PROBE_EVALSTR_RETURN(self);
     return res;
 }
 
@@ -1282,7 +1282,7 @@ rb_obj_instance_eval(int argc, VALUE *argv, VALUE self)
 {
     VALUE klass, res;
 
-    PROBE_EVAL_BEGIN(INSTANCE,self);
+    PROBE_EVAL_ENTRY(INSTANCE,self);
     if (SPECIAL_CONST_P(self)) {
 	klass = Qnil;
     }
@@ -1290,7 +1290,7 @@ rb_obj_instance_eval(int argc, VALUE *argv, VALUE self)
 	klass = rb_singleton_class(self);
     }
     res = specific_eval(argc, argv, klass, self);
-    PROBE_EVAL_END(INSTANCE,self);
+    PROBE_EVAL_RETURN(INSTANCE,self);
     return res;
 }
 
@@ -1316,7 +1316,7 @@ VALUE
 rb_obj_instance_exec(int argc, VALUE *argv, VALUE self)
 {
     VALUE klass, res;
-    PROBE_EXEC_BEGIN(INSTANCE,self);
+    PROBE_EXEC_ENTRY(INSTANCE,self);
     if (SPECIAL_CONST_P(self)) {
 	klass = Qnil;
     }
@@ -1324,7 +1324,7 @@ rb_obj_instance_exec(int argc, VALUE *argv, VALUE self)
 	klass = rb_singleton_class(self);
     }
     res = yield_under(klass, self, rb_ary_new4(argc, argv));
-    PROBE_EXEC_END(INSTANCE,self);
+    PROBE_EXEC_RETURN(INSTANCE,self);
     return res;
 }
 
@@ -1356,9 +1356,9 @@ VALUE
 rb_mod_module_eval(int argc, VALUE *argv, VALUE mod)
 {
     VALUE res;
-    PROBE_EVAL_BEGIN(MODULE,mod);
+    PROBE_EVAL_ENTRY(MODULE,mod);
     res = specific_eval(argc, argv, mod, mod);
-    PROBE_EVAL_END(MODULE,mod);
+    PROBE_EVAL_RETURN(MODULE,mod);
     return res;
 }
 
@@ -1386,9 +1386,9 @@ VALUE
 rb_mod_module_exec(int argc, VALUE *argv, VALUE mod)
 {
     VALUE res;
-    PROBE_EXEC_BEGIN(MODULE,mod);
+    PROBE_EXEC_ENTRY(MODULE,mod);
     res = yield_under(mod, mod, rb_ary_new4(argc, argv));
-    PROBE_EXEC_END(MODULE,mod);
+    PROBE_EXEC_RETURN(MODULE,mod);
     return res;
 }
 
@@ -1408,10 +1408,10 @@ static VALUE
 rb_f_throw(int argc, VALUE *argv)
 {
     VALUE tag, value;
-    PROBE_THROW_BEGIN();
+    PROBE_THROW_ENTRY();
     rb_scan_args(argc, argv, "11", &tag, &value);
     rb_throw_obj(tag, value);
-    PROBE_THROW_END();
+    PROBE_THROW_RETURN();
     return Qnil;		/* not reached */
 }
 
@@ -1491,7 +1491,7 @@ static VALUE
 rb_f_catch(int argc, VALUE *argv)
 {
     VALUE tag, res;
-    PROBE_CATCH_BEGIN();
+    PROBE_CATCH_ENTRY();
     if (argc == 0) {
 	tag = rb_obj_alloc(rb_cObject);
     }
@@ -1499,7 +1499,7 @@ rb_f_catch(int argc, VALUE *argv)
 	rb_scan_args(argc, argv, "01", &tag);
     }
     res = rb_catch_obj(tag, catch_i, 0);
-    PROBE_CATCH_END();
+    PROBE_CATCH_RETURN();
     return res;
 }
 
@@ -1569,7 +1569,7 @@ rb_f_caller(int argc, VALUE *argv)
 {
     VALUE level, res;
     int lev;
-    PROBE_CALLER_BEGIN();
+    PROBE_CALLER_ENTRY();
     rb_scan_args(argc, argv, "01", &level);
 
     if (NIL_P(level))
@@ -1580,7 +1580,7 @@ rb_f_caller(int argc, VALUE *argv)
 	rb_raise(rb_eArgError, "negative level (%d)", lev);
 
     res = vm_backtrace(GET_THREAD(), lev);
-    PROBE_CALLER_END();
+    PROBE_CALLER_RETURN();
     return res;
 }
 
@@ -1709,7 +1709,7 @@ rb_f_local_variables(void)
 VALUE
 rb_f_block_given_p(void)
 {
-    PROBE_BLOCK_GIVEN_BEGIN();
+    PROBE_BLOCK_GIVEN_ENTRY();
     rb_thread_t *th = GET_THREAD();
     rb_control_frame_t *cfp = th->cfp;
     cfp = vm_get_ruby_level_caller_cfp(th, RUBY_VM_PREVIOUS_CONTROL_FRAME(cfp));
@@ -1717,11 +1717,11 @@ rb_f_block_given_p(void)
     if (cfp != 0 &&
 	(cfp->lfp[0] & 0x02) == 0 &&
 	GC_GUARDED_PTR_REF(cfp->lfp[0])) {
-    PROBE_BLOCK_GIVEN_END();
+    PROBE_BLOCK_GIVEN_RETURN();
 	return Qtrue;
     }
     else {
-    PROBE_BLOCK_GIVEN_END();	
+    PROBE_BLOCK_GIVEN_RETURN();	
 	return Qfalse;
     }
 }

@@ -1,2 +1,2 @@
-#define PROBE_RB_TRACE_BEGIN(probe_id) PROBE_STR_BEGIN(RB_TRACE, probe_id)
-#define PROBE_RB_TRACE_END(probe_id) PROBE_STR_END(RB_TRACE, probe_id)
+#define PROBE_RB_TRACE_ENTRY(probe_id) PROBE_STR_ENTRY(RB_TRACE, probe_id)
+#define PROBE_RB_TRACE_RETURN(probe_id) PROBE_STR_RETURN(RB_TRACE, probe_id)

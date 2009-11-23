@@ -205,9 +205,9 @@ st_table*
 st_init_numtable(void)
 {
     st_table* res;
-    PROBE_ST_INIT_NUMTABLE_BEGIN();
+    PROBE_ST_INIT_NUMTABLE_ENTRY();
     res = st_init_table(&type_numhash);
-    PROBE_ST_INIT_NUMTABLE_END();
+    PROBE_ST_INIT_NUMTABLE_RETURN();
     return res;
 }
 
@@ -215,9 +215,9 @@ st_table*
 st_init_numtable_with_size(st_index_t size)
 {
     st_table* res;
-    PROBE_ST_INIT_SIZED_NUMTABLE_BEGIN(size);
+    PROBE_ST_INIT_SIZED_NUMTABLE_ENTRY(size);
     res = st_init_table_with_size(&type_numhash, size);
-    PROBE_ST_INIT_SIZED_NUMTABLE_END(size);
+    PROBE_ST_INIT_SIZED_NUMTABLE_RETURN(size);
     return res;
 }
 
@@ -225,9 +225,9 @@ st_table*
 st_init_strtable(void)
 {
     st_table* res;
-    PROBE_ST_INIT_STRTABLE_BEGIN();
+    PROBE_ST_INIT_STRTABLE_ENTRY();
     res = st_init_table(&type_strhash);
-    PROBE_ST_INIT_STRTABLE_END();
+    PROBE_ST_INIT_STRTABLE_RETURN();
     return res;
 }
 
@@ -235,9 +235,9 @@ st_table*
 st_init_strtable_with_size(st_index_t size)
 {
     st_table* res;
-    PROBE_ST_INIT_SIZED_STRTABLE_BEGIN(size);
+    PROBE_ST_INIT_SIZED_STRTABLE_ENTRY(size);
     res = st_init_table_with_size(&type_strhash, size);
-    PROBE_ST_INIT_SIZED_STRTABLE_END(size);
+    PROBE_ST_INIT_SIZED_STRTABLE_RETURN(size);
     return res;
 }
 
@@ -245,9 +245,9 @@ st_table*
 st_init_strcasetable(void)
 {
     st_table* res;
-    PROBE_ST_INIT_STRCASETABLE_BEGIN();
+    PROBE_ST_INIT_STRCASETABLE_ENTRY();
     res = st_init_table(&type_strcasehash);
-    PROBE_ST_INIT_STRCASETABLE_BEGIN();
+    PROBE_ST_INIT_STRCASETABLE_ENTRY();
     return res;
 }
 
@@ -255,9 +255,9 @@ st_table*
 st_init_strcasetable_with_size(st_index_t size)
 {
     st_table* res;
-    PROBE_ST_INIT_SIZED_STRCASETABLE_BEGIN(size);
+    PROBE_ST_INIT_SIZED_STRCASETABLE_ENTRY(size);
     res = st_init_table_with_size(&type_strcasehash, size);
-    PROBE_ST_INIT_SIZED_STRCASETABLE_END(size);
+    PROBE_ST_INIT_SIZED_STRCASETABLE_RETURN(size);
     return res;
 }
 
@@ -266,10 +266,10 @@ st_clear(st_table *table)
 {
     register st_table_entry *ptr, *next;
     st_index_t i;
-    PROBE_ST_CLEAR_BEGIN(table);
+    PROBE_ST_CLEAR_ENTRY(table);
     if (table->entries_packed) {
         table->num_entries = 0;
-        PROBE_ST_CLEAR_END(table);
+        PROBE_ST_CLEAR_RETURN(table);
         return;
     }
 
@@ -285,17 +285,17 @@ st_clear(st_table *table)
     table->num_entries = 0;
     table->head = 0;
     table->tail = 0;
-    PROBE_ST_CLEAR_END(table);
+    PROBE_ST_CLEAR_RETURN(table);
 }
 
 void
 st_free_table(st_table *table)
 {
-    PROBE_ST_FREE_BEGIN(table);
+    PROBE_ST_FREE_ENTRY(table);
     st_clear(table);
     free(table->bins);
     free(table);
-    PROBE_ST_FREE_END(table);
+    PROBE_ST_FREE_RETURN(table);
 }
 
 size_t
@@ -354,17 +354,17 @@ st_lookup(st_table *table, register st_data_t key, st_data_t *value)
 {
     st_index_t hash_val, bin_pos;
     register st_table_entry *ptr;
-    PROBE_ST_LOOKUP_BEGIN(table,key,*value);
+    PROBE_ST_LOOKUP_ENTRY(table,key,*value);
     if (table->entries_packed) {
         st_index_t i;
         for (i = 0; i < table->num_entries; i++) {
             if ((st_data_t)table->bins[i*2] == key) {
                 if (value !=0) *value = (st_data_t)table->bins[i*2+1];
-                PROBE_ST_LOOKUP_END(table,key,*value);
+                PROBE_ST_LOOKUP_RETURN(table,key,*value);
                 return 1;
             }
         }
-        PROBE_ST_LOOKUP_END(table,key,*value);
+        PROBE_ST_LOOKUP_RETURN(table,key,*value);
         return 0;
     }
 
@@ -372,12 +372,12 @@ st_lookup(st_table *table, register st_data_t key, st_data_t *value)
     FIND_ENTRY(table, ptr, hash_val, bin_pos);
 
     if (ptr == 0) {
-    PROBE_ST_LOOKUP_END(table,key,*value);
+    PROBE_ST_LOOKUP_RETURN(table,key,*value);
 	return 0;
     }
     else {
 	if (value != 0)  *value = ptr->record;
-    PROBE_ST_LOOKUP_END(table,key,*value);
+    PROBE_ST_LOOKUP_RETURN(table,key,*value);
 	return 1;
     }
 }
@@ -387,17 +387,17 @@ st_get_key(st_table *table, register st_data_t key, st_data_t *result)
 {
     st_index_t hash_val, bin_pos;
     register st_table_entry *ptr;
-    PROBE_ST_GET_KEY_BEGIN(table,key);
+    PROBE_ST_GET_KEY_ENTRY(table,key);
     if (table->entries_packed) {
         st_index_t i;
         for (i = 0; i < table->num_entries; i++) {
             if ((st_data_t)table->bins[i*2] == key) {
                 if (result !=0) *result = (st_data_t)table->bins[i*2];
-                PROBE_ST_GET_KEY_END(table,key);
+                PROBE_ST_GET_KEY_RETURN(table,key);
                 return 1;
             }
         }
-        PROBE_ST_GET_KEY_END(table,key);
+        PROBE_ST_GET_KEY_RETURN(table,key);
         return 0;
     }
 
@@ -405,12 +405,12 @@ st_get_key(st_table *table, register st_data_t key, st_data_t *result)
     FIND_ENTRY(table, ptr, hash_val, bin_pos);
 
     if (ptr == 0) {
-    PROBE_ST_GET_KEY_END(table,key);
+    PROBE_ST_GET_KEY_RETURN(table,key);
 	return 0;
     }
     else {
 	if (result != 0)  *result = ptr->key;
-    PROBE_ST_GET_KEY_END(table,key);
+    PROBE_ST_GET_KEY_RETURN(table,key);
 	return 1;
     }
 }
@@ -472,13 +472,13 @@ st_insert(register st_table *table, register st_data_t key, st_data_t value)
 {
     st_index_t hash_val, bin_pos;
     register st_table_entry *ptr;
-    PROBE_ST_INSERT_BEGIN(table,key,value);
+    PROBE_ST_INSERT_ENTRY(table,key,value);
     if (table->entries_packed) {
         st_index_t i;
         for (i = 0; i < table->num_entries; i++) {
             if ((st_data_t)table->bins[i*2] == key) {
                 table->bins[i*2+1] = (struct st_table_entry*)value;
-                PROBE_ST_INSERT_END(table,key,value);
+                PROBE_ST_INSERT_RETURN(table,key,value);
                 return 1;
             }
         }
@@ -486,7 +486,7 @@ st_insert(register st_table *table, register st_data_t key, st_data_t value)
             i = table->num_entries++;
             table->bins[i*2] = (struct st_table_entry*)key;
             table->bins[i*2+1] = (struct st_table_entry*)value;
-            PROBE_ST_INSERT_END(table,key,value);
+            PROBE_ST_INSERT_RETURN(table,key,value);
             return 0;
         }
         else {
@@ -499,12 +499,12 @@ st_insert(register st_table *table, register st_data_t key, st_data_t value)
 
     if (ptr == 0) {
 	ADD_DIRECT(table, key, value, hash_val, bin_pos);
-    PROBE_ST_INSERT_END(table,key,value);
+    PROBE_ST_INSERT_RETURN(table,key,value);
 	return 0;
     }
     else {
 	ptr->record = value;
-    PROBE_ST_INSERT_END(table,key,value);	
+    PROBE_ST_INSERT_RETURN(table,key,value);	
 	return 1;
     }
 }
@@ -515,13 +515,13 @@ st_insert2(register st_table *table, register st_data_t key, st_data_t value,
 {
     st_index_t hash_val, bin_pos;
     register st_table_entry *ptr;
-    PROBE_ST_INSERT2_BEGIN(table,key,value);
+    PROBE_ST_INSERT2_ENTRY(table,key,value);
     if (table->entries_packed) {
         st_index_t i;
         for (i = 0; i < table->num_entries; i++) {
             if ((st_data_t)table->bins[i*2] == key) {
                 table->bins[i*2+1] = (struct st_table_entry*)value;
-                PROBE_ST_INSERT2_END(table,key,value);
+                PROBE_ST_INSERT2_RETURN(table,key,value);
                 return 1;
             }
         }
@@ -529,7 +529,7 @@ st_insert2(register st_table *table, register st_data_t key, st_data_t value,
             i = table->num_entries++;
             table->bins[i*2] = (struct st_table_entry*)key;
             table->bins[i*2+1] = (struct st_table_entry*)value;
-            PROBE_ST_INSERT2_END(table,key,value);
+            PROBE_ST_INSERT2_RETURN(table,key,value);
             return 0;
         }
         else {
@@ -543,12 +543,12 @@ st_insert2(register st_table *table, register st_data_t key, st_data_t value,
     if (ptr == 0) {
 	key = (*func)(key);
 	ADD_DIRECT(table, key, value, hash_val, bin_pos);
-    PROBE_ST_INSERT2_END(table,key,value);
+    PROBE_ST_INSERT2_RETURN(table,key,value);
 	return 0;
     }
     else {
 	ptr->record = value;
-    PROBE_ST_INSERT2_END(table,key,value);
+    PROBE_ST_INSERT2_RETURN(table,key,value);
 	return 1;
     }
 }
@@ -557,14 +557,14 @@ void
 st_add_direct(st_table *table, st_data_t key, st_data_t value)
 {
     st_index_t hash_val, bin_pos;
-    PROBE_ST_ADD_DIRECT_BEGIN(table,key,value);
+    PROBE_ST_ADD_DIRECT_ENTRY(table,key,value);
     if (table->entries_packed) {
         int i;
         if (MORE_PACKABLE_P(table)) {
             i = table->num_entries++;
             table->bins[i*2] = (struct st_table_entry*)key;
             table->bins[i*2+1] = (struct st_table_entry*)value;
-            PROBE_ST_ADD_DIRECT_END(table,key,value);
+            PROBE_ST_ADD_DIRECT_RETURN(table,key,value);
             return;
         }
         else {
@@ -575,7 +575,7 @@ st_add_direct(st_table *table, st_data_t key, st_data_t value)
     hash_val = do_hash(key, table);
     bin_pos = hash_val % table->num_bins;
     ADD_DIRECT(table, key, value, hash_val, bin_pos);
-    PROBE_ST_ADD_DIRECT_END(table,key,value);
+    PROBE_ST_ADD_DIRECT_RETURN(table,key,value);
 }
 
 static void
@@ -607,10 +607,10 @@ st_copy(st_table *old_table)
     st_table_entry *ptr, *entry, *prev, **tail;
     st_index_t num_bins = old_table->num_bins;
     st_index_t hash_val;
-    PROBE_ST_COPY_BEGIN(old_table);
+    PROBE_ST_COPY_ENTRY(old_table);
     new_table = alloc(st_table);
     if (new_table == 0) {
-    PROBE_ST_COPY_END(old_table);
+    PROBE_ST_COPY_RETURN(old_table);
 	return 0;
     }
 
@@ -620,13 +620,13 @@ st_copy(st_table *old_table)
 
     if (new_table->bins == 0) {
 	free(new_table);
-    PROBE_ST_COPY_END(old_table);	
+    PROBE_ST_COPY_RETURN(old_table);	
 	return 0;
     }
 
     if (old_table->entries_packed) {
         memcpy(new_table->bins, old_table->bins, sizeof(struct st_table_entry *) * old_table->num_bins);
-        PROBE_ST_COPY_END(old_table);
+        PROBE_ST_COPY_RETURN(old_table);
         return new_table;
     }
 
@@ -637,7 +637,7 @@ st_copy(st_table *old_table)
 	    entry = alloc(st_table_entry);
 	    if (entry == 0) {
 		st_free_table(new_table);
-        PROBE_ST_COPY_END(old_table);
+        PROBE_ST_COPY_RETURN(old_table);
 		return 0;
 	    }
 	    *entry = *ptr;
@@ -650,7 +650,7 @@ st_copy(st_table *old_table)
 	} while ((ptr = ptr->fore) != 0);
 	new_table->tail = prev;
     }
-    PROBE_ST_COPY_END(old_table);
+    PROBE_ST_COPY_RETURN(old_table);
     return new_table;
 }
 
@@ -676,7 +676,7 @@ st_delete(register st_table *table, register st_data_t *key, st_data_t *value)
     st_index_t hash_val;
     st_table_entry **prev;
     register st_table_entry *ptr;
-    PROBE_ST_DELETE_BEGIN(table,*key,*value);
+    PROBE_ST_DELETE_ENTRY(table,*key,*value);
     if (table->entries_packed) {
         st_index_t i;
         for (i = 0; i < table->num_entries; i++) {
@@ -685,12 +685,12 @@ st_delete(register st_table *table, register st_data_t *key, st_data_t *value)
                 table->num_entries--;
                 memmove(&table->bins[i*2], &table->bins[(i+1)*2],
                         sizeof(struct st_table_entry*) * 2*(table->num_entries-i));
-                PROBE_ST_DELETE_END(table,*key,*value);
+                PROBE_ST_DELETE_RETURN(table,*key,*value);
                 return 1;
             }
         }
         if (value != 0) *value = 0;
-        PROBE_ST_DELETE_END(table,*key,*value);
+        PROBE_ST_DELETE_RETURN(table,*key,*value);
         return 0;
     }
 
@@ -703,13 +703,13 @@ st_delete(register st_table *table, register st_data_t *key, st_data_t *value)
 	    if (value != 0) *value = ptr->record;
 	    *key = ptr->key;
 	    free(ptr);
-        PROBE_ST_DELETE_END(table,*key,*value);
+        PROBE_ST_DELETE_RETURN(table,*key,*value);
 	    return 1;
 	}
     }
 
     if (value != 0) *value = 0;
-    PROBE_ST_DELETE_END(table,*key,*value);
+    PROBE_ST_DELETE_RETURN(table,*key,*value);
     return 0;
 }
 
@@ -718,19 +718,19 @@ st_delete_safe(register st_table *table, register st_data_t *key, st_data_t *val
 {
     st_index_t hash_val;
     register st_table_entry *ptr;
-    PROBE_ST_DELETE_SAFE_BEGIN(table,*key,*value,never);
+    PROBE_ST_DELETE_SAFE_ENTRY(table,*key,*value,never);
     if (table->entries_packed) {
 	st_index_t i;
 	for (i = 0; i < table->num_entries; i++) {
 	    if ((st_data_t)table->bins[i*2] == *key) {
 		if (value != 0) *value = (st_data_t)table->bins[i*2+1];
 		table->bins[i*2] = (void *)never;
-        PROBE_ST_DELETE_SAFE_END(table,*key,*value,never);
+        PROBE_ST_DELETE_SAFE_RETURN(table,*key,*value,never);
 		return 1;
 	    }
 	}
 	if (value != 0) *value = 0;
-    PROBE_ST_DELETE_SAFE_END(table,*key,*value,never);
+    PROBE_ST_DELETE_SAFE_RETURN(table,*key,*value,never);
 	return 0;
     }
 
@@ -743,13 +743,13 @@ st_delete_safe(register st_table *table, register st_data_t *key, st_data_t *val
 	    *key = ptr->key;
 	    if (value != 0) *value = ptr->record;
 	    ptr->key = ptr->record = never;
-        PROBE_ST_DELETE_SAFE_END(table,*key,*value,never);
+        PROBE_ST_DELETE_SAFE_RETURN(table,*key,*value,never);
 	    return 1;
 	}
     }
 
     if (value != 0) *value = 0;
-    PROBE_ST_DELETE_SAFE_END(table,*key,*value,never);
+    PROBE_ST_DELETE_SAFE_RETURN(table,*key,*value,never);
     return 0;
 }
 
@@ -758,12 +758,12 @@ st_cleanup_safe(st_table *table, st_data_t never)
 {
     st_table_entry *ptr, **last, *tmp;
     st_index_t i;
-    PROBE_ST_CLEANUP_SAFE_BEGIN(table,never);
+    PROBE_ST_CLEANUP_SAFE_ENTRY(table,never);
     if (table->entries_packed) {
 	st_index_t i = 0, j = 0;
 	while ((st_data_t)table->bins[i*2] != never) {
 	    if (i++ == table->num_entries){ 
-          PROBE_ST_CLEANUP_SAFE_END(table,never);
+          PROBE_ST_CLEANUP_SAFE_RETURN(table,never);
           return;
         }
 	}
@@ -774,7 +774,7 @@ st_cleanup_safe(st_table *table, st_data_t never)
 	    j++;
 	}
 	table->num_entries = j;
-    PROBE_ST_CLEANUP_SAFE_END(table,never);
+    PROBE_ST_CLEANUP_SAFE_RETURN(table,never);
 	return;
     }
 

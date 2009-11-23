@@ -1,19 +1,19 @@
-#define PROBE_FIBER_BEGIN(probe,fib) do {\
-  if (RUBY_##probe##_BEGIN_ENABLED())\
-   RUBY_##probe##_BEGIN((char*)rb_obj_classname(fib->prev),(int)fib->status);\
+#define PROBE_FIBER_ENTRY(probe,fib) do {\
+  if (RUBY_##probe##_ENTRY_ENABLED())\
+   RUBY_##probe##_ENTRY((char*)rb_obj_classname(fib->prev),(int)fib->status);\
 } while (0)
-#define PROBE_FIBER_END(probe,fib) do {\
-  if (RUBY_##probe##_END_ENABLED())\
-   RUBY_##probe##_END((char*)rb_obj_classname(fib->prev),(int)fib->status);\
+#define PROBE_FIBER_RETURN(probe,fib) do {\
+  if (RUBY_##probe##_RETURN_ENABLED())\
+   RUBY_##probe##_RETURN((char*)rb_obj_classname(fib->prev),(int)fib->status);\
 } while (0)
 
-#define PROBE_FIBER_MARK_BEGIN(fiber) PROBE_FIBER_BEGIN(FIBER_MARK,fiber)
-#define PROBE_FIBER_MARK_END(fiber) PROBE_FIBER_END(FIBER_MARK,fiber)
-#define PROBE_FIBER_FREE_BEGIN(fiber) PROBE_FIBER_BEGIN(FIBER_FREE,fiber)
-#define PROBE_FIBER_FREE_END(fiber) PROBE_FIBER_END(FIBER_FREE,fiber)
-#define PROBE_FIBER_SWITCH_BEGIN(fiber) PROBE_FIBER_BEGIN(FIBER_SWITCH,fiber)
-#define PROBE_FIBER_SWITCH_END(fiber) PROBE_FIBER_END(FIBER_SWITCH,fiber)
-#define PROBE_FIBER_START_BEGIN(fiber) PROBE_FIBER_BEGIN(FIBER_START,fiber)
-#define PROBE_FIBER_START_END(fiber) PROBE_FIBER_END(FIBER_START,fiber)
-#define PROBE_FIBER_TERMINATE_BEGIN(fiber) PROBE_FIBER_BEGIN(FIBER_TERMINATE,fiber)
-#define PROBE_FIBER_TERMINATE_END(fiber) PROBE_FIBER_END(FIBER_TERMINATE,fiber)
+#define PROBE_FIBER_MARK_ENTRY(fiber) PROBE_FIBER_ENTRY(FIBER_MARK,fiber)
+#define PROBE_FIBER_MARK_RETURN(fiber) PROBE_FIBER_RETURN(FIBER_MARK,fiber)
+#define PROBE_FIBER_FREE_ENTRY(fiber) PROBE_FIBER_ENTRY(FIBER_FREE,fiber)
+#define PROBE_FIBER_FREE_RETURN(fiber) PROBE_FIBER_RETURN(FIBER_FREE,fiber)
+#define PROBE_FIBER_SWITCH_ENTRY(fiber) PROBE_FIBER_ENTRY(FIBER_SWITCH,fiber)
+#define PROBE_FIBER_SWITCH_RETURN(fiber) PROBE_FIBER_RETURN(FIBER_SWITCH,fiber)
+#define PROBE_FIBER_START_ENTRY(fiber) PROBE_FIBER_ENTRY(FIBER_START,fiber)
+#define PROBE_FIBER_START_RETURN(fiber) PROBE_FIBER_RETURN(FIBER_START,fiber)
+#define PROBE_FIBER_TERMINATE_ENTRY(fiber) PROBE_FIBER_ENTRY(FIBER_TERMINATE,fiber)
+#define PROBE_FIBER_TERMINATE_RETURN(fiber) PROBE_FIBER_RETURN(FIBER_TERMINATE,fiber)

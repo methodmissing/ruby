@@ -12,7 +12,7 @@ rb_dtrace(int argc, VALUE *argv, VALUE self)
       probe_str = RSTRING_PTR(rb_obj_as_string(probe_id));
       PROBE_RB_TRACE_BEGIN(probe_str);
       rb_yield(Qnil);
-      PROBE_RB_TRACE_END(probe_str);
+      PROBE_RB_TRACE_RETURN(probe_str);
     }
 }
 
