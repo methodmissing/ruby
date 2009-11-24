@@ -1,26 +1,26 @@
-#define PROBE_STRING_ENTRY(PROBE,str) do {\
-  if (RUBY_STR_##PROBE##_ENTRY_ENABLED())\
-   RUBY_STR_##PROBE##_ENTRY((char*)RSTRING_PTR(str));\
+#define PROBE_STRING_ENTRY(probe,str) do {\
+  if (RUBY_STR_##probe##_ENTRY_ENABLED())\
+   RUBY_STR_##probe##_ENTRY((char*)RSTRING_PTR(str));\
 } while (0)
-#define PROBE_STRING_INT_ENTRY(PROBE,str,len) do {\
-  if (RUBY_STR_##PROBE##_ENTRY_ENABLED())\
-   RUBY_STR_##PROBE##_ENTRY((char*)RSTRING_PTR(str),len);\
+#define PROBE_STRING_INT_ENTRY(probe,str,len) do {\
+  if (RUBY_STR_##probe##_ENTRY_ENABLED())\
+   RUBY_STR_##probe##_ENTRY((char*)RSTRING_PTR(str),len);\
 } while (0)
-#define PROBE_STRING1_ENTRY(PROBE,str,str2) do {\
-  if (RUBY_STR_##PROBE##_ENTRY_ENABLED())\
-   RUBY_STR_##PROBE##_ENTRY((char*)RSTRING_PTR(str),(char*)RSTRING_PTR(str2));\
+#define PROBE_STRING1_ENTRY(probe,str,str2) do {\
+  if (RUBY_STR_##probe##_ENTRY_ENABLED())\
+   RUBY_STR_##probe##_ENTRY((char*)RSTRING_PTR(str),(char*)RSTRING_PTR(str2));\
 } while (0)
-#define PROBE_STRING_RETURN(PROBE,str) do {\
-  if (RUBY_STR_##PROBE##_RETURN_ENABLED())\
-   RUBY_STR_##PROBE##_RETURN((char*)RSTRING_PTR(str));\
+#define PROBE_STRING_RETURN(probe,str) do {\
+  if (RUBY_STR_##probe##_RETURN_ENABLED())\
+   RUBY_STR_##probe##_RETURN((char*)RSTRING_PTR(str));\
 } while (0)
-#define PROBE_STRING_INT_RETURN(PROBE,str,len) do {\
-  if (RUBY_STR_##PROBE##_RETURN_ENABLED())\
-   RUBY_STR_##PROBE##_RETURN((char*)RSTRING_PTR(str),len);\
+#define PROBE_STRING_INT_RETURN(probe,str,len) do {\
+  if (RUBY_STR_##probe##_RETURN_ENABLED())\
+   RUBY_STR_##probe##_RETURN((char*)RSTRING_PTR(str),len);\
 } while (0)
-#define PROBE_STRING1_RETURN(PROBE,str,str2) do {\
-  if (RUBY_STR_##PROBE##_RETURN_ENABLED())\
-   RUBY_STR_##PROBE##_RETURN((char*)RSTRING_PTR(str),(char*)RSTRING_PTR(str2));\
+#define PROBE_STRING1_RETURN(probe,str,str2) do {\
+  if (RUBY_STR_##probe##_RETURN_ENABLED())\
+   RUBY_STR_##probe##_RETURN((char*)RSTRING_PTR(str),(char*)RSTRING_PTR(str2));\
 } while (0)
 
 #define PROBE_STR_NEW_ENTRY(ptr,len) PROBE_STR_INT_ENTRY(STR_NEW,ptr,len)
