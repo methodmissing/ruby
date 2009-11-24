@@ -18,11 +18,24 @@
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
+#include <errno.h>
+
 #ifndef EXIT_SUCCESS
 #define EXIT_SUCCESS 0
 #endif
 
 extern const char ruby_description[];
+
+static const char *
+rb_strerrno(int err)
+{
+#define defined_error(name, num) if (err == num) return name;
+#define undefined_error(name) 
+#include "known_errors.inc"
+#undef defined_error
+#undef undefined_error
+    return NULL;
+}
 
 static int
 err_position_0(char *buf, long len, const char *file, int line)
@@ -236,6 +249,20 @@ rb_bug(const char *fmt, ...)
 }
 
 void
+rb_bug_errno(const char *mesg, int errno_arg)
+{
+    if (errno_arg == 0)
+        rb_bug("%s: errno == 0 (NOERROR)", mesg);
+    else {
+        const char *errno_str = rb_strerrno(errno_arg);
+        if (errno_str)
+            rb_bug("%s: %s (%s)", mesg, strerror(errno_arg), errno_str);
+        else
+            rb_bug("%s: %s (%d)", mesg, strerror(errno_arg), errno_arg);
+    }
+}
+
+void
 rb_compile_bug(const char *file, int line, const char *fmt, ...)
 {
     va_list args;
@@ -349,8 +376,6 @@ rb_check_typeddata(VALUE obj, const rb_data_type_t *data_type)
 }
 
 /* exception classes */
-#include <errno.h>
-
 VALUE rb_eException;
 VALUE rb_eSystemExit;
 VALUE rb_eInterrupt;
@@ -1256,18 +1281,6 @@ Init_syserr(void)
 #include "known_errors.inc"
 #undef defined_error
 #undef undefined_error
-}
-
-const char *
-rb_strerrno(int err)
-{
-    if (err == 0) return "NOERROR";
-#define defined_error(name, num) if (err == num) return name;
-#define undefined_error(name) 
-#include "known_errors.inc"
-#undef defined_error
-#undef undefined_error
-    return "UNKNOWNERROR";
 }
 
 static void
