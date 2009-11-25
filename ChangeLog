@@ -1,3 +1,23 @@
+Thu Nov 26 00:05:58 2009  NAKAMURA, Hiroshi  <nahi@ruby-lang.org>
+
+	* test/digest/test_digest_extend.rb: Added tests for current digest
+	  framework.
+
+Wed Nov 25 20:46:37 2009  Tanaka Akira  <akr@fsij.org>
+
+	* vm_eval.c (rb_search_method_entry): refine error message.
+
+Wed Nov 25 19:29:05 2009  Akinori MUSHA  <knu@iDaemons.org>
+
+	* ext/digest/digest.c (rb_digest_instance_method_unimpl): Do not
+	  call rb_inspect() on an object that does not implement necessary
+	  methods; reported by NaHi.
+
+Wed Nov 25 19:30:30 2009  Martin Duerst  <duerst@it.aoyama.ac.jp>
+
+	* transcode.c: Added a check for an internal error
+	  (with Tatsuya Mizuno)
+
 Tue Nov 24 22:57:46 2009  Tanaka Akira  <akr@fsij.org>
 
 	* test/ruby/envutil.rb (EnvUtil.invoke_ruby): raise Timeout::Error
