@@ -1,36 +1,12 @@
-#define PROBE_ST_TABLE_ENTRY(probe,table) do {\
-  if (RUBY_##probe##_ENTRY_ENABLED())\
-   RUBY_##probe##_ENTRY((int)table->num_bins,(int)table->num_entries,(int)st_memsize(table));\
-} while (0)
-#define PROBE_ST_TABLE1_ENTRY(probe,table,data1) do {\
-  if (RUBY_##probe##_ENTRY_ENABLED())\
-   RUBY_##probe##_ENTRY((int)table->num_bins,(int)table->num_entries,(int)st_memsize(table),(int)data1);\
-} while (0)
-#define PROBE_ST_TABLE2_ENTRY(probe,table,data1,data2) do {\
-  if (RUBY_##probe##_ENTRY_ENABLED())\
-   RUBY_##probe##_ENTRY((int)table->num_bins,(int)table->num_entries,(int)st_memsize(table),(int)data1,(int)data2);\
-} while (0)
-#define PROBE_ST_TABLE3_ENTRY(probe,table,data1,data2,data3) do {\
-  if (RUBY_##probe##_ENTRY_ENABLED())\
-   RUBY_##probe##_ENTRY((int)table->num_bins,(int)table->num_entries,(int)st_memsize(table),(int)data1,(int)data2,(int)data3);\
-} while (0)
-
-#define PROBE_ST_TABLE_RETURN(probe,table) do {\
-  if (RUBY_##probe##_RETURN_ENABLED())\
-   RUBY_##probe##_RETURN((int)table->num_bins,(int)table->num_entries,(int)st_memsize(table));\
-} while (0)
-#define PROBE_ST_TABLE1_RETURN(probe,table,data1) do {\
-  if (RUBY_##probe##_RETURN_ENABLED())\
-   RUBY_##probe##_RETURN((int)table->num_bins,(int)table->num_entries,(int)st_memsize(table),(int)data1);\
-} while (0)
-#define PROBE_ST_TABLE2_RETURN(probe,table,data1,data2) do {\
-  if (RUBY_##probe##_RETURN_ENABLED())\
-   RUBY_##probe##_RETURN((int)table->num_bins,(int)table->num_entries,(int)st_memsize(table),(int)data1,(int)data2);\
-} while (0)
-#define PROBE_ST_TABLE3_RETURN(probe,table,data1,data2,data3) do {\
-  if (RUBY_##probe##_RETURN_ENABLED())\
-   RUBY_##probe##_RETURN((int)table->num_bins,(int)table->num_entries,(int)st_memsize(table),(int)data1,(int)data2,(int)data3);\
-} while (0)
+#define ST_TABLE_ARGS(table) (int)table->num_bins,(int)table->num_entries,(int)st_memsize(table)
+#define PROBE_ST_TABLE_ENTRY(probe,table) PROBE_ENTRY(probe,ST_TABLE_ARGS(table))
+#define PROBE_ST_TABLE1_ENTRY(probe,table,data) PROBE_ENTRY(probe,ST_TABLE_ARGS(table),(int)data)
+#define PROBE_ST_TABLE2_ENTRY(probe,table,data,data2) PROBE_ENTRY(probe,ST_TABLE_ARGS(table),(int)data,(int)data2)
+#define PROBE_ST_TABLE3_ENTRY(probe,table,data,data2,data3) PROBE_ENTRY(probe,ST_TABLE_ARGS(table),(int)data,(int)data2,(int)data3)
+#define PROBE_ST_TABLE_RETURN(probe,table) PROBE_RETURN(probe,ST_TABLE_ARGS(table))
+#define PROBE_ST_TABLE1_RETURN(probe,table,data) PROBE_RETURN(probe,ST_TABLE_ARGS(table),(int)data)
+#define PROBE_ST_TABLE2_RETURN(probe,table,data,data2) PROBE_RETURN(probe,ST_TABLE_ARGS(table),(int)data,(int)data2)
+#define PROBE_ST_TABLE3_RETURN(probe,table,data,data2,data3) PROBE_RETURN(probe,ST_TABLE_ARGS(table),(int)data,(int)data2,(int)data3)
 
 #define PROBE_ST_INIT_NUMTABLE_ENTRY() PROBE_ENTRY(ST_INIT_NUMTABLE)
 #define PROBE_ST_INIT_NUMTABLE_RETURN() PROBE_RETURN(ST_INIT_NUMTABLE)

@@ -1282,7 +1282,7 @@ rb_obj_instance_eval(int argc, VALUE *argv, VALUE self)
 {
     VALUE klass, res;
 
-    PROBE_EVAL_ENTRY(INSTANCE,self);
+    PROBE_INSTANCE_EVAL_ENTRY(self);
     if (SPECIAL_CONST_P(self)) {
 	klass = Qnil;
     }
@@ -1290,7 +1290,7 @@ rb_obj_instance_eval(int argc, VALUE *argv, VALUE self)
 	klass = rb_singleton_class(self);
     }
     res = specific_eval(argc, argv, klass, self);
-    PROBE_EVAL_RETURN(INSTANCE,self);
+    PROBE_INSTANCE_EVAL_RETURN(self);
     return res;
 }
 
@@ -1316,7 +1316,7 @@ VALUE
 rb_obj_instance_exec(int argc, VALUE *argv, VALUE self)
 {
     VALUE klass, res;
-    PROBE_EXEC_ENTRY(INSTANCE,self);
+    PROBE_INSTANCE_EXEC_ENTRY(self);
     if (SPECIAL_CONST_P(self)) {
 	klass = Qnil;
     }
@@ -1324,7 +1324,7 @@ rb_obj_instance_exec(int argc, VALUE *argv, VALUE self)
 	klass = rb_singleton_class(self);
     }
     res = yield_under(klass, self, rb_ary_new4(argc, argv));
-    PROBE_EXEC_RETURN(INSTANCE,self);
+    PROBE_INSTANCE_EXEC_RETURN(self);
     return res;
 }
 
@@ -1356,9 +1356,9 @@ VALUE
 rb_mod_module_eval(int argc, VALUE *argv, VALUE mod)
 {
     VALUE res;
-    PROBE_EVAL_ENTRY(MODULE,mod);
+    PROBE_MODULE_EVAL_ENTRY(mod);
     res = specific_eval(argc, argv, mod, mod);
-    PROBE_EVAL_RETURN(MODULE,mod);
+    PROBE_MODULE_EVAL_RETURN(mod);
     return res;
 }
 
@@ -1386,9 +1386,9 @@ VALUE
 rb_mod_module_exec(int argc, VALUE *argv, VALUE mod)
 {
     VALUE res;
-    PROBE_EXEC_ENTRY(MODULE,mod);
+    PROBE_MODULE_EXEC_ENTRY(mod);
     res = yield_under(mod, mod, rb_ary_new4(argc, argv));
-    PROBE_EXEC_RETURN(MODULE,mod);
+    PROBE_MODULE_EXEC_RETURN(mod);
     return res;
 }
 

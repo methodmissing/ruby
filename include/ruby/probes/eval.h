@@ -1,27 +1,13 @@
-#define PROBE_EVALSTR_ENTRY(obj) do {\
-  if (RUBY_EVALSTR_ENTRY_ENABLED())\
-   RUBY_EVALSTR_ENTRY((char*)rb_obj_classname(obj));\
-} while (0)
-#define PROBE_EVALSTR_RETURN(obj) do {\
-  if (RUBY_EVALSTR_RETURN_ENABLED())\
-   RUBY_EVALSTR_RETURN((char*)rb_obj_classname(obj));\
-} while (0)
-#define PROBE_EVAL_ENTRY(probe,obj) do {\
-  if (RUBY_##probe##_EVAL_ENTRY_ENABLED())\
-   RUBY_##probe##_EVAL_ENTRY((char*)rb_obj_classname(obj));\
-} while (0)
-#define PROBE_EVAL_RETURN(probe,obj) do {\
-  if (RUBY_##probe##_EVAL_RETURN_ENABLED())\
-   RUBY_##probe##_EVAL_RETURN((char*)rb_obj_classname(obj));\
-} while (0)
-#define PROBE_EXEC_ENTRY(probe,obj) do {\
-  if (RUBY_##probe##_EXEC_ENTRY_ENABLED())\
-   RUBY_##probe##_EXEC_ENTRY((char*)rb_obj_classname(obj));\
-} while (0)
-#define PROBE_EXEC_RETURN(probe,obj) do {\
-  if (RUBY_##probe##_EXEC_RETURN_ENABLED())\
-   RUBY_##probe##_EXEC_RETURN((char*)rb_obj_classname(obj));\
-} while (0)
+#define PROBE_EVALSTR_ENTRY(obj) PROBE_ENTRY(EVALSTR,(char*)rb_obj_classname(obj))
+#define PROBE_EVALSTR_RETURN(obj) PROBE_RETURN(EVALSTR,(char*)rb_obj_classname(obj))
+#define PROBE_INSTANCE_EVAL_ENTRY(obj) PROBE_ENTRY(INSTANCE_EVAL,(char*)rb_obj_classname(obj))
+#define PROBE_INSTANCE_EVAL_RETURN(obj) PROBE_RETURN(INSTANCE_EVAL,(char*)rb_obj_classname(obj))
+#define PROBE_INSTANCE_EXEC_ENTRY(obj) PROBE_ENTRY(INSTANCE_EXEC,(char*)rb_obj_classname(obj))
+#define PROBE_INSTANCE_EXEC_RETURN(obj) PROBE_RETURN(INSTANCE_EXEC,(char*)rb_obj_classname(obj))
+#define PROBE_MODULE_EVAL_ENTRY(obj) PROBE_ENTRY(MODULE_EVAL,(char*)rb_obj_classname(obj))
+#define PROBE_MODULE_EVAL_RETURN(obj) PROBE_RETURN(MODULE_EVAL,(char*)rb_obj_classname(obj))
+#define PROBE_MODULE_EXEC_ENTRY(obj) PROBE_ENTRY(MODULE_EXEC,(char*)rb_obj_classname(obj))
+#define PROBE_MODULE_EXEC_RETURN(obj) PROBE_RETURN(MODULE_EXEC,(char*)rb_obj_classname(obj))
 
 #define PROBE_SEND_ENTRY() PROBE_ENTRY(SEND)
 #define PROBE_SEND_RETURN() PROBE_RETURN(SEND)

@@ -1,11 +1,5 @@
-#define PROBE_FIBER_ENTRY(probe,fib) do {\
-  if (RUBY_##probe##_ENTRY_ENABLED())\
-   RUBY_##probe##_ENTRY((char*)rb_obj_classname(fib->prev),(int)fib->status);\
-} while (0)
-#define PROBE_FIBER_RETURN(probe,fib) do {\
-  if (RUBY_##probe##_RETURN_ENABLED())\
-   RUBY_##probe##_RETURN((char*)rb_obj_classname(fib->prev),(int)fib->status);\
-} while (0)
+#define PROBE_FIBER_ENTRY(probe,fib) PROBE_ENTRY(probe,(char*)rb_obj_classname(fib->prev),(int)fib->status)
+#define PROBE_FIBER_RETURN(probe,fib) PROBE_RETURN(probe,(char*)rb_obj_classname(fib->prev),(int)fib->status)
 
 #define PROBE_FIBER_MARK_ENTRY(fiber) PROBE_FIBER_ENTRY(FIBER_MARK,fiber)
 #define PROBE_FIBER_MARK_RETURN(fiber) PROBE_FIBER_RETURN(FIBER_MARK,fiber)
