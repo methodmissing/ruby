@@ -208,6 +208,10 @@ provider ruby {
     probe gc__mark__return(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer, int level);
     probe gc__mark__children__entry(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer, int level);
     probe gc__mark__children__return(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer, int level);
+    probe gc__heaps__increment__entry(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
+    probe gc__heaps__increment__return(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
+    probe gc__assign__heap__slot__entry(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
+    probe gc__assign__heap__slot__return(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
 
     probe rb__trace__entry(char *id);
     probe rb__trace__return(char *id);

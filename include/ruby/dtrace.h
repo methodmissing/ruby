@@ -367,6 +367,22 @@ do { \
 } while (0)
 #define	RUBY_GC_ADD_FREELIST_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$gc__add__freelist__return$v1()
+#define	RUBY_GC_ASSIGN_HEAP_SLOT_ENTRY(arg0, arg1, arg2, arg3, arg4, arg5) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$gc__assign__heap__slot__entry$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74(arg0, arg1, arg2, arg3, arg4, arg5); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_GC_ASSIGN_HEAP_SLOT_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$gc__assign__heap__slot__entry$v1()
+#define	RUBY_GC_ASSIGN_HEAP_SLOT_RETURN(arg0, arg1, arg2, arg3, arg4, arg5) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$gc__assign__heap__slot__return$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74(arg0, arg1, arg2, arg3, arg4, arg5); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_GC_ASSIGN_HEAP_SLOT_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$gc__assign__heap__slot__return$v1()
 #define	RUBY_GC_FREE_UNUSED_HEAPS_ENTRY(arg0, arg1, arg2, arg3, arg4, arg5) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
@@ -399,6 +415,22 @@ do { \
 } while (0)
 #define	RUBY_GC_GARBAGE_COLLECT_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$gc__garbage_collect__return$v1()
+#define	RUBY_GC_HEAPS_INCREMENT_ENTRY(arg0, arg1, arg2, arg3, arg4, arg5) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$gc__heaps__increment__entry$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74(arg0, arg1, arg2, arg3, arg4, arg5); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_GC_HEAPS_INCREMENT_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$gc__heaps__increment__entry$v1()
+#define	RUBY_GC_HEAPS_INCREMENT_RETURN(arg0, arg1, arg2, arg3, arg4, arg5) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$gc__heaps__increment__return$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74(arg0, arg1, arg2, arg3, arg4, arg5); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_GC_HEAPS_INCREMENT_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$gc__heaps__increment__return$v1()
 #define	RUBY_GC_IS_POINTER_TO_HEAP_ENTRY(arg0, arg1, arg2, arg3, arg4, arg5, arg6) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
@@ -2409,6 +2441,10 @@ extern void __dtrace_probe$ruby$gc__add__freelist__entry$v1$6c6f6e67$6c6f6e67$6c
 extern int __dtrace_isenabled$ruby$gc__add__freelist__entry$v1(void);
 extern void __dtrace_probe$ruby$gc__add__freelist__return$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74$766f6964202a(long, long, long, long, long, unsigned int, void *);
 extern int __dtrace_isenabled$ruby$gc__add__freelist__return$v1(void);
+extern void __dtrace_probe$ruby$gc__assign__heap__slot__entry$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74(long, long, long, long, long, unsigned int);
+extern int __dtrace_isenabled$ruby$gc__assign__heap__slot__entry$v1(void);
+extern void __dtrace_probe$ruby$gc__assign__heap__slot__return$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74(long, long, long, long, long, unsigned int);
+extern int __dtrace_isenabled$ruby$gc__assign__heap__slot__return$v1(void);
 extern void __dtrace_probe$ruby$gc__free__unused__heaps__entry$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74(long, long, long, long, long, unsigned int);
 extern int __dtrace_isenabled$ruby$gc__free__unused__heaps__entry$v1(void);
 extern void __dtrace_probe$ruby$gc__free__unused__heaps__return$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74(long, long, long, long, long, unsigned int);
@@ -2417,6 +2453,10 @@ extern void __dtrace_probe$ruby$gc__garbage__collect__entry$v1$6c6f6e67$6c6f6e67
 extern int __dtrace_isenabled$ruby$gc__garbage__collect__entry$v1(void);
 extern void __dtrace_probe$ruby$gc__garbage_collect__return$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74(long, long, long, long, long, unsigned int);
 extern int __dtrace_isenabled$ruby$gc__garbage_collect__return$v1(void);
+extern void __dtrace_probe$ruby$gc__heaps__increment__entry$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74(long, long, long, long, long, unsigned int);
+extern int __dtrace_isenabled$ruby$gc__heaps__increment__entry$v1(void);
+extern void __dtrace_probe$ruby$gc__heaps__increment__return$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74(long, long, long, long, long, unsigned int);
+extern int __dtrace_isenabled$ruby$gc__heaps__increment__return$v1(void);
 extern void __dtrace_probe$ruby$gc__is__pointer__to__heap__entry$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74$766f6964202a(long, long, long, long, long, unsigned int, void *);
 extern int __dtrace_isenabled$ruby$gc__is__pointer__to__heap__entry$v1(void);
 extern void __dtrace_probe$ruby$gc__is__pointer__to__heap__return$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74$766f6964202a(long, long, long, long, long, unsigned int, void *);

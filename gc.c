@@ -922,6 +922,7 @@ assign_heap_slot(rb_objspace_t *objspace)
     size_t hi, lo, mid;
     size_t objs;
 
+    PROBE_GC_ASSIGN_HEAP_SLOT_ENTRY(objspace);
     objs = HEAP_OBJ_LIMIT;
     p = (RVALUE*)malloc(HEAP_SIZE);
 
@@ -971,6 +972,7 @@ assign_heap_slot(rb_objspace_t *objspace)
 	freelist = p;
 	p++;
     }
+    PROBE_GC_ASSIGN_HEAP_SLOT_RETURN(objspace);
 }
 
 static void
@@ -999,6 +1001,7 @@ init_heap(rb_objspace_t *objspace)
 static void
 set_heaps_increment(rb_objspace_t *objspace)
 {
+    PROBE_GC_HEAPS_INCREMENT_ENTRY(objspace);
     size_t next_heaps_length = (size_t)(heaps_used * 1.8);
 
     if (next_heaps_length == heaps_used) {
@@ -1010,6 +1013,7 @@ set_heaps_increment(rb_objspace_t *objspace)
     if (next_heaps_length > heaps_length) {
 	allocate_heaps(objspace, next_heaps_length);
     }
+    PROBE_GC_HEAPS_INCREMENT_RETURN(objspace);
 }
 
 static int
