@@ -1,35 +1,14 @@
-#define PROBE_OBJSPACE_ENTRY(probe,os) do {\
-  if (RUBY_##probe##_ENTRY_ENABLED())\
-   RUBY_##probe##_ENTRY((long)os->malloc_params.limit, (long)os->malloc_params.increase, (long)os->heap.increment, (long)os->heap.length, (long)os->heap.used, (unsigned int)os->count);\
-} while (0)
-#define PROBE_OBJSPACE_RETURN(probe,os) do {\
-  if (RUBY_##probe##_RETURN_ENABLED())\
-   RUBY_##probe##_RETURN((long)os->malloc_params.limit, (long)os->malloc_params.increase, (long)os->heap.increment, (long)os->heap.length, (long)os->heap.used, (unsigned int)os->count);\
-} while (0)
-#define PROBE_OBJSPACE_PTR_ENTRY(probe,os,pointer) do {\
-  if (RUBY_##probe##_ENTRY_ENABLED())\
-   RUBY_##probe##_ENTRY((long)os->malloc_params.limit, (long)os->malloc_params.increase, (long)os->heap.increment, (long)os->heap.length, (long)os->heap.used, (unsigned int)os->count, (void *)pointer);\
-} while (0)
-#define PROBE_OBJSPACE_PTR_RETURN(probe,os,pointer) do {\
-  if (RUBY_##probe##_RETURN_ENABLED())\
-   RUBY_##probe##_RETURN((long)os->malloc_params.limit, (long)os->malloc_params.increase, (long)os->heap.increment, (long)os->heap.length, (long)os->heap.used, (unsigned int)os->count, (void *)pointer);\
-} while (0)
-#define PROBE_OBJSPACE_PTR_INT_ENTRY(probe,os,pointer,val) do {\
-  if (RUBY_##probe##_ENTRY_ENABLED())\
-   RUBY_##probe##_ENTRY((long)os->malloc_params.limit, (long)os->malloc_params.increase, (long)os->heap.increment, (long)os->heap.length, (long)os->heap.used, (unsigned int)os->count, (void *)pointer, (int)val);\
-} while (0)
-#define PROBE_OBJSPACE_PTR_INT_RETURN(probe,os,pointer,val) do {\
-  if (RUBY_##probe##_RETURN_ENABLED())\
-   RUBY_##probe##_RETURN((long)os->malloc_params.limit, (long)os->malloc_params.increase, (long)os->heap.increment, (long)os->heap.length, (long)os->heap.used, (unsigned int)os->count, (void *)pointer, (int)val);\
-} while (0)
-#define PROBE_OBJSPACE_OBJ_ENTRY(probe,os,obj) do {\
-  if (RUBY_##probe##_ENTRY_ENABLED())\
-   RUBY_##probe##_ENTRY((long)os->malloc_params.limit, (long)os->malloc_params.increase, (long)os->heap.increment, (long)os->heap.length, (long)os->heap.used, (unsigned int)os->count, (char *)rb_obj_classname(obj));\
-} while (0)
-#define PROBE_OBJSPACE_OBJ_RETURN(probe,os,obj) do {\
-  if (RUBY_##probe##_RETURN_ENABLED())\
-   RUBY_##probe##_RETURN((long)os->malloc_params.limit, (long)os->malloc_params.increase, (long)os->heap.increment, (long)os->heap.length, (long)os->heap.used, (unsigned int)os->count, (char *)rb_obj_classname(obj));\
-} while (0)
+#define OBJECT_SPACE_ARGS(os) (long)os->malloc_params.limit, (long)os->malloc_params.increase, (long)os->heap.increment, (long)os->heap.length, (long)os->heap.used, (unsigned int)os->count 
+
+#define PROBE_OBJSPACE_ENTRY(probe,os) PROBE_ENTRY(probe,OBJECT_SPACE_ARGS(os))
+#define PROBE_OBJSPACE_RETURN(probe,os) PROBE_RETURN(probe,OBJECT_SPACE_ARGS(os))
+#define PROBE_OBJSPACE_PTR_ENTRY(probe,os,ptr) PROBE_ENTRY(probe,OBJECT_SPACE_ARGS(os),(void*)ptr)
+#define PROBE_OBJSPACE_PTR_RETURN(probe,os,ptr) PROBE_RETURN(probe,OBJECT_SPACE_ARGS(os),(void*)ptr)
+#define PROBE_OBJSPACE_PTR_INT_ENTRY(probe,os,ptr,val) PROBE_ENTRY(probe,OBJECT_SPACE_ARGS(os),(void*)ptr,(int)val)
+#define PROBE_OBJSPACE_PTR_INT_RETURN(probe,os,ptr,val) PROBE_RETURN(probe,OBJECT_SPACE_ARGS(os),(void*)ptr,(int)val)
+#define PROBE_OBJSPACE_OBJ_ENTRY(probe,os,obj) PROBE_ENTRY(probe,OBJECT_SPACE_ARGS(os),(char *)rb_obj_classname(obj))
+#define PROBE_OBJSPACE_OBJ_RETURN(probe,os,obj) PROBE_RETURN(probe,OBJECT_SPACE_ARGS(os),(char *)rb_obj_classname(obj))
+
 #define PROBE_GC_OBJSPACE_ALLOC_ENTRY() PROBE_ENTRY(GC_OBJSPACE_ALLOC)
 #define PROBE_GC_OBJSPACE_ALLOC_RETURN(objspace) PROBE_OBJSPACE_RETURN(GC_OBJSPACE_ALLOC,objspace)
 #define PROBE_GC_OBJSPACE_FREE_ENTRY(objspace) PROBE_OBJSPACE_ENTRY(GC_OBJSPACE_FREE,objspace)
