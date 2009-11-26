@@ -216,16 +216,16 @@ provider ruby {
     probe rb__trace__entry(char *id);
     probe rb__trace__return(char *id);
 
-    probe fiber__mark__entry(char *class, int status);
-    probe fiber__mark__return(char *class, int status);
-    probe fiber__free__entry(char *class, int status);
-    probe fiber__free__return(char *class, int status);
-    probe fiber__switch__entry(char *class, int status);
-    probe fiber__switch__return(char *class, int status);
-    probe fiber__start__entry(char *class, int status);
-    probe fiber__start__return(char *class, int status);
-    probe fiber__terminate__entry(char *class, int status);
-    probe fiber__terminate__return(char *class, int status);
+    probe fiber__mark__entry(char *file, int line, unsigned long oid, int status);
+    probe fiber__mark__return(char *file, int line, unsigned long oid, int status);
+    probe fiber__free__entry(char *file, int line, unsigned long oid, int status);
+    probe fiber__free__return(char *file, int line, unsigned long oid, int status);
+    probe fiber__switch__entry(char *file, int line, unsigned long oid, int status);
+    probe fiber__switch__return(char *file, int line, unsigned long oid, int status);
+    probe fiber__start__entry(char *file, int line, unsigned long oid, int status);
+    probe fiber__start__return(char *file, int line, unsigned long oid, int status);
+    probe fiber__terminate__entry(char *file, int line, unsigned long oid, int status);
+    probe fiber__terminate__return(char *file, int line, unsigned long oid, int status);
 
     probe proc__mark__entry(void *pointer);
     probe proc__mark__return(void *pointer);
