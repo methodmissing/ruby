@@ -17,6 +17,7 @@
 .ppack
 .svn
 /.git
+/include/ruby/dtrace.h
 /*_prelude.c
 /COPYING.LIB
 /ChangeLog-1.8.0
