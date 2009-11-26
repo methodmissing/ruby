@@ -109,9 +109,12 @@ struct getaddrinfo_arg
 static VALUE
 nogvl_getaddrinfo(void *arg)
 {
+    VALUE res;
     struct getaddrinfo_arg *ptr = arg;
-    return getaddrinfo(ptr->node, ptr->service,
-                       ptr->hints, ptr->res);
+    res = getaddrinfo(ptr->node, ptr->service,
+                      ptr->hints, ptr->res);
+    PROBE_IO_SOCKET_GETADDRINFO_RETURN(ptr->node, ptr->service);
+    return res;
 }
 #endif
 
@@ -123,6 +126,7 @@ rb_getaddrinfo(const char *node, const char *service,
 #ifdef GETADDRINFO_EMU
     return getaddrinfo(node, service, hints, res);
 #else
+    PROBE_IO_SOCKET_GETADDRINFO_ENTRY(node,service);
     struct getaddrinfo_arg arg;
     int ret;
     arg.node = node;
@@ -149,11 +153,13 @@ struct getnameinfo_arg
 static VALUE
 nogvl_getnameinfo(void *arg)
 {
+    VALUE res;
     struct getnameinfo_arg *ptr = arg;
-    return getnameinfo(ptr->sa, ptr->salen,
-                       ptr->host, ptr->hostlen,
-                       ptr->serv, ptr->servlen,
-                       ptr->flags);
+    res = getnameinfo(ptr->sa, ptr->salen,
+                      ptr->host, ptr->hostlen,
+                      ptr->serv, ptr->servlen,
+                      ptr->flags);
+    PROBE_IO_SOCKET_GETNAMEINFO_RETURN(ptr->host, ptr->serv);
 }
 #endif
 
@@ -165,6 +171,7 @@ rb_getnameinfo(const struct sockaddr *sa, socklen_t salen,
 #ifdef GETADDRINFO_EMU
     return getnameinfo(sa, salen, host, hostlen, serv, servlen, flags);
 #else
+    PROBE_IO_SOCKET_GETNAMEINFO_ENTRY(host,serv);
     struct getnameinfo_arg arg;
     int ret;
     arg.sa = sa;

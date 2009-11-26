@@ -1839,6 +1839,70 @@ do { \
 } while (0)
 #define	RUBY_IO_READ_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$io__read__return$v1()
+#define	RUBY_IO_SOCKET_GETADDRINFO_ENTRY(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$io__socket__getaddrinfo__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_IO_SOCKET_GETADDRINFO_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$io__socket__getaddrinfo__entry$v1()
+#define	RUBY_IO_SOCKET_GETADDRINFO_RETURN(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$io__socket__getaddrinfo__return$v1$63686172202a$63686172202a(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_IO_SOCKET_GETADDRINFO_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$io__socket__getaddrinfo__return$v1()
+#define	RUBY_IO_SOCKET_GETNAMEINFO_ENTRY(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$io__socket__getnameinfo__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_IO_SOCKET_GETNAMEINFO_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$io__socket__getnameinfo__entry$v1()
+#define	RUBY_IO_SOCKET_GETNAMEINFO_RETURN(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$io__socket__getnameinfo__return$v1$63686172202a$63686172202a(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_IO_SOCKET_GETNAMEINFO_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$io__socket__getnameinfo__return$v1()
+#define	RUBY_IO_SOCKET_RECEIVE_ENTRY(arg0) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$io__socket__receive__entry$v1$696e74(arg0); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_IO_SOCKET_RECEIVE_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$io__socket__receive__entry$v1()
+#define	RUBY_IO_SOCKET_RECEIVE_RETURN(arg0) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$io__socket__receive__return$v1$696e74(arg0); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_IO_SOCKET_RECEIVE_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$io__socket__receive__return$v1()
+#define	RUBY_IO_SOCKET_SEND_ENTRY(arg0) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$io__socket__send__entry$v1$696e74(arg0); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_IO_SOCKET_SEND_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$io__socket__send__entry$v1()
+#define	RUBY_IO_SOCKET_SEND_RETURN(arg0) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$io__socket__send__return$v1$696e74(arg0); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_IO_SOCKET_SEND_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$io__socket__send__return$v1()
 #define	RUBY_IO_WRITE_ENTRY(arg0, arg1) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
@@ -3593,6 +3657,22 @@ extern void __dtrace_probe$ruby$io__read__entry$v1$696e74$6c6f6e67(int, long);
 extern int __dtrace_isenabled$ruby$io__read__entry$v1(void);
 extern void __dtrace_probe$ruby$io__read__return$v1$696e74$6c6f6e67(int, long);
 extern int __dtrace_isenabled$ruby$io__read__return$v1(void);
+extern void __dtrace_probe$ruby$io__socket__getaddrinfo__entry$v1$63686172202a$63686172202a(char *, char *);
+extern int __dtrace_isenabled$ruby$io__socket__getaddrinfo__entry$v1(void);
+extern void __dtrace_probe$ruby$io__socket__getaddrinfo__return$v1$63686172202a$63686172202a(char *, char *);
+extern int __dtrace_isenabled$ruby$io__socket__getaddrinfo__return$v1(void);
+extern void __dtrace_probe$ruby$io__socket__getnameinfo__entry$v1$63686172202a$63686172202a(char *, char *);
+extern int __dtrace_isenabled$ruby$io__socket__getnameinfo__entry$v1(void);
+extern void __dtrace_probe$ruby$io__socket__getnameinfo__return$v1$63686172202a$63686172202a(char *, char *);
+extern int __dtrace_isenabled$ruby$io__socket__getnameinfo__return$v1(void);
+extern void __dtrace_probe$ruby$io__socket__receive__entry$v1$696e74(int);
+extern int __dtrace_isenabled$ruby$io__socket__receive__entry$v1(void);
+extern void __dtrace_probe$ruby$io__socket__receive__return$v1$696e74(int);
+extern int __dtrace_isenabled$ruby$io__socket__receive__return$v1(void);
+extern void __dtrace_probe$ruby$io__socket__send__entry$v1$696e74(int);
+extern int __dtrace_isenabled$ruby$io__socket__send__entry$v1(void);
+extern void __dtrace_probe$ruby$io__socket__send__return$v1$696e74(int);
+extern int __dtrace_isenabled$ruby$io__socket__send__return$v1(void);
 extern void __dtrace_probe$ruby$io__write__entry$v1$696e74$6c6f6e67(int, long);
 extern int __dtrace_isenabled$ruby$io__write__entry$v1(void);
 extern void __dtrace_probe$ruby$io__write__return$v1$696e74$6c6f6e67(int, long);

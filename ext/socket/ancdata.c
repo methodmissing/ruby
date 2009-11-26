@@ -1113,13 +1113,17 @@ struct sendmsg_args_struct {
 static VALUE
 nogvl_sendmsg_func(void *ptr)
 {
+    VALUE res;
     struct sendmsg_args_struct *args = ptr;
-    return sendmsg(args->fd, args->msg, args->flags);
+    res = sendmsg(args->fd, args->msg, args->flags);
+    PROBE_IO_SOCKET_SEND_RETURN(args->fd);
+    return res;
 }
 
 static ssize_t
 rb_sendmsg(int fd, const struct msghdr *msg, int flags)
 {
+    PROBE_IO_SOCKET_SEND_ENTRY(fd);
     struct sendmsg_args_struct args;
     args.fd = fd;
     args.msg = msg;
@@ -1365,13 +1369,17 @@ struct recvmsg_args_struct {
 static VALUE
 nogvl_recvmsg_func(void *ptr)
 {
+    VALUE res;
     struct recvmsg_args_struct *args = ptr;
-    return recvmsg(args->fd, args->msg, args->flags);
+    res = recvmsg(args->fd, args->msg, args->flags);
+    PROBE_IO_SOCKET_RECEIVE_RETURN(args->fd);
+    return res;
 }
 
 static ssize_t
 rb_recvmsg(int fd, struct msghdr *msg, int flags)
 {
+    PROBE_IO_SOCKET_RECEIVE_ENTRY(fd);
     struct recvmsg_args_struct args;
     args.fd = fd;
     args.msg = msg;

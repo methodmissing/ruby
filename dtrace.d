@@ -408,6 +408,14 @@ provider ruby {
     probe io__read__return(int fd, long size);
     probe io__write__entry(int fd, long size);
     probe io__write__return(int fd, long size);
+    probe io__socket__send__entry(int fd);
+    probe io__socket__send__return(int fd);
+    probe io__socket__receive__entry(int fd);
+    probe io__socket__receive__return(int fd);
+    probe io__socket__getaddrinfo__entry(char *node, char *service);
+    probe io__socket__getaddrinfo__return(char *node, char *service);
+    probe io__socket__getnameinfo__entry(char *host, char *service);
+    probe io__socket__getnameinfo__return(char *host, char *service);
 };
 
 #pragma D attributes Evolving/Evolving/Common provider ruby provider
