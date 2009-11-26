@@ -511,20 +511,27 @@ struct io_internal_struct {
 static VALUE
 internal_read_func(void *ptr)
 {
+    VALUE res;
     struct io_internal_struct *iis = (struct io_internal_struct*)ptr;
-    return read(iis->fd, iis->buf, iis->capa);
+    res = read(iis->fd, iis->buf, iis->capa);
+    PROBE_IO_READ_RETURN(iis->fd,iis->capa);
+    return res;
 }
 
 static VALUE
 internal_write_func(void *ptr)
 {
+    VALUE res;
     struct io_internal_struct *iis = (struct io_internal_struct*)ptr;
-    return write(iis->fd, iis->buf, iis->capa);
+    res = write(iis->fd, iis->buf, iis->capa);
+    PROBE_IO_WRITE_RETURN(iis->fd,iis->capa);
+    return res;
 }
 
 static ssize_t
 rb_read_internal(int fd, void *buf, size_t count)
 {
+    PROBE_IO_READ_ENTRY(fd,count);
     struct io_internal_struct iis;
     iis.fd = fd;
     iis.buf = buf;
@@ -536,6 +543,7 @@ rb_read_internal(int fd, void *buf, size_t count)
 static ssize_t
 rb_write_internal(int fd, void *buf, size_t count)
 {
+    PROBE_IO_WRITE_ENTRY(fd,count);
     struct io_internal_struct iis;
     iis.fd = fd;
     iis.buf = buf;

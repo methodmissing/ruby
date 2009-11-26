@@ -55,9 +55,9 @@ getlocal
 ()
 (VALUE val)
 {
-    PROBE_INS_GETLOCAL_ENTRY(idx);
+    PROBE_INS_GETLOCAL_ENTRY();
     val = *(GET_LFP() - idx);
-    PROBE_INS_GETLOCAL_RETURN(val);
+    PROBE_INS_GETLOCAL_RETURN();
 }
 
 /**
@@ -71,7 +71,7 @@ setlocal
 (VALUE val)
 ()
 {
-    PROBE_INS_SETLOCAL_ENTRY(idx,val);
+    PROBE_INS_SETLOCAL_ENTRY();
     (*(GET_LFP() - idx)) = val;
     PROBE_INS_SETLOCAL_RETURN();
 }
@@ -87,7 +87,9 @@ getspecial
 ()
 (VALUE val)
 {
+    PROBE_INS_GETSPECIAL_ENTRY();
     val = vm_getspecial(th, GET_LFP(), key, type);
+    PROBE_INS_GETSPECIAL_RETURN();
 }
 
 /**
@@ -101,7 +103,9 @@ setspecial
 (VALUE obj)
 ()
 {
+    PROBE_INS_SETSPECIAL_ENTRY();
     lfp_svar_set(th, GET_LFP(), key, obj);
+    PROBE_INS_SETSPECIAL_RETURN();
 }
 
 /**
@@ -118,13 +122,13 @@ getdynamic
 (VALUE val)
 {
     rb_num_t i;
-    PROBE_INS_GETDYNAMIC_ENTRY(idx,level);
+    PROBE_INS_GETDYNAMIC_ENTRY();
     VALUE *dfp2 = GET_DFP();
     for (i = 0; i < level; i++) {
 	dfp2 = GET_PREV_DFP(dfp2);
     }
     val = *(dfp2 - idx);
-    PROBE_INS_GETDYNAMIC_RETURN(val);
+    PROBE_INS_GETDYNAMIC_RETURN();
 }
 
 /**
@@ -141,7 +145,7 @@ setdynamic
 ()
 {
     rb_num_t i;
-    PROBE_INS_SETDYNAMIC_ENTRY(idx,level,val);
+    PROBE_INS_SETDYNAMIC_ENTRY();
     VALUE *dfp2 = GET_DFP();
     for (i = 0; i < level; i++) {
 	dfp2 = GET_PREV_DFP(dfp2);
@@ -162,7 +166,9 @@ getinstancevariable
 ()
 (VALUE val)
 {
+    PROBE_INS_GETINSTANCEVARIABLE_ENTRY();
     val = vm_getivar(GET_SELF(), id, ic);
+    PROBE_INS_GETINSTANCEVARIABLE_RETURN();
 }
 
 /**
@@ -177,7 +183,9 @@ setinstancevariable
 (VALUE val)
 ()
 {
+    PROBE_INS_SETINSTANCEVARIABLE_ENTRY();
     vm_setivar(GET_SELF(), id, val, ic);
+    PROBE_INS_SETINSTANCEVARIABLE_RETURN();
 }
 
 /**
@@ -191,8 +199,10 @@ getclassvariable
 ()
 (VALUE val)
 {
+    PROBE_INS_GETCLASSVARIABLE_ENTRY();
     NODE * const cref = vm_get_cref(GET_ISEQ(), GET_LFP(), GET_DFP());
     val = rb_cvar_get(vm_get_cvar_base(cref), id);
+    PROBE_INS_GETCLASSVARIABLE_RETURN();
 }
 
 /**
@@ -206,8 +216,10 @@ setclassvariable
 (VALUE val)
 ()
 {
+    PROBE_INS_SETCLASSVARIABLE_ENTRY();
     NODE * const cref = vm_get_cref(GET_ISEQ(), GET_LFP(), GET_DFP());
     rb_cvar_set(vm_get_cvar_base(cref), id, val);
+    PROBE_INS_SETCLASSVARIABLE_RETURN();
 }
 
 /**
@@ -228,7 +240,9 @@ getconstant
 (VALUE klass)
 (VALUE val)
 {
+    PROBE_INS_GETCONSTANT_ENTRY();
     val = vm_get_ev_const(th, GET_ISEQ(), klass, id, 0);
+    PROBE_INS_GETCONSTANT_RETURN();
 }
 
 /**
@@ -250,9 +264,11 @@ setconstant
 (VALUE val, VALUE cbase)
 ()
 {
+    PROBE_INS_SETCONSTANT_ENTRY();
     vm_check_if_namespace(cbase);
     rb_const_set(cbase, id, val);
     INC_VM_STATE_VERSION();
+    PROBE_INS_SETCONSTANT_RETURN();
 }
 
 /**
@@ -266,7 +282,9 @@ getglobal
 ()
 (VALUE val)
 {
+    PROBE_INS_GETGLOBAL_ENTRY();
     val = GET_GLOBAL(entry);
+    PROBE_INS_GETGLOBAL_RETURN();
 }
 
 /**
@@ -280,7 +298,9 @@ setglobal
 (VALUE val)
 ()
 {
+    PROBE_INS_SETGLOBAL_ENTRY();
     SET_GLOBAL(entry, val);
+    PROBE_INS_SETGLOBAL_RETURN();    
 }
 
 
@@ -299,7 +319,9 @@ putnil
 ()
 (VALUE val)
 {
+    PROBE_INS_PUTNIL_ENTRY();
     val = Qnil;
+    PROBE_INS_PUTNIL_RETURN();
 }
 
 /**
@@ -313,7 +335,9 @@ putself
 ()
 (VALUE val)
 {
+    PROBE_INS_PUTSELF_ENTRY();
     val = GET_SELF();
+    PROBE_INS_PUTSELF_RETURN();
 }
 
 /**
@@ -329,7 +353,10 @@ putobject
 ()
 (VALUE val)
 {
+    /* no-ops */
+    PROBE_INS_PUTOBJECT_ENTRY(); 
     /* */
+    PROBE_INS_PUTOBJECT_RETURN();
 }
 
 /**
@@ -344,6 +371,7 @@ putspecialobject
 ()
 (VALUE val)
 {
+    PROBE_INS_PUTSPECIALOBJECT_ENTRY();
     switch (value_type) {
       case VM_SPECIAL_OBJECT_VMCORE:
 	val = rb_mRubyVMFrozenCore;
@@ -354,6 +382,7 @@ putspecialobject
       default:
 	rb_bug("putspecialobject insn: unknown value_type");
     }
+    PROBE_INS_PUTSPECIALOBJECT_RETURN();
 }
 
 /**
@@ -367,7 +396,9 @@ putiseq
 ()
 (VALUE ret)
 {
+    PROBE_INS_PUTISEQ_ENTRY();
     ret = iseq->self;
+    PROBE_INS_PUTISEQ_RETURN();
 }
 
 /**
@@ -381,7 +412,9 @@ putstring
 ()
 (VALUE val)
 {
+    PROBE_INS_PUTSTRING_ENTRY();
     val = rb_str_resurrect(str);
+    PROBE_INS_PUTSTRING_RETURN();
 }
 
 /**
@@ -395,6 +428,7 @@ concatstrings
 (...)
 (VALUE val) // inc += 1 - num;
 {
+    PROBE_INS_CONCATSTRINGS_ENTRY();
     rb_num_t i = num;
 
     val = rb_str_new(0, 0);
@@ -403,6 +437,7 @@ concatstrings
 	rb_str_append(val, v);
     }
     POPN(num);
+    PROBE_INS_CONCATSTRINGS_RETURN();
 }
 
 /**
@@ -416,7 +451,9 @@ tostring
 (VALUE val)
 (VALUE val)
 {
+    PROBE_INS_TOSTRING_ENTRY();
     val = rb_obj_as_string(val);
+    PROBE_INS_TOSTRING_RETURN();
 }
 
 /**
@@ -431,6 +468,7 @@ toregexp
 (...)
 (VALUE val) // inc += 1 - cnt;
 {
+    PROBE_INS_TOREGEXP_ENTRY();
     VALUE rb_reg_new_ary(VALUE ary, int options);
     rb_num_t i;
     const VALUE ary = rb_ary_tmp_new(cnt);
@@ -440,6 +478,7 @@ toregexp
     POPN(cnt);
     val = rb_reg_new_ary(ary, (int)opt);
     rb_ary_clear(ary);
+    PROBE_INS_TOREGEXP_RETURN();
 }
 
 /**
@@ -453,8 +492,10 @@ newarray
 (...)
 (VALUE val) // inc += 1 - num;
 {
+    PROBE_INS_NEWARRAY_ENTRY();
     val = rb_ary_new4((long)num, STACK_ADDR_FROM_TOP(num));
     POPN(num);
+    PROBE_INS_NEWARRAY_RETURN();
 }
 
 /**
@@ -468,7 +509,9 @@ duparray
 ()
 (VALUE val)
 {
+    PROBE_INS_DUPARRAY_ENTRY();
     val = rb_ary_resurrect(ary);
+    PROBE_INS_DUPARRAY_RETURN();
 }
 
 /**
@@ -489,7 +532,9 @@ expandarray
 (..., VALUE ary)
 (...) // inc += num - 1 + (flag & 1 ? 1 : 0);
 {
+    PROBE_INS_EXPANDARRAY_ENTRY();
     vm_expandarray(GET_CFP(), ary, num, (int)flag);
+    PROBE_INS_EXPANDARRAY_RETURN();
 }
 
 /**
@@ -503,6 +548,7 @@ concatarray
 (VALUE ary1, VALUE ary2st)
 (VALUE ary)
 {
+    PROBE_INS_CONCATARRAY_ENTRY();
     const VALUE ary2 = ary2st;
     VALUE tmp1 = rb_check_convert_type(ary1, T_ARRAY, "Array", "to_a");
     VALUE tmp2 = rb_check_convert_type(ary2, T_ARRAY, "Array", "to_a");
@@ -519,6 +565,7 @@ concatarray
 	tmp1 = rb_ary_dup(ary1);
     }
     ary = rb_ary_concat(tmp1, tmp2);
+    PROBE_INS_CONCATARRAY_RETURN();
 }
 
 /**
@@ -532,11 +579,13 @@ splatarray
 (VALUE ary)
 (VALUE obj)
 {
+    PROBE_INS_SPLATARRAY_ENTRY();
     VALUE tmp = rb_check_convert_type(ary, T_ARRAY, "Array", "to_a");
     if (NIL_P(tmp)) {
 	tmp = rb_ary_new3(1, ary);
     }
     obj = tmp;
+    PROBE_INS_SPLATARRAY_RETURN();
 }
 
 /**
@@ -550,6 +599,7 @@ checkincludearray
 (VALUE obj, VALUE ary)
 (VALUE obj, VALUE result)
 {
+    PROBE_INS_CHECKINCLUDEARRAY_ENTRY();
     int i;
     result = Qfalse;
 
@@ -577,6 +627,7 @@ checkincludearray
 	    }
 	}
     }
+    PROBE_INS_CHECKINCLUDEARRAY_RETURN();
 }
 
 /**
@@ -591,6 +642,7 @@ newhash
 (...)
 (VALUE val) // inc += 1 - num;
 {
+    PROBE_INS_NEWHASH_ENTRY();
     rb_num_t i;
     val = rb_hash_new();
 
@@ -600,6 +652,7 @@ newhash
 	rb_hash_aset(val, k, v);
     }
     POPN(num);
+    PROBE_INS_NEWHASH_RETURN();
 }
 
 /**
@@ -613,7 +666,9 @@ newrange
 (VALUE low, VALUE high)
 (VALUE val)
 {
+    PROBE_INS_NEWRANGE_ENTRY();
     val = rb_range_new(low, high, (int)flag);
+    PROBE_INS_NEWRANGE_RETURN();
 }
 
 /**********************************************************/
@@ -631,8 +686,10 @@ pop
 (VALUE val)
 ()
 {
+    PROBE_INS_POP_ENTRY();
     val = val;
     /* none */
+    PROBE_INS_POP_RETURN();
 }
 
 /**
@@ -646,7 +703,9 @@ dup
 (VALUE val)
 (VALUE val1, VALUE val2)
 {
+    PROBE_INS_DUP_ENTRY();
     val1 = val2 = val;
+    PROBE_INS_DUP_RETURN();
 }
 
 /**
@@ -660,12 +719,14 @@ dupn
 (...)
 (...) // inc += n;
 {
+    PROBE_INS_DUPN_ENTRY();
     rb_num_t i;
     VALUE *sp = STACK_ADDR_FROM_TOP(n);
     for (i = 0; i < n; i++) {
 	GET_SP()[i] = sp[i];
     }
     INC_SP(n);
+    PROBE_INS_DUPN_RETURN();
 }
 
 
@@ -680,7 +741,9 @@ swap
 (VALUE val, VALUE obj)
 (VALUE obj, VALUE val)
 {
+    PROBE_INS_SWAP_ENTRY();
     /* none */
+    PROBE_INS_SWAP_RETURN();
 }
 
 /**
@@ -694,7 +757,9 @@ reput
 (..., VALUE val)
 (VALUE val) // inc += 0;
 {
+    PROBE_INS_REPUT_ENTRY();
     /* none */
+    PROBE_INS_REPUT_RETURN();
 }
 
 /**
@@ -708,7 +773,9 @@ topn
 (...)
 (VALUE val) // inc += 1;
 {
+    PROBE_INS_TOPN_ENTRY();
     val = TOPN(n);
+    PROBE_INS_TOPN_RETURN();
 }
 
 /**
@@ -722,7 +789,9 @@ setn
 (..., VALUE val)
 (VALUE val) // inc += 0
 {
+    PROBE_INS_SETN_ENTRY();
     TOPN(n-1) = val;
+    PROBE_INS_SETN_RETURN();
 }
 
 /**
@@ -736,7 +805,9 @@ adjuststack
 (...)
 (...) // inc -= n
 {
+    PROBE_INS_ADJUSTSTACK_ENTRY();
     DEC_SP(n);
+    PROBE_INS_ADJUSTSTACK_RETURN();
 }
 
 
@@ -755,6 +826,7 @@ defined
 (VALUE v)
 (VALUE val)
 {
+    PROBE_INS_DEFINED_ENTRY();
     VALUE klass;
     const char *expr_type = 0;
     val = Qnil;
@@ -846,6 +918,7 @@ defined
 	    val = Qtrue;
 	}
     }
+    PROBE_INS_DEFINED_RETURN();
 }
 
 /**
@@ -859,9 +932,11 @@ trace
 ()
 ()
 {
+    PROBE_INS_TRACE_ENTRY();
     rb_event_flag_t flag = (rb_event_flag_t)nf;
 
     EXEC_EVENT_HOOK(th, flag, GET_SELF(), 0, 0 /* TODO: id, klass */);
+    PROBE_INS_TRACE_RETURN();
 }
 
 /**********************************************************/
@@ -883,6 +958,7 @@ defineclass
 (VALUE cbase, VALUE super)
 (VALUE val)
 {
+    PROBE_INS_DEFINECLASS_ENTRY();
     VALUE klass;
 
     switch ((int)define_type) {
@@ -963,6 +1039,7 @@ defineclass
 
     INC_VM_STATE_VERSION();
     NEXT_INSN();
+    PROBE_INS_DEFINECLASS_RETURN();
 }
 
 
@@ -987,6 +1064,7 @@ send
 (...)
 (VALUE val) // inc += - (int)(op_argc + ((op_flag & VM_CALL_ARGS_BLOCKARG_BIT) ? 1 : 0));
 {
+    PROBE_INS_SEND_ENTRY();
     const rb_method_entry_t *me;
     VALUE recv, klass;
     rb_block_t *blockptr = 0;
@@ -1000,6 +1078,7 @@ send
     klass = CLASS_OF(recv);
     me = vm_method_search(id, klass, ic);
     CALL_METHOD(num, blockptr, flag, id, me, recv);
+    PROBE_INS_SEND_RETURN();
 }
 
 /**
@@ -1015,6 +1094,7 @@ invokesuper
 (...)
 (VALUE val) // inc += - (int)(op_argc + ((op_flag & VM_CALL_ARGS_BLOCKARG_BIT) ? 1 : 0));
 {
+    PROBE_INS_INVOKESUPER_ENTRY();
     rb_block_t *blockptr = !(op_flag & VM_CALL_ARGS_BLOCKARG_BIT) ? GET_BLOCK_PTR() : 0;
     int num = caller_setup_args(th, GET_CFP(), op_flag,
 				(int)op_argc, blockiseq, &blockptr);
@@ -1028,6 +1108,7 @@ invokesuper
     me = rb_method_entry(klass, id);
 
     CALL_METHOD(num, blockptr, flag, id, me, recv);
+    PROBE_INS_INVOKESUPER_RETURN();
 }
 
 /**
@@ -1042,11 +1123,13 @@ invokeblock
 (...)
 (VALUE val)  // inc += 1 - num;
 {
+    PROBE_INS_INVOKEBLOCK_ENTRY();
     val = vm_invoke_block(th, GET_CFP(), num, flag);
     if (val == Qundef) {
 	RESTORE_REGS();
 	NEXT_INSN();
     }
+    PROBE_INS_INVOKEBLOCK_RETURN();
 }
 
 /**
@@ -1060,6 +1143,7 @@ leave
 (VALUE val)
 (VALUE val)
 {
+    PROBE_INS_LEAVE_ENTRY();
     if (OPT_CHECKED_RUN) {
 	if (reg_cfp->sp != reg_cfp->bp) {
 	    rb_bug("Stack consistency error (sp: %"PRIdPTRDIFF", bp: %"PRIdPTRDIFF")",
@@ -1070,6 +1154,7 @@ leave
     RUBY_VM_CHECK_INTS();
     vm_pop_frame(th);
     RESTORE_REGS();
+    PROBE_INS_LEAVE_RETURN();
 }
 
 /**
@@ -1083,12 +1168,14 @@ finish
 (VALUE val)
 (VALUE val)
 {
+    PROBE_INS_FINISH_ENTRY();
 #if OPT_CALL_THREADED_CODE
     rb_bug("unused instruction on OPT_CALL_THREADED_CODE");
 #else
     th->cfp++;
     return val;
 #endif
+    PROBE_INS_FINISH_RETURN();
 }
 
 /**********************************************************/
@@ -1106,8 +1193,10 @@ throw
 (VALUE throwobj)
 (VALUE val)
 {
+    PROBE_INS_THROW_ENTRY();
     RUBY_VM_CHECK_INTS();
     val = vm_throw(th, GET_CFP(), throw_state, throwobj);
+    PROBE_INS_THROW_RETURN();
     THROW_EXCEPTION(val);
     /* unreachable */
 }
@@ -1127,8 +1216,10 @@ jump
 ()
 ()
 {
+    PROBE_INS_JUMP_ENTRY();
     RUBY_VM_CHECK_INTS();
     JUMP(dst);
+    PROBE_INS_JUMP_RETURN();
 }
 
 /**
@@ -1142,10 +1233,12 @@ branchif
 (VALUE val)
 ()
 {
+    PROBE_INS_BRANCHIF_ENTRY();
     if (RTEST(val)) {
 	RUBY_VM_CHECK_INTS();
 	JUMP(dst);
     }
+    PROBE_INS_BRANCHIF_RETURN();
 }
 
 /**
@@ -1159,10 +1252,12 @@ branchunless
 (VALUE val)
 ()
 {
+    PROBE_INS_BRANCHUNLESS_ENTRY();
     if (!RTEST(val)) {
 	RUBY_VM_CHECK_INTS();
 	JUMP(dst);
     }
+    PROBE_INS_BRANCHUNLESS_RETURN();
 }
 
 
@@ -1181,7 +1276,7 @@ getinlinecache
 ()
 (VALUE val)
 {
-    PROBE_INS_GETINLINECACHE_ENTRY(dst);
+    PROBE_INS_GETINLINECACHE_ENTRY();
     if (ic->ic_vmstat == GET_VM_STATE_VERSION()) {
 	val = ic->ic_value.value;
 	JUMP(dst);
@@ -1190,7 +1285,7 @@ getinlinecache
 	/* none */
 	val = Qnil;
     }
-    PROBE_INS_GETINLINECACHE_RETURN(val);
+    PROBE_INS_GETINLINECACHE_RETURN();
 }
 
 /**
@@ -1204,7 +1299,7 @@ onceinlinecache
 ()
 (VALUE val)
 {
-    PROBE_INS_ONCEINLINECACHE_ENTRY(dst);
+    PROBE_INS_ONCEINLINECACHE_ENTRY();
     if (ic->ic_vmstat) {
 	val = ic->ic_value.value;
 	JUMP(dst);
@@ -1214,7 +1309,7 @@ onceinlinecache
 	ic->ic_value.value = Qundef;
 	val = Qnil;
     }
-    PROBE_INS_ONCEINLINECACHE_RETURN(val);
+    PROBE_INS_ONCEINLINECACHE_RETURN();
 }
 
 /**
@@ -1228,7 +1323,7 @@ setinlinecache
 (VALUE val)
 (VALUE val)
 {
-    PROBE_INS_SETINLINECACHE_ENTRY(dst,val);
+    PROBE_INS_SETINLINECACHE_ENTRY();
     IC ic = GET_CONST_INLINE_CACHE(dst);
 
     if (ic->ic_value.value == Qundef) {
@@ -1237,7 +1332,7 @@ setinlinecache
     ic->ic_value.value = val;
     ic->ic_vmstat = GET_VM_STATE_VERSION() - ruby_vm_const_missing_count;
     ruby_vm_const_missing_count = 0;
-    PROBE_INS_SETINLINECACHE_RETURN(val);
+    PROBE_INS_SETINLINECACHE_RETURN();
 }
 
 /**
@@ -1251,7 +1346,7 @@ opt_case_dispatch
 (..., VALUE key)
 () // inc += -1;
 {
-    PROBE_INS_OPT_CASE_DISPATCH_ENTRY(hash,else_offset,key);
+    PROBE_INS_OPT_CASE_DISPATCH_ENTRY();
     if (BASIC_OP_UNREDEFINED_P(BOP_EQQ)) {
 	VALUE val;
 	if (st_lookup(RHASH_TBL(hash), key, &val)) {
@@ -1313,7 +1408,7 @@ opt_plus
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_PLUS_ENTRY(recv,obj);
+    PROBE_INS_OPT_PLUS_ENTRY();
     if (0) {
 
     }
@@ -1377,7 +1472,7 @@ opt_plus
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idPLUS, recv);
     }
-    PROBE_INS_OPT_PLUS_RETURN(val);
+    PROBE_INS_OPT_PLUS_RETURN();
 }
 
 /**
@@ -1391,7 +1486,7 @@ opt_minus
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_MINUS_ENTRY(recv,obj);
+    PROBE_INS_OPT_MINUS_ENTRY();
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_MINUS)) {
 	long a, b, c;
@@ -1428,7 +1523,7 @@ opt_minus
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idMINUS, recv);
     }
-    PROBE_INS_OPT_MINUS_RETURN(val);
+    PROBE_INS_OPT_MINUS_RETURN();
 }
 
 /**
@@ -1442,7 +1537,7 @@ opt_mult
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_MULT_ENTRY(recv,obj);
+    PROBE_INS_OPT_MULT_ENTRY();
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_MULT)) {
 	long a, b, c;
@@ -1483,7 +1578,7 @@ opt_mult
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idMULT, recv);
     }
-    PROBE_INS_OPT_MULT_RETURN(val);
+    PROBE_INS_OPT_MULT_RETURN();
 }
 
 /**
@@ -1497,7 +1592,7 @@ opt_div
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_DIV_ENTRY(recv,obj);
+    PROBE_INS_OPT_DIV_ENTRY();
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_DIV)) {
 	long x, y, div;
@@ -1549,7 +1644,7 @@ opt_div
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idDIV, recv);
     }
-    PROBE_INS_OPT_DIV_RETURN(val);
+    PROBE_INS_OPT_DIV_RETURN();
 }
 
 /**
@@ -1563,7 +1658,7 @@ opt_mod
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_MOD_ENTRY(recv,obj);
+    PROBE_INS_OPT_MOD_ENTRY();
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_MOD)) {
 	long x, y, mod;
@@ -1630,7 +1725,7 @@ opt_mod
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idMOD, recv);
     }
-    PROBE_INS_OPT_MOD_RETURN(val);
+    PROBE_INS_OPT_MOD_RETURN();
 }
 
 /**
@@ -1644,7 +1739,7 @@ opt_eq
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_EQ_ENTRY(recv,obj);
+    PROBE_INS_OPT_EQ_ENTRY();
     val = opt_eq_func(recv, obj, ic);
 
     if (val == Qundef) {
@@ -1653,7 +1748,7 @@ opt_eq
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idEq, recv);
     }
-    PROBE_INS_OPT_EQ_RETURN(val);
+    PROBE_INS_OPT_EQ_RETURN();
 }
 
 /**
@@ -1667,7 +1762,7 @@ opt_neq
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_NEQ_ENTRY(recv,obj);
+    PROBE_INS_OPT_NEQ_ENTRY();
     extern VALUE rb_obj_not_equal(VALUE obj1, VALUE obj2);
     const rb_method_entry_t *me = vm_method_search(idNeq, CLASS_OF(recv), ic);
     val = Qundef;
@@ -1686,7 +1781,7 @@ opt_neq
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idNeq, recv);
     }
-    PROBE_INS_OPT_NEQ_RETURN(val);
+    PROBE_INS_OPT_NEQ_RETURN();
 }
 
 /**
@@ -1700,7 +1795,7 @@ opt_lt
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_LT_ENTRY(recv,obj);
+    PROBE_INS_OPT_LT_ENTRY();
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_LT)) {
 	SIGNED_VALUE a = recv, b = obj;
@@ -1738,7 +1833,7 @@ opt_lt
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idLT, recv);
     }
-    PROBE_INS_OPT_LT_RETURN(val);
+    PROBE_INS_OPT_LT_RETURN();
 }
 
 /**
@@ -1752,7 +1847,7 @@ opt_le
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_LE_ENTRY(recv,obj);
+    PROBE_INS_OPT_LE_ENTRY();
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_LE)) {
 	SIGNED_VALUE a = recv, b = obj;
@@ -1770,7 +1865,7 @@ opt_le
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idLE, recv);
     }
-    PROBE_INS_OPT_LE_RETURN(val);
+    PROBE_INS_OPT_LE_RETURN();
 }
 
 /**
@@ -1784,7 +1879,7 @@ opt_gt
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_GT_ENTRY(recv,obj);
+    PROBE_INS_OPT_GT_ENTRY();
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_GT)) {
 	SIGNED_VALUE a = recv, b = obj;
@@ -1822,7 +1917,7 @@ opt_gt
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idGT, recv);
     }
-    PROBE_INS_OPT_GT_RETURN(val);
+    PROBE_INS_OPT_GT_RETURN();
 }
 
 /**
@@ -1836,7 +1931,7 @@ opt_ge
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_GE_ENTRY(recv,obj);
+    PROBE_INS_OPT_GE_ENTRY();
     if (FIXNUM_2_P(recv, obj) &&
 	BASIC_OP_UNREDEFINED_P(BOP_GE)) {
 	SIGNED_VALUE a = recv, b = obj;
@@ -1853,7 +1948,7 @@ opt_ge
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idGE, recv);
     }
-    PROBE_INS_OPT_GE_RETURN(val);
+    PROBE_INS_OPT_GE_RETURN();
 }
 
 /**
@@ -1867,7 +1962,7 @@ opt_ltlt
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_LTLT_ENTRY(recv,obj);
+    PROBE_INS_OPT_LTLT_ENTRY();
     if (!SPECIAL_CONST_P(recv)) {
 	if (0) {
 	}
@@ -1889,7 +1984,7 @@ opt_ltlt
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idLTLT, recv);
     }
-    PROBE_INS_OPT_LTLT_RETURN(val);
+    PROBE_INS_OPT_LTLT_RETURN();
 }
 
 /**
@@ -1903,7 +1998,7 @@ opt_aref
 (VALUE recv, VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_AREF_ENTRY(recv,obj);
+    PROBE_INS_OPT_AREF_ENTRY();
     if (!SPECIAL_CONST_P(recv) && BASIC_OP_UNREDEFINED_P(BOP_AREF)) {
 	if (HEAP_CLASS_OF(recv) == rb_cArray && FIXNUM_P(obj)) {
 	    val = rb_ary_entry(recv, FIX2LONG(obj));
@@ -1921,7 +2016,7 @@ opt_aref
 	PUSH(obj);
 	CALL_SIMPLE_METHOD(1, idAREF, recv);
     }
-    PROBE_INS_OPT_AREF_RETURN(val);
+    PROBE_INS_OPT_AREF_RETURN();
 }
 
 /**
@@ -1935,7 +2030,7 @@ opt_aset
 (VALUE recv, VALUE obj, VALUE set)
 (VALUE val)
 {
-    PROBE_INS_OPT_ASET_ENTRY(recv,obj,set);
+    PROBE_INS_OPT_ASET_ENTRY();
     if (!SPECIAL_CONST_P(recv) &&
 	BASIC_OP_UNREDEFINED_P(BOP_ASET)) {
 	if (HEAP_CLASS_OF(recv) == rb_cArray && FIXNUM_P(obj)) {
@@ -1957,7 +2052,7 @@ opt_aset
 	PUSH(set);
 	CALL_SIMPLE_METHOD(2, idASET, recv);
     }
-    PROBE_INS_OPT_ASET_RETURN(val);
+    PROBE_INS_OPT_ASET_RETURN();
 }
 
 /**
@@ -1971,7 +2066,7 @@ opt_length
 (VALUE recv)
 (VALUE val)
 {
-    PROBE_INS_OPT_LENGTH_ENTRY(recv);
+    PROBE_INS_OPT_LENGTH_ENTRY();
     if (LIKELY(!SPECIAL_CONST_P(recv) &&
 	       BASIC_OP_UNREDEFINED_P(BOP_LENGTH))) {
 	if (HEAP_CLASS_OF(recv) == rb_cString) {
@@ -1992,7 +2087,7 @@ opt_length
 	PUSH(recv);
 	CALL_SIMPLE_METHOD(0, idLength, recv);
     }
-    PROBE_INS_OPT_LENGTH_RETURN(val);
+    PROBE_INS_OPT_LENGTH_RETURN();
 }
 
 /**
@@ -2006,7 +2101,7 @@ opt_size
 (VALUE recv)
 (VALUE val)
 {
-    PROBE_INS_OPT_SIZE_ENTRY(recv);
+    PROBE_INS_OPT_SIZE_ENTRY();
     if (LIKELY(BASIC_OP_UNREDEFINED_P(BOP_SIZE) &&
 	       !SPECIAL_CONST_P(recv))) {
 	if (HEAP_CLASS_OF(recv) == rb_cString) {
@@ -2027,7 +2122,7 @@ opt_size
 	PUSH(recv);
 	CALL_SIMPLE_METHOD(0, idSize, recv);
     }
-    PROBE_INS_OPT_SIZE_RETURN(val);
+    PROBE_INS_OPT_SIZE_RETURN();
 }
 
 /**
@@ -2041,7 +2136,7 @@ opt_succ
 (VALUE recv)
 (VALUE val)
 {
-    PROBE_INS_OPT_SUCC_ENTRY(recv);
+    PROBE_INS_OPT_SUCC_ENTRY();
     if (SPECIAL_CONST_P(recv)) {
 	if (FIXNUM_P(recv) &&
 	    BASIC_OP_UNREDEFINED_P(BOP_SUCC)) {
@@ -2076,7 +2171,7 @@ opt_succ
 	PUSH(recv);
 	CALL_SIMPLE_METHOD(0, idSucc, recv);
     }
-    PROBE_INS_OPT_SUCC_RETURN(val);
+    PROBE_INS_OPT_SUCC_RETURN();
 }
 
 /**
@@ -2090,7 +2185,7 @@ opt_not
 (VALUE recv)
 (VALUE val)
 {
-    PROBE_INS_OPT_NOT_ENTRY(recv);
+    PROBE_INS_OPT_NOT_ENTRY();
     extern VALUE rb_obj_not(VALUE obj);
     const rb_method_entry_t *me = vm_method_search(idNot, CLASS_OF(recv), ic);
 
@@ -2101,7 +2196,7 @@ opt_not
 	PUSH(recv);
 	CALL_SIMPLE_METHOD(0, idNot, recv);
     }
-    PROBE_INS_OPT_NOT_RETURN(val);
+    PROBE_INS_OPT_NOT_RETURN();
 }
 
 
@@ -2116,9 +2211,9 @@ opt_regexpmatch1
 (VALUE obj)
 (VALUE val)
 {
-    PROBE_INS_OPT_REGEXPMATCH1_ENTRY(r,obj);
+    PROBE_INS_OPT_REGEXPMATCH1_ENTRY();
     val = rb_reg_match(r, obj);
-    PROBE_INS_OPT_REGEXPMATCH1_RETURN(val);
+    PROBE_INS_OPT_REGEXPMATCH1_RETURN();
 }
 
 /**
@@ -2132,14 +2227,14 @@ opt_regexpmatch2
 (VALUE obj2, VALUE obj1)
 (VALUE val)
 {
-    PROBE_INS_OPT_REGEXPMATCH2_ENTRY(obj2,obj1);
+    PROBE_INS_OPT_REGEXPMATCH2_ENTRY();
     if (TYPE(obj2) == T_STRING) {
 	val = rb_reg_match(obj1, obj2);
     }
     else {
 	val = rb_funcall(obj2, idEqTilde, 1, obj1);
     }
-    PROBE_INS_OPT_REGEXPMATCH2_RETURN(val);
+    PROBE_INS_OPT_REGEXPMATCH2_RETURN();
 }
 
 /**

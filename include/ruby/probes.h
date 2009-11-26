@@ -8,6 +8,7 @@
 #define PROBE_INT_ENTRY(probe,val) PROBE_ENTRY(probe,(int)val)
 #define PROBE_PTR_ENTRY(probe,val) PROBE_ENTRY(probe,val)
 #define PROBE_ULONG_ENTRY(probe,val) PROBE_ENTRY(probe,(unsigned long)val)
+#define PROBE_INT_LONG_ENTRY(probe,val,val2) PROBE_ENTRY(probe,(int)val,(long)val2)
 #define PROBE_ULONG1_ENTRY(probe,val,val2) PROBE_ENTRY(probe,(unsigned long)val,(unsigned long)val2)
 #define PROBE_ULONG_OBJECT_ENTRY(probe,val,obj) PROBE_ENTRY(probe,(unsigned long)val,(char*)rb_obj_classname(obj))
 #define PROBE_ULONG1_OBJECT_ENTRY(probe,val,val2,obj) PROBE_ENTRY(probe,(unsigned long)val,(unsigned long)val2,(char*)rb_obj_classname(obj))
@@ -37,6 +38,7 @@
 #define PROBE_INT_RETURN(probe,val) PROBE_RETURN(probe,(int)val)
 #define PROBE_PTR_RETURN(probe,val) PROBE_RETURN(probe,val)
 #define PROBE_ULONG_RETURN(probe,val) PROBE_RETURN(probe,(unsigned long)val)
+#define PROBE_INT_LONG_RETURN(probe,val,val2) PROBE_RETURN(probe,(int)val,(long)val2)
 #define PROBE_ULONG1_RETURN(probe,val,val1) PROBE_RETURN(probe,(unsigned long)val,(unsigned long)val1)
 #define PROBE_ULONG_OBJECT_RETURN(probe,val,obj) PROBE_RETURN(probe,(unsigned long)val,(char*)rb_obj_classname(obj))
 #define PROBE_ULONG1_OBJECT_RETURN(probe,val,val1,obj) PROBE_RETURN(probe,(unsigned long)val,(unsigned long)val1,(char*)rb_obj_classname(obj))
@@ -72,6 +74,7 @@
 #include "probes/ins.h"
 #include "probes/proc.h"
 #include "probes/vm.h"
+#include "probes/io.h"
 #else
 #include "noop_probes/string.h"
 #include "noop_probes/method_table.h"
@@ -85,4 +88,5 @@
 #include "noop_probes/ins.h"
 #include "noop_probes/proc.h"
 #include "noop_probes/vm.h"
+#include "noop_probes/io.h"
 #endif

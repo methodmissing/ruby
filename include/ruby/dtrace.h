@@ -543,98 +543,498 @@ do { \
 } while (0)
 #define	RUBY_GC_SWEEP_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$gc__sweep__return$v1()
-#define	RUBY_INS_GETDYNAMIC_ENTRY(arg0, arg1) \
+#define	RUBY_INS_ADJUSTSTACK_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__getdynamic__entry$v1$756e7369676e6564206c6f6e67$756e7369676e6564206c6f6e67(arg0, arg1); \
+	__dtrace_probe$ruby$ins__adjuststack__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_ADJUSTSTACK_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__adjuststack__entry$v1()
+#define	RUBY_INS_ADJUSTSTACK_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__adjuststack__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_ADJUSTSTACK_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__adjuststack__return$v1()
+#define	RUBY_INS_BRANCHIF_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__branchif__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_BRANCHIF_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__branchif__entry$v1()
+#define	RUBY_INS_BRANCHIF_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__branchif__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_BRANCHIF_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__branchif__return$v1()
+#define	RUBY_INS_BRANCHUNLESS_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__branchunless__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_BRANCHUNLESS_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__branchunless__entry$v1()
+#define	RUBY_INS_BRANCHUNLESS_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__branchunless__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_BRANCHUNLESS_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__branchunless__return$v1()
+#define	RUBY_INS_CHECKINCLUDEARRAY_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__checkincludearray__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_CHECKINCLUDEARRAY_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__checkincludearray__entry$v1()
+#define	RUBY_INS_CHECKINCLUDEARRAY_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__checkincludearray__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_CHECKINCLUDEARRAY_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__checkincludearray__return$v1()
+#define	RUBY_INS_CONCATARRAY_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__concatarray__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_CONCATARRAY_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__concatarray__entry$v1()
+#define	RUBY_INS_CONCATARRAY_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__concatarray__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_CONCATARRAY_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__concatarray__return$v1()
+#define	RUBY_INS_CONCATSTRINGS_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__concatstrings__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_CONCATSTRINGS_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__concatstrings__entry$v1()
+#define	RUBY_INS_CONCATSTRINGS_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__concatstrings__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_CONCATSTRINGS_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__concatstrings__return$v1()
+#define	RUBY_INS_DEFINECLASS_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__defineclass__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_DEFINECLASS_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__defineclass__entry$v1()
+#define	RUBY_INS_DEFINECLASS_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__defineclass__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_DEFINECLASS_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__defineclass__return$v1()
+#define	RUBY_INS_DEFINED_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__defined__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_DEFINED_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__defined__entry$v1()
+#define	RUBY_INS_DEFINED_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__defined__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_DEFINED_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__defined__return$v1()
+#define	RUBY_INS_DUP_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__dup__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_DUP_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__dup__entry$v1()
+#define	RUBY_INS_DUP_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__dup__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_DUP_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__dup__return$v1()
+#define	RUBY_INS_DUPARRAY_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__duparray__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_DUPARRAY_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__duparray__entry$v1()
+#define	RUBY_INS_DUPARRAY_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__duparray__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_DUPARRAY_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__duparray__return$v1()
+#define	RUBY_INS_DUPN_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__dupn__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_DUPN_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__dupn__entry$v1()
+#define	RUBY_INS_DUPN_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__dupn__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_DUPN_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__dupn__return$v1()
+#define	RUBY_INS_EXPANDARRAY_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__expandarray__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_EXPANDARRAY_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__expandarray__entry$v1()
+#define	RUBY_INS_EXPANDARRAY_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__expandarray__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_EXPANDARRAY_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__expandarray__return$v1()
+#define	RUBY_INS_FINISH_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__finish__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_FINISH_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__finish__entry$v1()
+#define	RUBY_INS_FINISH_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__finish__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_FINISH_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__finish__return$v1()
+#define	RUBY_INS_GETCLASSVARIABLE_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__getclassvariable__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_GETCLASSVARIABLE_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__getclassvariable__entry$v1()
+#define	RUBY_INS_GETCLASSVARIABLE_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__getclassvariable__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_GETCLASSVARIABLE_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__getclassvariable__return$v1()
+#define	RUBY_INS_GETCONSTANT_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__getconstant__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_GETCONSTANT_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__getconstant__entry$v1()
+#define	RUBY_INS_GETCONSTANT_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__getconstant__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_GETCONSTANT_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__getconstant__return$v1()
+#define	RUBY_INS_GETDYNAMIC_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__getdynamic__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_GETDYNAMIC_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__getdynamic__entry$v1()
-#define	RUBY_INS_GETDYNAMIC_RETURN(arg0) \
+#define	RUBY_INS_GETDYNAMIC_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__getdynamic__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__getdynamic__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_GETDYNAMIC_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__getdynamic__return$v1()
-#define	RUBY_INS_GETINLINECACHE_ENTRY(arg0) \
+#define	RUBY_INS_GETGLOBAL_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__getinlinecache__entry$v1$6c6f6e67(arg0); \
+	__dtrace_probe$ruby$ins__getglobal__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_GETGLOBAL_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__getglobal__entry$v1()
+#define	RUBY_INS_GETGLOBAL_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__getglobal__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_GETGLOBAL_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__getglobal__return$v1()
+#define	RUBY_INS_GETINLINECACHE_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__getinlinecache__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_GETINLINECACHE_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__getinlinecache__entry$v1()
-#define	RUBY_INS_GETINLINECACHE_RETURN(arg0) \
+#define	RUBY_INS_GETINLINECACHE_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__getinlinecache__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__getinlinecache__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_GETINLINECACHE_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__getinlinecache__return$v1()
-#define	RUBY_INS_GETLOCAL_ENTRY(arg0) \
+#define	RUBY_INS_GETINSTANCEVARIABLE_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__getlocal__entry$v1$756e7369676e6564206c6f6e67(arg0); \
+	__dtrace_probe$ruby$ins__getinstancevariable__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_GETINSTANCEVARIABLE_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__getinstancevariable__entry$v1()
+#define	RUBY_INS_GETINSTANCEVARIABLE_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__getinstancevariable__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_GETINSTANCEVARIABLE_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__getinstancevariable__return$v1()
+#define	RUBY_INS_GETLOCAL_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__getlocal__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_GETLOCAL_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__getlocal__entry$v1()
-#define	RUBY_INS_GETLOCAL_RETURN(arg0) \
+#define	RUBY_INS_GETLOCAL_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__getlocal__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__getlocal__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_GETLOCAL_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__getlocal__return$v1()
-#define	RUBY_INS_ONCEINLINECACHE_ENTRY(arg0) \
+#define	RUBY_INS_GETSPECIAL_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__onceinlinecache__entry$v1$6c6f6e67(arg0); \
+	__dtrace_probe$ruby$ins__getspecial__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_GETSPECIAL_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__getspecial__entry$v1()
+#define	RUBY_INS_GETSPECIAL_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__getspecial__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_GETSPECIAL_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__getspecial__return$v1()
+#define	RUBY_INS_INVOKEBLOCK_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__invokeblock__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_INVOKEBLOCK_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__invokeblock__entry$v1()
+#define	RUBY_INS_INVOKEBLOCK_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__invokeblock__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_INVOKEBLOCK_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__invokeblock__return$v1()
+#define	RUBY_INS_INVOKESUPER_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__invokesuper__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_INVOKESUPER_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__invokesuper__entry$v1()
+#define	RUBY_INS_INVOKESUPER_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__invokesuper__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_INVOKESUPER_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__invokesuper__return$v1()
+#define	RUBY_INS_JUMP_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__jump__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_JUMP_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__jump__entry$v1()
+#define	RUBY_INS_JUMP_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__jump__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_JUMP_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__jump__return$v1()
+#define	RUBY_INS_LEAVE_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__leave__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_LEAVE_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__leave__entry$v1()
+#define	RUBY_INS_LEAVE_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__leave__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_LEAVE_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__leave__return$v1()
+#define	RUBY_INS_NEWARRAY_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__newarray__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_NEWARRAY_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__newarray__entry$v1()
+#define	RUBY_INS_NEWARRAY_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__newarray__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_NEWARRAY_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__newarray__return$v1()
+#define	RUBY_INS_NEWHASH_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__newhash__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_NEWHASH_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__newhash__entry$v1()
+#define	RUBY_INS_NEWHASH_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__newhash__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_NEWHASH_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__newhash__return$v1()
+#define	RUBY_INS_NEWRANGE_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__newrange__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_NEWRANGE_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__newrange__entry$v1()
+#define	RUBY_INS_NEWRANGE_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__newrange__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_NEWRANGE_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__newrange__return$v1()
+#define	RUBY_INS_ONCEINLINECACHE_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__onceinlinecache__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_ONCEINLINECACHE_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__onceinlinecache__entry$v1()
-#define	RUBY_INS_ONCEINLINECACHE_RETURN(arg0) \
+#define	RUBY_INS_ONCEINLINECACHE_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__onceinlinecache__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__onceinlinecache__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_ONCEINLINECACHE_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__onceinlinecache__return$v1()
-#define	RUBY_INS_OPT_AREF_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_AREF_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__aref__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__aref__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_AREF_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__aref__entry$v1()
-#define	RUBY_INS_OPT_AREF_RETURN(arg0) \
+#define	RUBY_INS_OPT_AREF_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__aref__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__aref__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_AREF_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__aref__return$v1()
-#define	RUBY_INS_OPT_ASET_ENTRY(arg0, arg1, arg2) \
+#define	RUBY_INS_OPT_ASET_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__aset__entry$v1$63686172202a$63686172202a$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__opt__aset__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_ASET_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__aset__entry$v1()
-#define	RUBY_INS_OPT_ASET_RETURN(arg0) \
+#define	RUBY_INS_OPT_ASET_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__aset__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__aset__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_ASET_RETURN_ENABLED() \
@@ -655,10 +1055,10 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_CALL_C_FUNCTION_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__call__c__function__return$v1()
-#define	RUBY_INS_OPT_CASE_DISPATCH_ENTRY(arg0, arg1, arg2) \
+#define	RUBY_INS_OPT_CASE_DISPATCH_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__case__dispatch__entry$v1$6c6f6e67$6c6f6e67$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__opt__case__dispatch__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_CASE_DISPATCH_ENTRY_ENABLED() \
@@ -703,298 +1103,474 @@ do { \
 } while (0)
 #define	RUBY_INS_OPT_CHECKENV_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__checkenv__return$v1()
-#define	RUBY_INS_OPT_DIV_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_DIV_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__div__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__div__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_DIV_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__div__entry$v1()
-#define	RUBY_INS_OPT_DIV_RETURN(arg0) \
+#define	RUBY_INS_OPT_DIV_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__div__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__div__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_DIV_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__div__return$v1()
-#define	RUBY_INS_OPT_EQ_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_EQ_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__eq__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__eq__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_EQ_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__eq__entry$v1()
-#define	RUBY_INS_OPT_EQ_RETURN(arg0) \
+#define	RUBY_INS_OPT_EQ_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__eq__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__eq__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_EQ_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__eq__return$v1()
-#define	RUBY_INS_OPT_GE_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_GE_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__ge__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__ge__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_GE_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__ge__entry$v1()
-#define	RUBY_INS_OPT_GE_RETURN(arg0) \
+#define	RUBY_INS_OPT_GE_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__ge__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__ge__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_GE_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__ge__return$v1()
-#define	RUBY_INS_OPT_GT_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_GT_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__gt__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__gt__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_GT_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__gt__entry$v1()
-#define	RUBY_INS_OPT_GT_RETURN(arg0) \
+#define	RUBY_INS_OPT_GT_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__gt__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__gt__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_GT_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__gt__return$v1()
-#define	RUBY_INS_OPT_LE_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_LE_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__le__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__le__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_LE_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__le__entry$v1()
-#define	RUBY_INS_OPT_LE_RETURN(arg0) \
+#define	RUBY_INS_OPT_LE_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__le__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__le__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_LE_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__le__return$v1()
-#define	RUBY_INS_OPT_LENGTH_ENTRY(arg0) \
+#define	RUBY_INS_OPT_LENGTH_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__length__entry$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__length__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_LENGTH_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__length__entry$v1()
-#define	RUBY_INS_OPT_LENGTH_RETURN(arg0) \
+#define	RUBY_INS_OPT_LENGTH_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__length__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__length__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_LENGTH_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__length__return$v1()
-#define	RUBY_INS_OPT_LT_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_LT_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__lt__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__lt__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_LT_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__lt__entry$v1()
-#define	RUBY_INS_OPT_LT_RETURN(arg0) \
+#define	RUBY_INS_OPT_LT_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__lt__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__lt__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_LT_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__lt__return$v1()
-#define	RUBY_INS_OPT_LTLT_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_LTLT_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__ltlt__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__ltlt__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_LTLT_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__ltlt__entry$v1()
-#define	RUBY_INS_OPT_LTLT_RETURN(arg0) \
+#define	RUBY_INS_OPT_LTLT_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__ltlt__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__ltlt__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_LTLT_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__ltlt__return$v1()
-#define	RUBY_INS_OPT_MINUS_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_MINUS_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__minus__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__minus__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_MINUS_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__minus__entry$v1()
-#define	RUBY_INS_OPT_MINUS_RETURN(arg0) \
+#define	RUBY_INS_OPT_MINUS_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__minus__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__minus__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_MINUS_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__minus__return$v1()
-#define	RUBY_INS_OPT_MOD_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_MOD_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__mod__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__mod__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_MOD_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__mod__entry$v1()
-#define	RUBY_INS_OPT_MOD_RETURN(arg0) \
+#define	RUBY_INS_OPT_MOD_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__mod__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__mod__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_MOD_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__mod__return$v1()
-#define	RUBY_INS_OPT_MULT_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_MULT_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__mult__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__mult__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_MULT_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__mult__entry$v1()
-#define	RUBY_INS_OPT_MULT_RETURN(arg0) \
+#define	RUBY_INS_OPT_MULT_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__mult__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__mult__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_MULT_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__mult__return$v1()
-#define	RUBY_INS_OPT_NEQ_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_NEQ_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__neq__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__neq__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_NEQ_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__neq__entry$v1()
-#define	RUBY_INS_OPT_NEQ_RETURN(arg0) \
+#define	RUBY_INS_OPT_NEQ_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__neq__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__neq__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_NEQ_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__neq__return$v1()
-#define	RUBY_INS_OPT_NOT_ENTRY(arg0) \
+#define	RUBY_INS_OPT_NOT_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__not__entry$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__not__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_NOT_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__not__entry$v1()
-#define	RUBY_INS_OPT_NOT_RETURN(arg0) \
+#define	RUBY_INS_OPT_NOT_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__not__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__not__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_NOT_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__not__return$v1()
-#define	RUBY_INS_OPT_PLUS_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_PLUS_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__plus__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__plus__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_PLUS_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__plus__entry$v1()
-#define	RUBY_INS_OPT_PLUS_RETURN(arg0) \
+#define	RUBY_INS_OPT_PLUS_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__plus__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__plus__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_PLUS_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__plus__return$v1()
-#define	RUBY_INS_OPT_REGEXPMATCH1_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_REGEXPMATCH1_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__regexpmatch1__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__regexpmatch1__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_REGEXPMATCH1_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__regexpmatch1__entry$v1()
-#define	RUBY_INS_OPT_REGEXPMATCH1_RETURN(arg0) \
+#define	RUBY_INS_OPT_REGEXPMATCH1_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__regexpmatch1__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__regexpmatch1__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_REGEXPMATCH1_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__regexpmatch1__return$v1()
-#define	RUBY_INS_OPT_REGEXPMATCH2_ENTRY(arg0, arg1) \
+#define	RUBY_INS_OPT_REGEXPMATCH2_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__regexpmatch2__entry$v1$63686172202a$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__opt__regexpmatch2__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_REGEXPMATCH2_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__regexpmatch2__entry$v1()
-#define	RUBY_INS_OPT_REGEXPMATCH2_RETURN(arg0) \
+#define	RUBY_INS_OPT_REGEXPMATCH2_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__regexpmatch2__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__regexpmatch2__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_REGEXPMATCH2_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__regexpmatch2__return$v1()
-#define	RUBY_INS_OPT_SIZE_ENTRY(arg0) \
+#define	RUBY_INS_OPT_SIZE_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__size__entry$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__size__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_SIZE_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__size__entry$v1()
-#define	RUBY_INS_OPT_SIZE_RETURN(arg0) \
+#define	RUBY_INS_OPT_SIZE_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__size__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__size__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_SIZE_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__size__return$v1()
-#define	RUBY_INS_OPT_SUCC_ENTRY(arg0) \
+#define	RUBY_INS_OPT_SUCC_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__succ__entry$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__succ__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_SUCC_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__succ__entry$v1()
-#define	RUBY_INS_OPT_SUCC_RETURN(arg0) \
+#define	RUBY_INS_OPT_SUCC_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__opt__succ__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__opt__succ__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_OPT_SUCC_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__opt__succ__return$v1()
-#define	RUBY_INS_SETDYNAMIC_ENTRY(arg0, arg1, arg2) \
+#define	RUBY_INS_POP_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__setdynamic__entry$v1$756e7369676e6564206c6f6e67$756e7369676e6564206c6f6e67$63686172202a(arg0, arg1, arg2); \
+	__dtrace_probe$ruby$ins__pop__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_POP_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__pop__entry$v1()
+#define	RUBY_INS_POP_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__pop__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_POP_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__pop__return$v1()
+#define	RUBY_INS_PUTISEQ_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__putiseq__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_PUTISEQ_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__putiseq__entry$v1()
+#define	RUBY_INS_PUTISEQ_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__putiseq__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_PUTISEQ_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__putiseq__return$v1()
+#define	RUBY_INS_PUTNIL_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__putnil__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_PUTNIL_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__putnil__entry$v1()
+#define	RUBY_INS_PUTNIL_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__putnil__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_PUTNIL_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__putnil__return$v1()
+#define	RUBY_INS_PUTOBJECT_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__putobject__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_PUTOBJECT_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__putobject__entry$v1()
+#define	RUBY_INS_PUTOBJECT_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__putobject__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_PUTOBJECT_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__putobject__return$v1()
+#define	RUBY_INS_PUTSELF_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__putself__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_PUTSELF_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__putself__entry$v1()
+#define	RUBY_INS_PUTSELF_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__putself__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_PUTSELF_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__putself__return$v1()
+#define	RUBY_INS_PUTSPECIALOBJECT_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__putspecialobject__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_PUTSPECIALOBJECT_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__putspecialobject__entry$v1()
+#define	RUBY_INS_PUTSPECIALOBJECT_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__putspecialobject__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_PUTSPECIALOBJECT_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__putspecialobject__return$v1()
+#define	RUBY_INS_PUTSTRING_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__putstring__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_PUTSTRING_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__putstring__entry$v1()
+#define	RUBY_INS_PUTSTRING_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__putstring__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_PUTSTRING_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__putstring__return$v1()
+#define	RUBY_INS_REPUT_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__reput__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_REPUT_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__reput__entry$v1()
+#define	RUBY_INS_REPUT_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__reput__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_REPUT_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__reput__return$v1()
+#define	RUBY_INS_SEND_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__send__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SEND_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__send__entry$v1()
+#define	RUBY_INS_SEND_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__send__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SEND_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__send__return$v1()
+#define	RUBY_INS_SETCLASSVARIABLE_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__setclassvariable__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SETCLASSVARIABLE_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__setclassvariable__entry$v1()
+#define	RUBY_INS_SETCLASSVARIABLE_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__setclassvariable__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SETCLASSVARIABLE_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__setclassvariable__return$v1()
+#define	RUBY_INS_SETCONSTANT_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__setconstant__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SETCONSTANT_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__setconstant__entry$v1()
+#define	RUBY_INS_SETCONSTANT_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__setconstant__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SETCONSTANT_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__setconstant__return$v1()
+#define	RUBY_INS_SETDYNAMIC_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__setdynamic__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_SETDYNAMIC_ENTRY_ENABLED() \
@@ -1007,26 +1583,58 @@ do { \
 } while (0)
 #define	RUBY_INS_SETDYNAMIC_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__setdynamic__return$v1()
-#define	RUBY_INS_SETINLINECACHE_ENTRY(arg0, arg1) \
+#define	RUBY_INS_SETGLOBAL_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__setinlinecache__entry$v1$6c6f6e67$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__setglobal__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SETGLOBAL_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__setglobal__entry$v1()
+#define	RUBY_INS_SETGLOBAL_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__setglobal__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SETGLOBAL_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__setglobal__return$v1()
+#define	RUBY_INS_SETINLINECACHE_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__setinlinecache__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_SETINLINECACHE_ENTRY_ENABLED() \
 	__dtrace_isenabled$ruby$ins__setinlinecache__entry$v1()
-#define	RUBY_INS_SETINLINECACHE_RETURN(arg0) \
+#define	RUBY_INS_SETINLINECACHE_RETURN() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__setinlinecache__return$v1$63686172202a(arg0); \
+	__dtrace_probe$ruby$ins__setinlinecache__return$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_SETINLINECACHE_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__setinlinecache__return$v1()
-#define	RUBY_INS_SETLOCAL_ENTRY(arg0, arg1) \
+#define	RUBY_INS_SETINSTANCEVARIABLE_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
-	__dtrace_probe$ruby$ins__setlocal__entry$v1$756e7369676e6564206c6f6e67$63686172202a(arg0, arg1); \
+	__dtrace_probe$ruby$ins__setinstancevariable__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SETINSTANCEVARIABLE_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__setinstancevariable__entry$v1()
+#define	RUBY_INS_SETINSTANCEVARIABLE_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__setinstancevariable__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SETINSTANCEVARIABLE_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__setinstancevariable__return$v1()
+#define	RUBY_INS_SETLOCAL_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__setlocal__entry$v1(); \
 	__asm__ volatile(".reference " RUBY_STABILITY); \
 } while (0)
 #define	RUBY_INS_SETLOCAL_ENTRY_ENABLED() \
@@ -1039,6 +1647,150 @@ do { \
 } while (0)
 #define	RUBY_INS_SETLOCAL_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$ins__setlocal__return$v1()
+#define	RUBY_INS_SETN_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__setn__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SETN_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__setn__entry$v1()
+#define	RUBY_INS_SETN_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__setn__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SETN_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__setn__return$v1()
+#define	RUBY_INS_SETSPECIAL_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__setspecial__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SETSPECIAL_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__setspecial__entry$v1()
+#define	RUBY_INS_SETSPECIAL_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__setspecial__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SETSPECIAL_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__setspecial__return$v1()
+#define	RUBY_INS_SPLATARRAY_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__splatarray__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SPLATARRAY_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__splatarray__entry$v1()
+#define	RUBY_INS_SPLATARRAY_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__splatarray__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SPLATARRAY_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__splatarray__return$v1()
+#define	RUBY_INS_SWAP_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__swap__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SWAP_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__swap__entry$v1()
+#define	RUBY_INS_SWAP_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__swap__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_SWAP_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__swap__return$v1()
+#define	RUBY_INS_THROW_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__throw__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_THROW_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__throw__entry$v1()
+#define	RUBY_INS_THROW_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__throw__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_THROW_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__throw__return$v1()
+#define	RUBY_INS_TOPN_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__topn__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_TOPN_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__topn__entry$v1()
+#define	RUBY_INS_TOPN_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__topn__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_TOPN_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__topn__return$v1()
+#define	RUBY_INS_TOREGEXP_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__toregexp__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_TOREGEXP_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__toregexp__entry$v1()
+#define	RUBY_INS_TOREGEXP_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__toregexp__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_TOREGEXP_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__toregexp__return$v1()
+#define	RUBY_INS_TOSTRING_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__tostring__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_TOSTRING_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__tostring__entry$v1()
+#define	RUBY_INS_TOSTRING_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__tostring__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_TOSTRING_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__tostring__return$v1()
+#define	RUBY_INS_TRACE_ENTRY() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__trace__entry$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_TRACE_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$ins__trace__entry$v1()
+#define	RUBY_INS_TRACE_RETURN() \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$ins__trace__return$v1(); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_INS_TRACE_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$ins__trace__return$v1()
 #define	RUBY_INSTANCE_EVAL_ENTRY(arg0) \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
@@ -1071,6 +1823,38 @@ do { \
 } while (0)
 #define	RUBY_INSTANCE_EXEC_RETURN_ENABLED() \
 	__dtrace_isenabled$ruby$instance__exec__return$v1()
+#define	RUBY_IO_READ_ENTRY(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$io__read__entry$v1$696e74$6c6f6e67(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_IO_READ_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$io__read__entry$v1()
+#define	RUBY_IO_READ_RETURN(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$io__read__return$v1$696e74$6c6f6e67(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_IO_READ_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$io__read__return$v1()
+#define	RUBY_IO_WRITE_ENTRY(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$io__write__entry$v1$696e74$6c6f6e67(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_IO_WRITE_ENTRY_ENABLED() \
+	__dtrace_isenabled$ruby$io__write__entry$v1()
+#define	RUBY_IO_WRITE_RETURN(arg0, arg1) \
+do { \
+	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
+	__dtrace_probe$ruby$io__write__return$v1$696e74$6c6f6e67(arg0, arg1); \
+	__asm__ volatile(".reference " RUBY_STABILITY); \
+} while (0)
+#define	RUBY_IO_WRITE_RETURN_ENABLED() \
+	__dtrace_isenabled$ruby$io__write__return$v1()
 #define	RUBY_LOOP_ENTRY() \
 do { \
 	__asm__ volatile(".reference " RUBY_TYPEDEFS); \
@@ -2485,35 +3269,135 @@ extern void __dtrace_probe$ruby$gc__sweep__entry$v1$6c6f6e67$6c6f6e67$6c6f6e67$6
 extern int __dtrace_isenabled$ruby$gc__sweep__entry$v1(void);
 extern void __dtrace_probe$ruby$gc__sweep__return$v1$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$6c6f6e67$756e7369676e656420696e74(long, long, long, long, long, unsigned int);
 extern int __dtrace_isenabled$ruby$gc__sweep__return$v1(void);
-extern void __dtrace_probe$ruby$ins__getdynamic__entry$v1$756e7369676e6564206c6f6e67$756e7369676e6564206c6f6e67(unsigned long, unsigned long);
+extern void __dtrace_probe$ruby$ins__adjuststack__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__adjuststack__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__adjuststack__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__adjuststack__return$v1(void);
+extern void __dtrace_probe$ruby$ins__branchif__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__branchif__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__branchif__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__branchif__return$v1(void);
+extern void __dtrace_probe$ruby$ins__branchunless__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__branchunless__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__branchunless__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__branchunless__return$v1(void);
+extern void __dtrace_probe$ruby$ins__checkincludearray__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__checkincludearray__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__checkincludearray__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__checkincludearray__return$v1(void);
+extern void __dtrace_probe$ruby$ins__concatarray__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__concatarray__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__concatarray__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__concatarray__return$v1(void);
+extern void __dtrace_probe$ruby$ins__concatstrings__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__concatstrings__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__concatstrings__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__concatstrings__return$v1(void);
+extern void __dtrace_probe$ruby$ins__defineclass__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__defineclass__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__defineclass__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__defineclass__return$v1(void);
+extern void __dtrace_probe$ruby$ins__defined__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__defined__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__defined__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__defined__return$v1(void);
+extern void __dtrace_probe$ruby$ins__dup__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__dup__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__dup__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__dup__return$v1(void);
+extern void __dtrace_probe$ruby$ins__duparray__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__duparray__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__duparray__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__duparray__return$v1(void);
+extern void __dtrace_probe$ruby$ins__dupn__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__dupn__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__dupn__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__dupn__return$v1(void);
+extern void __dtrace_probe$ruby$ins__expandarray__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__expandarray__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__expandarray__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__expandarray__return$v1(void);
+extern void __dtrace_probe$ruby$ins__finish__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__finish__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__finish__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__finish__return$v1(void);
+extern void __dtrace_probe$ruby$ins__getclassvariable__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__getclassvariable__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__getclassvariable__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__getclassvariable__return$v1(void);
+extern void __dtrace_probe$ruby$ins__getconstant__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__getconstant__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__getconstant__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__getconstant__return$v1(void);
+extern void __dtrace_probe$ruby$ins__getdynamic__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__getdynamic__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__getdynamic__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__getdynamic__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__getdynamic__return$v1(void);
-extern void __dtrace_probe$ruby$ins__getinlinecache__entry$v1$6c6f6e67(long);
+extern void __dtrace_probe$ruby$ins__getglobal__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__getglobal__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__getglobal__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__getglobal__return$v1(void);
+extern void __dtrace_probe$ruby$ins__getinlinecache__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__getinlinecache__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__getinlinecache__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__getinlinecache__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__getinlinecache__return$v1(void);
-extern void __dtrace_probe$ruby$ins__getlocal__entry$v1$756e7369676e6564206c6f6e67(unsigned long);
+extern void __dtrace_probe$ruby$ins__getinstancevariable__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__getinstancevariable__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__getinstancevariable__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__getinstancevariable__return$v1(void);
+extern void __dtrace_probe$ruby$ins__getlocal__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__getlocal__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__getlocal__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__getlocal__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__getlocal__return$v1(void);
-extern void __dtrace_probe$ruby$ins__onceinlinecache__entry$v1$6c6f6e67(long);
+extern void __dtrace_probe$ruby$ins__getspecial__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__getspecial__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__getspecial__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__getspecial__return$v1(void);
+extern void __dtrace_probe$ruby$ins__invokeblock__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__invokeblock__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__invokeblock__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__invokeblock__return$v1(void);
+extern void __dtrace_probe$ruby$ins__invokesuper__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__invokesuper__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__invokesuper__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__invokesuper__return$v1(void);
+extern void __dtrace_probe$ruby$ins__jump__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__jump__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__jump__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__jump__return$v1(void);
+extern void __dtrace_probe$ruby$ins__leave__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__leave__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__leave__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__leave__return$v1(void);
+extern void __dtrace_probe$ruby$ins__newarray__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__newarray__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__newarray__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__newarray__return$v1(void);
+extern void __dtrace_probe$ruby$ins__newhash__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__newhash__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__newhash__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__newhash__return$v1(void);
+extern void __dtrace_probe$ruby$ins__newrange__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__newrange__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__newrange__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__newrange__return$v1(void);
+extern void __dtrace_probe$ruby$ins__onceinlinecache__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__onceinlinecache__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__onceinlinecache__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__onceinlinecache__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__onceinlinecache__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__aref__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__aref__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__aref__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__aref__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__aref__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__aref__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__aset__entry$v1$63686172202a$63686172202a$63686172202a(char *, char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__aset__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__aset__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__aset__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__aset__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__aset__return$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__call__c__function__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__call__c__function__entry$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__call__c__function__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__call__c__function__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__case__dispatch__entry$v1$6c6f6e67$6c6f6e67$63686172202a(long, long, char *);
+extern void __dtrace_probe$ruby$ins__opt__case__dispatch__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__case__dispatch__entry$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__case__dispatch__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__case__dispatch__return$v1(void);
@@ -2525,90 +3409,178 @@ extern void __dtrace_probe$ruby$ins__opt__checkenv__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__checkenv__entry$v1(void);
 extern void __dtrace_probe$ruby$ins__opt__checkenv__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__checkenv__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__div__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__div__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__div__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__div__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__div__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__div__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__eq__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__eq__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__eq__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__eq__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__eq__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__eq__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__ge__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__ge__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__ge__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__ge__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__ge__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__ge__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__gt__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__gt__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__gt__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__gt__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__gt__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__gt__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__le__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__le__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__le__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__le__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__le__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__le__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__length__entry$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__length__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__length__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__length__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__length__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__length__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__lt__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__lt__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__lt__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__lt__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__lt__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__lt__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__ltlt__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__ltlt__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__ltlt__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__ltlt__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__ltlt__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__ltlt__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__minus__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__minus__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__minus__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__minus__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__minus__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__minus__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__mod__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__mod__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__mod__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__mod__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__mod__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__mod__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__mult__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__mult__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__mult__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__mult__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__mult__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__mult__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__neq__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__neq__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__neq__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__neq__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__neq__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__neq__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__not__entry$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__not__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__not__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__not__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__not__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__not__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__plus__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__plus__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__plus__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__plus__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__plus__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__plus__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__regexpmatch1__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__regexpmatch1__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__regexpmatch1__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__regexpmatch1__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__regexpmatch1__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__regexpmatch1__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__regexpmatch2__entry$v1$63686172202a$63686172202a(char *, char *);
+extern void __dtrace_probe$ruby$ins__opt__regexpmatch2__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__regexpmatch2__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__regexpmatch2__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__regexpmatch2__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__regexpmatch2__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__size__entry$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__size__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__size__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__size__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__size__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__size__return$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__succ__entry$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__succ__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__succ__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__opt__succ__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__opt__succ__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__opt__succ__return$v1(void);
-extern void __dtrace_probe$ruby$ins__setdynamic__entry$v1$756e7369676e6564206c6f6e67$756e7369676e6564206c6f6e67$63686172202a(unsigned long, unsigned long, char *);
+extern void __dtrace_probe$ruby$ins__pop__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__pop__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__pop__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__pop__return$v1(void);
+extern void __dtrace_probe$ruby$ins__putiseq__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__putiseq__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__putiseq__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__putiseq__return$v1(void);
+extern void __dtrace_probe$ruby$ins__putnil__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__putnil__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__putnil__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__putnil__return$v1(void);
+extern void __dtrace_probe$ruby$ins__putobject__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__putobject__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__putobject__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__putobject__return$v1(void);
+extern void __dtrace_probe$ruby$ins__putself__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__putself__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__putself__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__putself__return$v1(void);
+extern void __dtrace_probe$ruby$ins__putspecialobject__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__putspecialobject__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__putspecialobject__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__putspecialobject__return$v1(void);
+extern void __dtrace_probe$ruby$ins__putstring__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__putstring__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__putstring__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__putstring__return$v1(void);
+extern void __dtrace_probe$ruby$ins__reput__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__reput__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__reput__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__reput__return$v1(void);
+extern void __dtrace_probe$ruby$ins__send__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__send__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__send__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__send__return$v1(void);
+extern void __dtrace_probe$ruby$ins__setclassvariable__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__setclassvariable__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__setclassvariable__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__setclassvariable__return$v1(void);
+extern void __dtrace_probe$ruby$ins__setconstant__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__setconstant__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__setconstant__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__setconstant__return$v1(void);
+extern void __dtrace_probe$ruby$ins__setdynamic__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__setdynamic__entry$v1(void);
 extern void __dtrace_probe$ruby$ins__setdynamic__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__setdynamic__return$v1(void);
-extern void __dtrace_probe$ruby$ins__setinlinecache__entry$v1$6c6f6e67$63686172202a(long, char *);
+extern void __dtrace_probe$ruby$ins__setglobal__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__setglobal__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__setglobal__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__setglobal__return$v1(void);
+extern void __dtrace_probe$ruby$ins__setinlinecache__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__setinlinecache__entry$v1(void);
-extern void __dtrace_probe$ruby$ins__setinlinecache__return$v1$63686172202a(char *);
+extern void __dtrace_probe$ruby$ins__setinlinecache__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__setinlinecache__return$v1(void);
-extern void __dtrace_probe$ruby$ins__setlocal__entry$v1$756e7369676e6564206c6f6e67$63686172202a(unsigned long, char *);
+extern void __dtrace_probe$ruby$ins__setinstancevariable__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__setinstancevariable__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__setinstancevariable__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__setinstancevariable__return$v1(void);
+extern void __dtrace_probe$ruby$ins__setlocal__entry$v1(void);
 extern int __dtrace_isenabled$ruby$ins__setlocal__entry$v1(void);
 extern void __dtrace_probe$ruby$ins__setlocal__return$v1(void);
 extern int __dtrace_isenabled$ruby$ins__setlocal__return$v1(void);
+extern void __dtrace_probe$ruby$ins__setn__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__setn__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__setn__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__setn__return$v1(void);
+extern void __dtrace_probe$ruby$ins__setspecial__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__setspecial__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__setspecial__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__setspecial__return$v1(void);
+extern void __dtrace_probe$ruby$ins__splatarray__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__splatarray__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__splatarray__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__splatarray__return$v1(void);
+extern void __dtrace_probe$ruby$ins__swap__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__swap__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__swap__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__swap__return$v1(void);
+extern void __dtrace_probe$ruby$ins__throw__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__throw__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__throw__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__throw__return$v1(void);
+extern void __dtrace_probe$ruby$ins__topn__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__topn__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__topn__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__topn__return$v1(void);
+extern void __dtrace_probe$ruby$ins__toregexp__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__toregexp__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__toregexp__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__toregexp__return$v1(void);
+extern void __dtrace_probe$ruby$ins__tostring__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__tostring__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__tostring__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__tostring__return$v1(void);
+extern void __dtrace_probe$ruby$ins__trace__entry$v1(void);
+extern int __dtrace_isenabled$ruby$ins__trace__entry$v1(void);
+extern void __dtrace_probe$ruby$ins__trace__return$v1(void);
+extern int __dtrace_isenabled$ruby$ins__trace__return$v1(void);
 extern void __dtrace_probe$ruby$instance__eval__entry$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$instance__eval__entry$v1(void);
 extern void __dtrace_probe$ruby$instance__eval__return$v1$63686172202a(char *);
@@ -2617,6 +3589,14 @@ extern void __dtrace_probe$ruby$instance__exec__entry$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$instance__exec__entry$v1(void);
 extern void __dtrace_probe$ruby$instance__exec__return$v1$63686172202a(char *);
 extern int __dtrace_isenabled$ruby$instance__exec__return$v1(void);
+extern void __dtrace_probe$ruby$io__read__entry$v1$696e74$6c6f6e67(int, long);
+extern int __dtrace_isenabled$ruby$io__read__entry$v1(void);
+extern void __dtrace_probe$ruby$io__read__return$v1$696e74$6c6f6e67(int, long);
+extern int __dtrace_isenabled$ruby$io__read__return$v1(void);
+extern void __dtrace_probe$ruby$io__write__entry$v1$696e74$6c6f6e67(int, long);
+extern int __dtrace_isenabled$ruby$io__write__entry$v1(void);
+extern void __dtrace_probe$ruby$io__write__return$v1$696e74$6c6f6e67(int, long);
+extern int __dtrace_isenabled$ruby$io__write__return$v1(void);
 extern void __dtrace_probe$ruby$loop__entry$v1(void);
 extern int __dtrace_isenabled$ruby$loop__entry$v1(void);
 extern void __dtrace_probe$ruby$loop__return$v1(void);
