@@ -216,6 +216,17 @@ provider ruby {
     probe rb__trace__entry(char *id);
     probe rb__trace__return(char *id);
 
+    probe thread__with__gvl__entry(char *file, int line, long thread_id, int status);
+    probe thread__with__gvl__return(char *file, int line, long thread_id, int status);
+    probe thread__without__gvl__entry(char *file, int line, long thread_id, int status);
+    probe thread__without__gvl__return(char *file, int line, long thread_id, int status);
+    probe thread__create__entry(char *file, int line, long thread_id, int status);
+    probe thread__create__return(char *file, int line, long thread_id, int status);
+    probe thread__sleep__entry(char *file, int line, long thread_id, int status);
+    probe thread__sleep__return(char *file, int line, long thread_id, int status);
+    probe thread__schedule__entry(char *file, int line);
+    probe thread__schedule__return(char *file, int line);
+
     probe fiber__mark__entry(char *file, int line, unsigned long oid, int status);
     probe fiber__mark__return(char *file, int line, unsigned long oid, int status);
     probe fiber__free__entry(char *file, int line, unsigned long oid, int status);

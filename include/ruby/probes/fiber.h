@@ -1,5 +1,5 @@
-#define PROBE_FIBER_ENTRY(probe,fib) PROBE_ENTRY(probe,(char*)rb_sourcefile(),(int)rb_sourceline(),(VALUE)rb_obj_id(fib->cont.self),(int)fib->status)
-#define PROBE_FIBER_RETURN(probe,fib) PROBE_RETURN(probe,(char*)rb_sourcefile(),(int)rb_sourceline(),(VALUE)rb_obj_id(fib->cont.self),(int)fib->status)
+#define PROBE_FIBER_ENTRY(probe,fib) PROBE_CALLSITE_ENTRY(probe,(VALUE)rb_obj_id(fib->cont.self),(int)fib->status)
+#define PROBE_FIBER_RETURN(probe,fib) PROBE_CALLSITE_RETURN(probe,(VALUE)rb_obj_id(fib->cont.self),(int)fib->status)
 
 #define PROBE_FIBER_MARK_ENTRY(fiber) PROBE_FIBER_ENTRY(FIBER_MARK,fiber)
 #define PROBE_FIBER_MARK_RETURN(fiber) PROBE_FIBER_RETURN(FIBER_MARK,fiber)

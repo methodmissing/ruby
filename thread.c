@@ -44,6 +44,7 @@
 
 /* for model 2 */
 
+#include "ruby/probes.h"
 #include "eval_intern.h"
 #include "gc.h"
 
@@ -515,7 +516,7 @@ thread_create_core(VALUE thval, VALUE args, VALUE (*fn)(ANYARGS))
 {
     rb_thread_t *th;
     int err;
-
+    PROBE_THREAD_CREATE_ENTRY(th);
     if (OBJ_FROZEN(GET_THREAD()->thgroup)) {
 	rb_raise(rb_eThreadError,
 		 "can't start a new thread (frozen ThreadGroup)");
@@ -539,6 +540,7 @@ thread_create_core(VALUE thval, VALUE args, VALUE (*fn)(ANYARGS))
 	th->status = THREAD_KILLED;
 	rb_raise(rb_eThreadError, "can't create Thread (%d)", err);
     }
+    PROBE_THREAD_CREATE_RETURN(th);
     return thval;
 }
 
@@ -842,7 +844,7 @@ sleep_timeval(rb_thread_t *th, struct timeval tv)
 {
     struct timeval to, tvn;
     enum rb_thread_status prev_status = th->status;
-
+    PROBE_THREAD_SLEEP_ENTRY(th);
     getclockofday(&to);
     to.tv_sec += tv.tv_sec;
     if ((to.tv_usec += tv.tv_usec) >= 1000000) {
@@ -867,6 +869,7 @@ sleep_timeval(rb_thread_t *th, struct timeval tv)
 	}
     } while (th->status == THREAD_STOPPED);
     th->status = prev_status;
+    PROBE_THREAD_SLEEP_RETURN(th);
 }
 
 void
@@ -1002,7 +1005,9 @@ rb_thread_schedule_rec(int sched_depth)
 void
 rb_thread_schedule(void)
 {
+    PROBE_THREAD_SCHEDULE_ENTRY();
     rb_thread_schedule_rec(0);
+    PROBE_THREAD_SCHEDULE_RETURN();
 }
 
 /* blocking region */
@@ -1082,7 +1087,7 @@ rb_thread_blocking_region(
 {
     VALUE val;
     rb_thread_t *th = GET_THREAD();
-
+    PROBE_THREAD_WITHOUT_GVL_ENTRY(th);
     if (ubf == RUBY_UBF_IO || ubf == RUBY_UBF_PROCESS) {
 	ubf = ubf_select;
 	data2 = th;
@@ -1091,7 +1096,7 @@ rb_thread_blocking_region(
     BLOCKING_REGION({
 	val = func(data1);
     }, ubf, data2);
-
+    PROBE_THREAD_WITHOUT_GVL_RETURN(th);
     return val;
 }
 
@@ -1141,6 +1146,7 @@ void *
 rb_thread_call_with_gvl(void *(*func)(void *), void *data1)
 {
     rb_thread_t *th = ruby_thread_from_native();
+    PROBE_THREAD_WITH_GVL_ENTRY(th);
     struct rb_blocking_region_buffer *brb;
     struct rb_unblock_callback prev_unblock;
     void *r;
@@ -1167,6 +1173,7 @@ rb_thread_call_with_gvl(void *(*func)(void *), void *data1)
     r = (*func)(data1);
     /* leave from Ruby world: You can not access Ruby values, etc. */
     blocking_region_begin(th, brb, prev_unblock.func, prev_unblock.arg);
+    PROBE_THREAD_WITH_GVL_RETURN(th);
     return r;
 }
 

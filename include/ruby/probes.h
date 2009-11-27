@@ -5,6 +5,7 @@
   if (RUBY_##probe##_ENTRY_ENABLED())\
    RUBY_##probe##_ENTRY(__VA_ARGS__);\
 } while (0)
+#define PROBE_CALLSITE_ENTRY(probe,...) PROBE_ENTRY(probe,(char*)rb_sourcefile(),(int)rb_sourceline(),__VA_ARGS__)
 #define PROBE_INT_ENTRY(probe,val) PROBE_ENTRY(probe,(int)val)
 #define PROBE_PTR_ENTRY(probe,val) PROBE_ENTRY(probe,val)
 #define PROBE_ULONG_ENTRY(probe,val) PROBE_ENTRY(probe,(unsigned long)val)
@@ -36,6 +37,7 @@
   if (RUBY_##probe##_RETURN_ENABLED())\
    RUBY_##probe##_RETURN(__VA_ARGS__);\
 } while (0)
+#define PROBE_CALLSITE_RETURN(probe,...) PROBE_RETURN(probe,(char*)rb_sourcefile(),(int)rb_sourceline(),__VA_ARGS__)
 #define PROBE_INT_RETURN(probe,val) PROBE_RETURN(probe,(int)val)
 #define PROBE_PTR_RETURN(probe,val) PROBE_RETURN(probe,val)
 #define PROBE_ULONG_RETURN(probe,val) PROBE_RETURN(probe,(unsigned long)val)
@@ -77,6 +79,7 @@
 #include "probes/proc.h"
 #include "probes/vm.h"
 #include "probes/io.h"
+#include "probes/thread.h"
 #else
 #include "noop_probes/string.h"
 #include "noop_probes/method_table.h"
@@ -91,4 +94,5 @@
 #include "noop_probes/proc.h"
 #include "noop_probes/vm.h"
 #include "noop_probes/io.h"
+#include "noop_probes/thread.h"
 #endif
