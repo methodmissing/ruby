@@ -3927,7 +3927,7 @@ rb_str_reverse_bang(VALUE str)
 	    while (s < e) {
 		c = *s;
 		*s++ = *e;
- 		*e-- = c;
+		*e-- = c;
 	    }
 	}
 	else {
