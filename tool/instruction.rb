@@ -237,6 +237,7 @@ class RubyVM
             # collect instruction comment
           when /^\/\*\*$/
             while line = f.gets
+              line.force_encoding('utf-8')
               if /\s+\*\/\s*$/ =~ line
                 break
               else

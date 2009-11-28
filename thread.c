@@ -516,12 +516,12 @@ thread_create_core(VALUE thval, VALUE args, VALUE (*fn)(ANYARGS))
 {
     rb_thread_t *th;
     int err;
-    PROBE_THREAD_CREATE_ENTRY(th);
     if (OBJ_FROZEN(GET_THREAD()->thgroup)) {
 	rb_raise(rb_eThreadError,
 		 "can't start a new thread (frozen ThreadGroup)");
     }
     GetThreadPtr(thval, th);
+    PROBE_THREAD_CREATE_ENTRY(th);
 
     /* setup thread environment */
     th->first_func = fn;

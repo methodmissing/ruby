@@ -35,12 +35,16 @@ static inline VALUE
 vm_call0(rb_thread_t* th, VALUE recv, VALUE id, int argc, const VALUE *argv,
 	 const rb_method_entry_t *me)
 {
+    PROBE_VM_CALL_ENTRY(th);
     const rb_method_definition_t *def = me->def;
     VALUE val;
     VALUE klass = me->klass;
     const rb_block_t *blockptr = 0;
 
-    if (!def) return Qnil;
+    if (!def){
+      PROBE_VM_CALL_RETURN(th);
+      return Qnil;
+    }
     if (th->passed_block) {
 	blockptr = th->passed_block;
 	th->passed_block = 0;
@@ -106,10 +110,14 @@ vm_call0(rb_thread_t* th, VALUE recv, VALUE id, int argc, const VALUE *argv,
       case VM_METHOD_TYPE_ZSUPER: {
 	klass = RCLASS_SUPER(klass);
 	if (!klass || !(me = rb_method_entry(klass, id))) {
+	    PROBE_VM_CALL_RETURN(th);
 	    return method_missing(recv, id, argc, argv, NOEX_SUPER);
 	}
 	RUBY_VM_CHECK_INTS();
-	if (!(def = me->def)) return Qnil;
+	if (!(def = me->def)){
+      PROBE_VM_CALL_RETURN(th);
+      return Qnil;
+    }
 	goto again;
       }
       case VM_METHOD_TYPE_MISSING: {
@@ -117,6 +125,7 @@ vm_call0(rb_thread_t* th, VALUE recv, VALUE id, int argc, const VALUE *argv,
 
 	RB_GC_GUARD(new_args);
 	rb_ary_unshift(new_args, ID2SYM(id));
+	PROBE_VM_CALL_RETURN(th);
 	return rb_funcall2(recv, idMethodMissing,
 			   argc+1, RARRAY_PTR(new_args));
       }
@@ -143,6 +152,7 @@ vm_call0(rb_thread_t* th, VALUE recv, VALUE id, int argc, const VALUE *argv,
 	val = Qundef;
     }
     RUBY_VM_CHECK_INTS();
+    PROBE_VM_CALL_RETURN(th);
     return val;
 }
 
@@ -187,10 +197,10 @@ VALUE
 rb_call_super(int argc, const VALUE *argv)
 {
     VALUE res;
-    PROBE_SUPER_ENTRY(); 
+    PROBE_VM_SUPER_ENTRY(); 
     PASS_PASSED_BLOCK();
     res = vm_call_super(GET_THREAD(), argc, argv);
-    PROBE_SUPER_RETURN(); 
+    PROBE_VM_SUPER_RETURN(); 
     return res;
 }
 
@@ -438,11 +448,7 @@ rb_method_call_status(rb_thread_t *th, rb_method_entry_t *me, call_type scope, V
 static inline VALUE
 rb_call(VALUE recv, ID mid, int argc, const VALUE *argv, call_type scope)
 {
-    VALUE res;
-    PROBE_METHOD_CALL_ENTRY(recv,mid);    
-    res = rb_call0(recv, mid, argc, argv, scope, Qundef);
-    PROBE_METHOD_CALL_RETURN(recv,mid);
-    return res;
+    return rb_call0(recv, mid, argc, argv, scope, Qundef);
 }
 
 NORETURN(static void raise_method_missing(rb_thread_t *th, int argc, const VALUE *argv,
@@ -484,10 +490,10 @@ NORETURN(static void raise_method_missing(rb_thread_t *th, int argc, const VALUE
 static VALUE
 rb_method_missing(int argc, const VALUE *argv, VALUE obj)
 {
-    PROBE_METHOD_MISSING_ENTRY();
+    PROBE_VM_METHOD_MISSING_ENTRY();
     rb_thread_t *th = GET_THREAD();
     raise_method_missing(th, argc, argv, obj, th->method_missing_reason);
-    PROBE_METHOD_MISSING_ENTRY();
+    PROBE_VM_METHOD_MISSING_ENTRY();
     return Qnil;		/* not reached */
 }
 
@@ -677,7 +683,8 @@ rb_funcall3(VALUE recv, ID mid, int argc, const VALUE *argv)
 static VALUE
 send_internal(int argc, const VALUE *argv, VALUE recv, call_type scope)
 {
-    VALUE vid;
+    VALUE vid, res;
+    PROBE_VM_SEND_ENTRY();
     VALUE self = RUBY_VM_PREVIOUS_CONTROL_FRAME(GET_THREAD()->cfp)->self;
     rb_thread_t *th = GET_THREAD();
 
@@ -688,7 +695,9 @@ send_internal(int argc, const VALUE *argv, VALUE recv, call_type scope)
     vid = *argv++; argc--;
     PASS_PASSED_BLOCK_TH(th);
 
-    return rb_call0(recv, rb_to_id(vid), argc, argv, scope, self);
+    res = rb_call0(recv, rb_to_id(vid), argc, argv, scope, self);
+    PROBE_VM_SEND_RETURN();
+    return res;
 }
 
 /*
@@ -712,11 +721,7 @@ send_internal(int argc, const VALUE *argv, VALUE recv, call_type scope)
 VALUE
 rb_f_send(int argc, VALUE *argv, VALUE recv)
 {
-    VALUE res;
-    PROBE_SEND_ENTRY();
-    res = send_internal(argc, argv, recv, CALL_FCALL);
-    PROBE_SEND_RETURN();
-    return res;
+    return send_internal(argc, argv, recv, CALL_FCALL);
 }
 
 /*
@@ -742,9 +747,7 @@ static inline VALUE
 rb_yield_0(int argc, const VALUE * argv)
 {
     VALUE res;
-    PROBE_YIELD_ENTRY();    
     res = vm_yield(GET_THREAD(), argc, argv);
-    PROBE_YIELD_RETURN();
     return res;
 }
 
@@ -802,11 +805,11 @@ rb_yield_splat(VALUE values)
 static VALUE
 loop_i(void)
 {
-    PROBE_LOOP_ENTRY();
+    PROBE_VM_LOOP_ENTRY();
     for (;;) {
 	rb_yield_0(0, 0);
     }
-    PROBE_END_ENTRY();
+    PROBE_VM_LOOP_RETURN();
     return Qnil;
 }
 
@@ -923,9 +926,9 @@ rb_block_call(VALUE obj, ID mid, int argc, VALUE * argv,
     arg.mid = mid;
     arg.argc = argc;
     arg.argv = argv;
-    PROBE_BLOCK_CALL_ENTRY(obj,mid);
+    PROBE_VM_BLOCK_CALL_ENTRY(obj,mid);
     res = rb_iterate(iterate_method, (VALUE)&arg, bl_proc, data2);
-    PROBE_BLOCK_CALL_RETURN(obj,mid);  
+    PROBE_VM_BLOCK_CALL_RETURN(obj,mid);  
     return res;
 }
 
@@ -1078,7 +1081,7 @@ rb_f_eval(int argc, VALUE *argv, VALUE self)
     VALUE src, scope, vfile, vline, res;
     const char *file = "(eval)";
     int line = 1;
-    PROBE_EVALSTR_ENTRY(self);
+	PROBE_VM_EVALSTR_ENTRY(self);
     rb_scan_args(argc, argv, "13", &src, &scope, &vfile, &vline);
     if (rb_safe_level() >= 4) {
 	StringValue(src);
@@ -1100,7 +1103,7 @@ rb_f_eval(int argc, VALUE *argv, VALUE self)
     if (!NIL_P(vfile))
 	file = RSTRING_PTR(vfile);
     res = eval_string(self, src, scope, file, line);
-    PROBE_EVALSTR_RETURN(self);
+    PROBE_VM_EVALSTR_RETURN(self);
     return res;
 }
 
@@ -1287,7 +1290,7 @@ rb_obj_instance_eval(int argc, VALUE *argv, VALUE self)
 {
     VALUE klass, res;
 
-    PROBE_INSTANCE_EVAL_ENTRY(self);
+    PROBE_VM_INSTANCE_EVAL_ENTRY(self);
     if (SPECIAL_CONST_P(self)) {
 	klass = Qnil;
     }
@@ -1295,7 +1298,7 @@ rb_obj_instance_eval(int argc, VALUE *argv, VALUE self)
 	klass = rb_singleton_class(self);
     }
     res = specific_eval(argc, argv, klass, self);
-    PROBE_INSTANCE_EVAL_RETURN(self);
+    PROBE_VM_INSTANCE_EVAL_RETURN(self);
     return res;
 }
 
@@ -1321,7 +1324,7 @@ VALUE
 rb_obj_instance_exec(int argc, VALUE *argv, VALUE self)
 {
     VALUE klass, res;
-    PROBE_INSTANCE_EXEC_ENTRY(self);
+    PROBE_VM_INSTANCE_EXEC_ENTRY(self);
     if (SPECIAL_CONST_P(self)) {
 	klass = Qnil;
     }
@@ -1329,7 +1332,7 @@ rb_obj_instance_exec(int argc, VALUE *argv, VALUE self)
 	klass = rb_singleton_class(self);
     }
     res = yield_under(klass, self, rb_ary_new4(argc, argv));
-    PROBE_INSTANCE_EXEC_RETURN(self);
+    PROBE_VM_INSTANCE_EXEC_RETURN(self);
     return res;
 }
 
@@ -1361,9 +1364,9 @@ VALUE
 rb_mod_module_eval(int argc, VALUE *argv, VALUE mod)
 {
     VALUE res;
-    PROBE_MODULE_EVAL_ENTRY(mod);
+    PROBE_VM_MODULE_EVAL_ENTRY(mod);
     res = specific_eval(argc, argv, mod, mod);
-    PROBE_MODULE_EVAL_RETURN(mod);
+    PROBE_VM_MODULE_EVAL_RETURN(mod);
     return res;
 }
 
@@ -1391,9 +1394,9 @@ VALUE
 rb_mod_module_exec(int argc, VALUE *argv, VALUE mod)
 {
     VALUE res;
-    PROBE_MODULE_EXEC_ENTRY(mod);
+    PROBE_VM_MODULE_EXEC_ENTRY(mod);
     res = yield_under(mod, mod, rb_ary_new4(argc, argv));
-    PROBE_MODULE_EXEC_RETURN(mod);
+    PROBE_VM_MODULE_EXEC_RETURN(mod);
     return res;
 }
 
@@ -1413,10 +1416,10 @@ static VALUE
 rb_f_throw(int argc, VALUE *argv)
 {
     VALUE tag, value;
-    PROBE_THROW_ENTRY();
+    PROBE_VM_THROW_ENTRY();
     rb_scan_args(argc, argv, "11", &tag, &value);
     rb_throw_obj(tag, value);
-    PROBE_THROW_RETURN();
+    PROBE_VM_THROW_RETURN();
     return Qnil;		/* not reached */
 }
 
@@ -1496,7 +1499,7 @@ static VALUE
 rb_f_catch(int argc, VALUE *argv)
 {
     VALUE tag, res;
-    PROBE_CATCH_ENTRY();
+    PROBE_VM_CATCH_ENTRY();
     if (argc == 0) {
 	tag = rb_obj_alloc(rb_cObject);
     }
@@ -1504,7 +1507,7 @@ rb_f_catch(int argc, VALUE *argv)
 	rb_scan_args(argc, argv, "01", &tag);
     }
     res = rb_catch_obj(tag, catch_i, 0);
-    PROBE_CATCH_RETURN();
+    PROBE_VM_CATCH_RETURN();
     return res;
 }
 
@@ -1572,9 +1575,8 @@ rb_catch_obj(VALUE tag, VALUE (*func)(), VALUE data)
 static VALUE
 rb_f_caller(int argc, VALUE *argv)
 {
-    VALUE level, res;
+    VALUE level;
     int lev;
-    PROBE_CALLER_ENTRY();
     rb_scan_args(argc, argv, "01", &level);
 
     if (NIL_P(level))
@@ -1584,9 +1586,7 @@ rb_f_caller(int argc, VALUE *argv)
     if (lev < 0)
 	rb_raise(rb_eArgError, "negative level (%d)", lev);
 
-    res = vm_backtrace(GET_THREAD(), lev);
-    PROBE_CALLER_RETURN();
-    return res;
+    return vm_backtrace(GET_THREAD(), lev);
 }
 
 static int
@@ -1714,7 +1714,7 @@ rb_f_local_variables(void)
 VALUE
 rb_f_block_given_p(void)
 {
-    PROBE_BLOCK_GIVEN_ENTRY();
+    PROBE_VM_BLOCK_GIVEN_ENTRY();
     rb_thread_t *th = GET_THREAD();
     rb_control_frame_t *cfp = th->cfp;
     cfp = vm_get_ruby_level_caller_cfp(th, RUBY_VM_PREVIOUS_CONTROL_FRAME(cfp));
@@ -1722,11 +1722,11 @@ rb_f_block_given_p(void)
     if (cfp != 0 &&
 	(cfp->lfp[0] & 0x02) == 0 &&
 	GC_GUARDED_PTR_REF(cfp->lfp[0])) {
-    PROBE_BLOCK_GIVEN_RETURN();
+    PROBE_VM_BLOCK_GIVEN_RETURN();
 	return Qtrue;
     }
     else {
-    PROBE_BLOCK_GIVEN_RETURN();	
+    PROBE_VM_BLOCK_GIVEN_RETURN();	
 	return Qfalse;
     }
 }

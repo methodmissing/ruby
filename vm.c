@@ -575,21 +575,30 @@ check_block(rb_thread_t *th)
 static inline VALUE
 vm_yield_with_cref(rb_thread_t *th, int argc, const VALUE *argv, const NODE *cref)
 {
+    VALUE res;
+    PROBE_VM_YIELD_CREF_ENTRY();  
     const rb_block_t *blockptr = check_block(th);
-    return invoke_block_from_c(th, blockptr, blockptr->self, argc, argv, 0, cref);
+    res = invoke_block_from_c(th, blockptr, blockptr->self, argc, argv, 0, cref);
+    PROBE_VM_YIELD_CREF_RETURN();
+    return res;
 }
 
 static inline VALUE
 vm_yield(rb_thread_t *th, int argc, const VALUE *argv)
 {
+    VALUE res;
+    PROBE_VM_YIELD_ENTRY();  
     const rb_block_t *blockptr = check_block(th);
-    return invoke_block_from_c(th, blockptr, blockptr->self, argc, argv, 0, 0);
+    res = invoke_block_from_c(th, blockptr, blockptr->self, argc, argv, 0, 0);
+    PROBE_VM_YIELD_RETURN();
+    return res;
 }
 
 VALUE
 rb_vm_invoke_proc(rb_thread_t *th, rb_proc_t *proc, VALUE self,
 		  int argc, const VALUE *argv, const rb_block_t * blockptr)
 {
+    PROBE_VM_INVOKE_PROC_ENTRY(self);
     VALUE val = Qundef;
     int state;
     volatile int stored_safe = th->safe_level;
@@ -624,8 +633,10 @@ rb_vm_invoke_proc(rb_thread_t *th, rb_proc_t *proc, VALUE self,
     }
 
     if (state) {
+    PROBE_VM_INVOKE_PROC_RETURN(self);
 	JUMP_TAG(state);
     }
+    PROBE_VM_INVOKE_PROC_RETURN(self);
     return val;
 }
 
@@ -773,13 +784,19 @@ vm_backtrace_push(void *arg, VALUE file, int line_no, VALUE name)
 static inline VALUE
 vm_backtrace(rb_thread_t *th, int lev)
 {
-    VALUE ary = 0;
+    VALUE res;
+    VALUE ary = 0; 
+    PROBE_VM_BACKTRACE_ENTRY(lev);
 
     if (lev < 0) {
 	ary = rb_ary_new();
     }
     vm_backtrace_each(th, lev, vm_backtrace_push, &ary);
-    if (!ary) return Qnil;
+    if (!ary){
+      PROBE_VM_BACKTRACE_RETURN(lev);
+      return Qnil;
+    }
+    PROBE_VM_BACKTRACE_RETURN(lev);
     return rb_ary_reverse(ary);
 }
 
@@ -949,17 +966,20 @@ static st_table *vm_opt_method_table = 0;
 static void
 rb_vm_check_redefinition_opt_method(const rb_method_entry_t *me)
 {
+   PROBE_VM_CHECK_OPT_METHOD_REDEF_ENTRY();
     VALUE bop;
     if (!me->def || me->def->type == VM_METHOD_TYPE_CFUNC) {
 	if (st_lookup(vm_opt_method_table, (st_data_t)me, &bop)) {
 	    ruby_vm_redefined_flag[bop] = 1;
 	}
     }
+   PROBE_VM_CHECK_OPT_METHOD_REDEF_RETURN();
 }
 
 static void
 add_opt_method(VALUE klass, ID mid, VALUE bop)
 {
+    PROBE_VM_ADD_OPT_METHOD_ENTRY(klass,mid);
     rb_method_entry_t *me;
     if (st_lookup(RCLASS_M_TBL(klass), mid, (void *)&me) && me->def &&
 	me->def->type == VM_METHOD_TYPE_CFUNC) {
@@ -968,6 +988,7 @@ add_opt_method(VALUE klass, ID mid, VALUE bop)
     else {
 	rb_bug("undefined optimized method: %s", rb_id2name(mid));
     }
+    PROBE_VM_ADD_OPT_METHOD_RETURN(klass,mid);
 }
 
 static void
@@ -1112,6 +1133,7 @@ vm_exec(rb_thread_t *th)
     VALUE initial = 0;
     VALUE *escape_dfp = NULL;
 
+    PROBE_VM_EXEC_ENTRY(th);
     TH_PUSH_TAG(th);
     _tag.retval = Qnil;
     if ((state = EXEC_TAG()) == 0) {
@@ -1312,6 +1334,7 @@ vm_exec(rb_thread_t *th)
     }
   finish_vme:
     TH_POP_TAG();
+    PROBE_VM_EXEC_RETURN(th);
     return result;
 }
 
@@ -1320,6 +1343,7 @@ vm_exec(rb_thread_t *th)
 VALUE
 rb_iseq_eval(VALUE iseqval)
 {
+    PROBE_VM_ISEQ_EVAL_ENTRY();
     rb_thread_t *th = GET_THREAD();
     VALUE val;
     volatile VALUE tmp;
@@ -1328,6 +1352,7 @@ rb_iseq_eval(VALUE iseqval)
 
     val = vm_exec(th);
     tmp = iseqval; /* prohibit tail call optimization */
+    PROBE_VM_ISEQ_EVAL_RETURN();
     return val;
 }
 
