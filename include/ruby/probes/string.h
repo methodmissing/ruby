@@ -5,8 +5,8 @@
 #define PROBE_STRING_INT_RETURN(probe,str,len) PROBE_CALLSITE_RETURN(probe,(char*)RSTRING_PTR(str),(long)(len))
 #define PROBE_STRING1_RETURN(probe,str,str2) PROBE_CALLSITE_RETURN(probe,(char*)RSTRING_PTR(str),(char*)RSTRING_PTR(str2))
 
-#define PROBE_STR_NEW_ENTRY(ptr,len) PROBE_CALLSITE_ENTRY(STR_NEW,(void*)ptr,(int)(len))
-#define PROBE_STR_NEW_RETURN(ptr,len) PROBE_CALLSITE_RETURN(STR_NEW,(void*)ptr,(int)(len))
+#define PROBE_STR_NEW_ENTRY(ptr,len) PROBE_CALLSITE_ENTRY(STR_NEW,(void*)ptr,(long)(len))
+#define PROBE_STR_NEW_RETURN(ptr,len) PROBE_CALLSITE_RETURN(STR_NEW,(void*)ptr,(long)(len))
 #define PROBE_STR_NEW_SHARED_ENTRY(str) PROBE_STRING_ENTRY(STR_NEW_SHARED,str)
 #define PROBE_STR_NEW_SHARED_RETURN(str) PROBE_STRING_RETURN(STR_NEW_SHARED,str)
 #define PROBE_STR_FREE_ENTRY(str) PROBE_STRING_ENTRY(STR_FREE,str)

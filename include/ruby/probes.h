@@ -79,6 +79,7 @@
 #include "probes/vm.h"
 #include "probes/io.h"
 #include "probes/thread.h"
+#include "probes/iseq.h"
 #else
 #include "noop_probes/string.h"
 #include "noop_probes/method_table.h"
@@ -93,4 +94,5 @@
 #include "noop_probes/vm.h"
 #include "noop_probes/io.h"
 #include "noop_probes/thread.h"
+#include "noop_probes/iseq.h"
 #endif

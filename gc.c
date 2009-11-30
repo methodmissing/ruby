@@ -979,7 +979,7 @@ static void
 init_heap(rb_objspace_t *objspace)
 {
     size_t add, i;
-
+    PROBE_GC_INIT_HEAP_ENTRY(objspace);
     add = HEAP_MIN_SLOTS / HEAP_OBJ_LIMIT;
 
     if (!add) {
@@ -995,6 +995,7 @@ init_heap(rb_objspace_t *objspace)
     }
     heaps_inc = 0;
     objspace->profile.invoke_time = getrusage_time();
+    PROBE_GC_INIT_HEAP_RETURN(objspace);
 }
 
 
@@ -1085,6 +1086,7 @@ rb_during_gc(void)
 VALUE
 rb_newobj(void)
 {
+    PROBE_GC_NEWOBJ_ENTRY();
 #if USE_VALUE_CACHE || (defined(ENABLE_VM_OBJSPACE) && ENABLE_VM_OBJSPACE)
     rb_thread_t *th = GET_THREAD();
 #endif
@@ -1115,8 +1117,10 @@ rb_newobj(void)
     printf("cache index: %d, v: %p, th: %p\n",
 	   th->value_cache_ptr - th->value_cache, v, th);
 #endif
+    PROBE_GC_NEWOBJ_RETURN();
     return v;
 #else
+    PROBE_GC_NEWOBJ_RETURN();
     return rb_newobj_from_heap(objspace);
 #endif
 }
@@ -1124,6 +1128,7 @@ rb_newobj(void)
 NODE*
 rb_node_newnode(enum node_type type, VALUE a0, VALUE a1, VALUE a2)
 {
+    PROBE_GC_NEWNODE_ENTRY();
     NODE *n = (NODE*)rb_newobj();
 
     n->flags |= T_NODE;
@@ -1132,7 +1137,7 @@ rb_node_newnode(enum node_type type, VALUE a0, VALUE a1, VALUE a2)
     n->u1.value = a0;
     n->u2.value = a1;
     n->u3.value = a2;
-
+    PROBE_GC_NEWNODE_RETURN();
     return n;
 }
 

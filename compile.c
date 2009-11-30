@@ -508,6 +508,7 @@ rb_iseq_compile_node(VALUE self, NODE *node)
 int
 rb_iseq_translate_threaded_code(rb_iseq_t *iseq)
 {
+    PROBE_ISEQ_TRANSLATE_THREADED_ENTRY(iseq);
 #if OPT_DIRECT_THREADED_CODE || OPT_CALL_THREADED_CODE
     extern const void **rb_vm_get_insns_address_table(void);
 #if OPT_DIRECT_THREADED_CODE
@@ -529,6 +530,7 @@ rb_iseq_translate_threaded_code(rb_iseq_t *iseq)
 #else
     iseq->iseq_encoded = iseq->iseq;
 #endif
+    PROBE_ISEQ_TRANSLATE_THREADED_RETURN(iseq);
     return COMPILE_OK;
 }
 
@@ -879,8 +881,10 @@ new_insn_core(rb_iseq_t *iseq, int line_no,
 static INSN *
 new_insn_body(rb_iseq_t *iseq, int line_no, int insn_id, int argc, ...)
 {
-    VALUE *operands = 0;
+    VALUE *operands = 0;   
     va_list argv;
+    INSN * res; 
+    PROBE_ISEQ_NEW_INSN_BODY_ENTRY(iseq);
     if (argc > 0) {
 	int i;
 	va_init_list(argv, argc);
@@ -891,7 +895,9 @@ new_insn_body(rb_iseq_t *iseq, int line_no, int insn_id, int argc, ...)
 	}
 	va_end(argv);
     }
-    return new_insn_core(iseq, line_no, insn_id, argc, operands);
+    res = new_insn_core(iseq, line_no, insn_id, argc, operands);
+    PROBE_ISEQ_NEW_INSN_BODY_RETURN(iseq);
+    return res;
 }
 
 static INSN *
@@ -2941,12 +2947,13 @@ static int
 iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 {
     enum node_type type;
-
+    PROBE_ISEQ_COMPILE_EACH_ENTRY(iseq);
     if (node == 0) {
 	if (!poped) {
 	    debugs("node: NODE_NIL(implicit)\n");
 	    ADD_INSN(ret, iseq->compile_data->last_line, putnil);
 	}
+    PROBE_ISEQ_COMPILE_EACH_RETURN(iseq);
 	return COMPILE_OK;
     }
 
@@ -4925,10 +4932,13 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
       }
       default:
 	rb_bug("iseq_compile_each: unknown node: %s", ruby_node_name(type));
+
+    PROBE_ISEQ_COMPILE_EACH_RETURN(iseq);
 	return COMPILE_NG;
     }
 
     debug_node_end();
+    PROBE_ISEQ_COMPILE_EACH_RETURN(iseq);
     return COMPILE_OK;
 }
 

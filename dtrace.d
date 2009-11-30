@@ -1,26 +1,26 @@
 provider ruby {
-    probe str__set__length__entry(char *file, int line, char *, int);
-    probe str__set__length__return(char *file, int line, char *, int);
-    probe str__dec__length__entry(char *file, int line, char *);
-    probe str__dec__length__return(char *file, int line, char *);
-    probe str__resize__capacity__entry(char *file, int line, char *, int);
-    probe str__resize__capacity__return(char *file, int line, char *, int);
-    probe str__replace__entry(char *file, int line, char *, char *);
-    probe str__replace__return(char *file, int line, char *, char *);
-    probe str__shared__replace__entry(char *file, int line, char *, char *);
-    probe str__shared__replace__return(char *file, int line, char *, char *);
-    probe str__buf__new__entry(char *file, int line, int);
-    probe str__buf__new__return(char *file, int line, int);
-    probe str__buf__cstr__new__entry(char *file, int line, char *);
-    probe str__buf__cstr__new__return(char *file, int line, char *);
-    probe str__new__entry(char *file, int line, char *, int);
-    probe str__new__return(char *file, int line, char *, int);
-    probe str__new__shared__entry(char *file, int line, char *);
-    probe str__new__shared__return(char *file, int line, char *);    
-    probe str__free__entry(char *file, int line, char *);
-    probe str__free__return(char *file, int line, char *);
-    probe str__dup__entry(char *file, int line, char *);
-    probe str__dup__return(char *file, int line, char *);
+    probe str__set__length__entry(char *file, int line, char *str, long len);
+    probe str__set__length__return(char *file, int line, char *str, long len);
+    probe str__dec__length__entry(char *file, int line, char *str);
+    probe str__dec__length__return(char *file, int line, char *str);
+    probe str__resize__capacity__entry(char *file, int line, char *str, long len);
+    probe str__resize__capacity__return(char *file, int line, char *str, long len);
+    probe str__replace__entry(char *file, int line, char *str, char *str2);
+    probe str__replace__return(char *file, int line, char *str, char *str2);
+    probe str__shared__replace__entry(char *file, int line, char *str, char *str2);
+    probe str__shared__replace__return(char *file, int line, char *str, char *str2);
+    probe str__buf__new__entry(char *file, int line, long len);
+    probe str__buf__new__return(char *file, int line, long len);
+    probe str__buf__cstr__new__entry(char *file, int line, char *str);
+    probe str__buf__cstr__new__return(char *file, int line, char *str);
+    probe str__new__entry(char *file, int line, char *, long len);
+    probe str__new__return(char *file, int line, char *, long len);
+    probe str__new__shared__entry(char *file, int line, char *str);
+    probe str__new__shared__return(char *file, int line, char *str);    
+    probe str__free__entry(char *file, int line, char *str);
+    probe str__free__return(char *file, int line, char *str);
+    probe str__dup__entry(char *file, int line, char *str);
+    probe str__dup__return(char *file, int line, char *str);
 
     probe mt__clear__cache__entry();
     probe mt__clear__cache__return();
@@ -38,6 +38,13 @@ provider ruby {
     probe mt__get__method__entry__return(char *klass, char *method);
     probe mt__method__entry__entry(char *klass, char *method);
     probe mt__method__entry__return(char *klass, char *method);
+ 
+    probe iseq__compile__each__entry(char *file, int line, char *name);
+    probe iseq__compile__each__return(char *file, int line, char *name);  
+    probe iseq__new__insn__body__entry(char *file, int line, char *name);
+    probe iseq__new__insn__body__return(char *file, int line, char *name);  
+    probe iseq__translate__threaded__entry(char *file, int line, char *name);
+    probe iseq__translate__threaded__return(char *file, int line, char *name);
 
     probe vm__change__state__entry(int v);
     probe vm__change__state__return(int v);
@@ -201,6 +208,14 @@ provider ruby {
 
     probe gc__objspace__alloc__entry();
     probe gc__objspace__alloc__return(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
+
+    probe gc__newobj__entry();
+    probe gc__newobj__return();
+    probe gc__newnode__entry();
+    probe gc__newnode__return();
+    probe gc__init__heap__entry(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
+    probe gc__init__heap__return(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
+
     probe gc__objspace__free__entry(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count);
     probe gc__objspace__free__return();
     probe gc__is__pointer__to__heap__entry(long malloc_limit, long malloc_increase, long heap_increment, long heap_length, long heap_used, unsigned int count, void *pointer);
