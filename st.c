@@ -247,7 +247,7 @@ st_init_strcasetable(void)
     st_table* res;
     PROBE_ST_INIT_STRCASETABLE_ENTRY();
     res = st_init_table(&type_strcasehash);
-    PROBE_ST_INIT_STRCASETABLE_ENTRY();
+    PROBE_ST_INIT_STRCASETABLE_RETURN();
     return res;
 }
 

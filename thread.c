@@ -983,7 +983,7 @@ rb_thread_schedule_rec(int sched_depth)
     thread_debug("rb_thread_schedule\n");
     if (!rb_thread_alone()) {
 	rb_thread_t *th = GET_THREAD();
-
+	PROBE_THREAD_SWITCH_ENTRY(th);
 	thread_debug("rb_thread_schedule/switch start\n");
 
 	RB_GC_SAVE_MACHINE_CONTEXT(th);
@@ -994,6 +994,7 @@ rb_thread_schedule_rec(int sched_depth)
 	native_mutex_lock(&th->vm->global_vm_lock);
 
 	rb_thread_set_current(th);
+	PROBE_THREAD_SWITCH_RETURN(th);
 	thread_debug("rb_thread_schedule/switch done\n");
 
         if (!sched_depth && UNLIKELY(GET_THREAD()->interrupt_flag)) {

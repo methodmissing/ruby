@@ -348,18 +348,22 @@ rb_get_alloc_func(VALUE klass)
 static rb_method_entry_t*
 search_method(VALUE klass, ID id)
 {
+    PROBE_MT_SEARCH_METHOD_ENTRY(klass,id);
     st_data_t body;
     if (!klass) {
+	PROBE_MT_SEARCH_METHOD_RETURN(klass,id);
 	return 0;
     }
 
     while (!st_lookup(RCLASS_M_TBL(klass), id, &body)) {
 	klass = RCLASS_SUPER(klass);
 	if (!klass) {
+		PROBE_MT_SEARCH_METHOD_RETURN(klass,id);
 	    return 0;
 	}
     }
 
+	PROBE_MT_SEARCH_METHOD_RETURN(klass,id);
     return (rb_method_entry_t *)body;
 }
 

@@ -447,26 +447,33 @@ search_required(VALUE fname, volatile VALUE *path, int safe_level)
     int type, ft = 0;
     const char *loading;
 
+    PROBE_LOAD_SEARCH_REQUIRED_ENTRY(fname,path);
     *path = 0;
     ext = strrchr(ftptr = RSTRING_PTR(fname), '.');
     if (ext && !strchr(ext, '/')) {
 	if (IS_RBEXT(ext)) {
 	    if (rb_feature_p(ftptr, ext, TRUE, FALSE, &loading)) {
-		if (loading) *path = rb_str_new2(loading);
-		return 'r';
+		if (loading) *path = rb_str_new2(loading);{
+		  PROBE_LOAD_SEARCH_REQUIRED_RETURN(fname,path);
+		  return 'r';
+	      }
 	    }
 	    if ((tmp = rb_find_file_safe(fname, safe_level)) != 0) {
 		ext = strrchr(ftptr = RSTRING_PTR(tmp), '.');
 		if (!rb_feature_p(ftptr, ext, TRUE, TRUE, &loading) || loading)
 		    *path = tmp;
+		PROBE_LOAD_SEARCH_REQUIRED_RETURN(fname,path);
 		return 'r';
 	    }
+	    PROBE_LOAD_SEARCH_REQUIRED_RETURN(fname,path);
 	    return 0;
 	}
 	else if (IS_SOEXT(ext)) {
 	    if (rb_feature_p(ftptr, ext, FALSE, FALSE, &loading)) {
-		if (loading) *path = rb_str_new2(loading);
-		return 's';
+		if (loading) *path = rb_str_new2(loading);{
+		  PROBE_LOAD_SEARCH_REQUIRED_RETURN(fname,path);
+		  return 's';
+		  }
 	    }
 	    tmp = rb_str_new(RSTRING_PTR(fname), ext - RSTRING_PTR(fname));
 #ifdef DLEXT2
@@ -475,6 +482,7 @@ search_required(VALUE fname, volatile VALUE *path, int safe_level)
 		ext = strrchr(ftptr = RSTRING_PTR(tmp), '.');
 		if (!rb_feature_p(ftptr, ext, FALSE, TRUE, &loading) || loading)
 		    *path = tmp;
+		PROBE_LOAD_SEARCH_REQUIRED_RETURN(fname,path);
 		return 's';
 	    }
 #else
@@ -484,25 +492,31 @@ search_required(VALUE fname, volatile VALUE *path, int safe_level)
 		ext = strrchr(ftptr = RSTRING_PTR(tmp), '.');
 		if (!rb_feature_p(ftptr, ext, FALSE, TRUE, &loading) || loading)
 		    *path = tmp;
+		PROBE_LOAD_SEARCH_REQUIRED_RETURN(fname,path);
 		return 's';
 	    }
 #endif
 	}
 	else if (IS_DLEXT(ext)) {
 	    if (rb_feature_p(ftptr, ext, FALSE, FALSE, &loading)) {
-		if (loading) *path = rb_str_new2(loading);
-		return 's';
+		if (loading) *path = rb_str_new2(loading);{
+		  PROBE_LOAD_SEARCH_REQUIRED_RETURN(fname,path);
+		  return 's';
+	      }
 	    }
 	    if ((tmp = rb_find_file_safe(fname, safe_level)) != 0) {
 		ext = strrchr(ftptr = RSTRING_PTR(tmp), '.');
 		if (!rb_feature_p(ftptr, ext, FALSE, TRUE, &loading) || loading)
 		    *path = tmp;
+		PROBE_LOAD_SEARCH_REQUIRED_RETURN(fname,path);
 		return 's';
 	    }
 	}
     }
     else if ((ft = rb_feature_p(ftptr, 0, FALSE, FALSE, &loading)) == 'r') {
-	if (loading) *path = rb_str_new2(loading);
+	if (loading) *path = rb_str_new2(loading); {
+      PROBE_LOAD_SEARCH_REQUIRED_RETURN(fname,path);
+	}
 	return 'r';
     }
     tmp = fname;
@@ -512,6 +526,7 @@ search_required(VALUE fname, volatile VALUE *path, int safe_level)
 	if (ft)
 	    break;
 	ftptr = RSTRING_PTR(tmp);
+    PROBE_LOAD_SEARCH_REQUIRED_RETURN(fname,path);
 	return rb_feature_p(ftptr, 0, FALSE, TRUE, 0);
 
       default:
@@ -523,6 +538,7 @@ search_required(VALUE fname, volatile VALUE *path, int safe_level)
 	    break;
 	*path = tmp;
     }
+    PROBE_LOAD_SEARCH_REQUIRED_RETURN(fname,path);
     return type ? 's' : 'r';
 }
 

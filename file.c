@@ -4732,7 +4732,11 @@ rb_find_file_ext_safe(VALUE *filep, const char *const *ext, int safe_level)
 VALUE
 rb_find_file(VALUE path)
 {
-    return rb_find_file_safe(path, rb_safe_level());
+   VALUE res;
+   PROBE_LOAD_FIND_FILE_ENTRY(path); 
+   res = rb_find_file_safe(path, rb_safe_level());
+   PROBE_LOAD_FIND_FILE_RETURN(path);
+   return res;
 }
 
 VALUE

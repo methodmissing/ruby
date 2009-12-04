@@ -20,8 +20,8 @@
 #define PROBE_GC_MARK_CHILDREN_RETURN(objspace,pointer,level)
 
 #define PROBE_GC_NEWOBJ_ENTRY()
-#define PROBE_GC_NEWOBJ_RETURN()
-#define PROBE_GC_NEWNODE_ENTRY()
-#define PROBE_GC_NEWNODE_RETURN()
+#define PROBE_GC_NEWOBJ_RETURN(obj)
+#define PROBE_GC_NEWNODE_ENTRY(type)
+#define PROBE_GC_NEWNODE_RETURN(type)
 #define PROBE_GC_INIT_HEAP_ENTRY(objspace)
 #define PROBE_GC_INIT_HEAP_RETURN(objspace)

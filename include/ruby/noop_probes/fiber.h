@@ -1,7 +1,7 @@
 #define PROBE_FIBER_MARK_ENTRY(fiber)
 #define PROBE_FIBER_MARK_RETURN(fiber)
 #define PROBE_FIBER_FREE_ENTRY(fiber)
-#define PROBE_FIBER_FREE_RETURN(fiber)
+#define PROBE_FIBER_FREE_RETURN()
 #define PROBE_FIBER_SWITCH_ENTRY(fiber)
 #define PROBE_FIBER_SWITCH_RETURN(fiber)
 #define PROBE_FIBER_START_ENTRY(fiber)

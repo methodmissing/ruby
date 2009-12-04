@@ -1086,6 +1086,7 @@ rb_during_gc(void)
 VALUE
 rb_newobj(void)
 {
+    VALUE res;
     PROBE_GC_NEWOBJ_ENTRY();
 #if USE_VALUE_CACHE || (defined(ENABLE_VM_OBJSPACE) && ENABLE_VM_OBJSPACE)
     rb_thread_t *th = GET_THREAD();
@@ -1117,18 +1118,19 @@ rb_newobj(void)
     printf("cache index: %d, v: %p, th: %p\n",
 	   th->value_cache_ptr - th->value_cache, v, th);
 #endif
-    PROBE_GC_NEWOBJ_RETURN();
+    PROBE_GC_NEWOBJ_RETURN(v);
     return v;
 #else
-    PROBE_GC_NEWOBJ_RETURN();
-    return rb_newobj_from_heap(objspace);
+    res = rb_newobj_from_heap(objspace);
+    PROBE_GC_NEWOBJ_RETURN(res);
+    return res;
 #endif
 }
 
 NODE*
 rb_node_newnode(enum node_type type, VALUE a0, VALUE a1, VALUE a2)
 {
-    PROBE_GC_NEWNODE_ENTRY();
+    PROBE_GC_NEWNODE_ENTRY(type);
     NODE *n = (NODE*)rb_newobj();
 
     n->flags |= T_NODE;
@@ -1137,7 +1139,7 @@ rb_node_newnode(enum node_type type, VALUE a0, VALUE a1, VALUE a2)
     n->u1.value = a0;
     n->u2.value = a1;
     n->u3.value = a2;
-    PROBE_GC_NEWNODE_RETURN();
+    PROBE_GC_NEWNODE_RETURN(type);
     return n;
 }
 

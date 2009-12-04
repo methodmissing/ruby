@@ -16,3 +16,5 @@
 #define PROBE_MT_METHOD_ENTRY_RETURN(class,id)
 #define PROBE_MT_GET_METHOD_ENTRY_ENTRY(class,id)
 #define PROBE_MT_GET_METHOD_ENTRY_RETURN(class,id)
+#define PROBE_MT_SEARCH_METHOD_ENTRY(class,id)
+#define PROBE_MT_SEARCH_METHOD_RETURN(class,id)

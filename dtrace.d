@@ -1,8 +1,6 @@
 provider ruby {
     probe str__set__length__entry(char *, int, char *, long);
     probe str__set__length__return(char *, int, char *, long);
-    probe str__dec__length__entry(char *, int, char *);
-    probe str__dec__length__return(char *, int, char *);
     probe str__resize__capacity__entry(char *, int, char *, long);
     probe str__resize__capacity__return(char *, int, char *, long);
     probe str__replace__entry(char *, int, char *, char *);
@@ -11,8 +9,6 @@ provider ruby {
     probe str__shared__replace__return(char *, int, char *, char *);
     probe str__buf__new__entry(char *, int, long);
     probe str__buf__new__return(char *, int, long);
-    probe str__buf__cstr__new__entry(char *, int, char *);
-    probe str__buf__cstr__new__return(char *, int, char *);
     probe str__new__entry(char *, int, char *, long);
     probe str__new__return(char *, int, char *, long);
     probe str__new__shared__entry(char *, int, char *);
@@ -21,19 +17,26 @@ provider ruby {
     probe str__free__return(char *, int, char *);
     probe str__dup__entry(char *, int, char *);
     probe str__dup__return(char *, int, char *);
+    probe str__buf__cstr__new__entry(char *, int, char *);
+    probe str__buf__cstr__new__return(char *, int, char *);
+    probe str__dec__length__entry(char *, int, char *);
+    probe str__dec__length__return(char *, int, char *);
+
 
     probe mt__clear__cache__entry();
     probe mt__clear__cache__return();
-    probe mt__clear__cache__undef__entry(char *, char *);
-    probe mt__clear__cache__undef__return(char *, char *);
     probe mt__clear__cache__id__entry(char *);
     probe mt__clear__cache__id__return(char *);
     probe mt__clear__cache__class__entry(char *);
     probe mt__clear__cache__class__return(char *);
+    probe mt__clear__cache__undef__entry(char *, char *);
+    probe mt__clear__cache__undef__return(char *, char *);
     probe mt__add__method__entry(char *, char *);
     probe mt__add__method__return(char *, char *);
     probe mt__remove__method__entry(char *, char *);
     probe mt__remove__method__return(char *, char *);
+    probe mt__search__method__entry(char *, char *);
+    probe mt__search__method__return(char *, char *);
     probe mt__get__method__entry__entry(char *, char *);
     probe mt__get__method__entry__return(char *, char *);
     probe mt__method__entry__entry(char *, char *);
@@ -92,7 +95,7 @@ provider ruby {
     probe vm__module__eval__return(char *);
     probe vm__module__exec__entry(char *);
     probe vm__module__exec__return(char *);
-
+ 
     probe st__init__numtable__entry();
     probe st__init__numtable__return();
     probe st__init__sized__numtable__entry(int);
@@ -113,10 +116,10 @@ provider ruby {
     probe st__copy__return(long, long, long);
     probe st__cleanup__safe__entry(long, long, long, long);
     probe st__cleanup__safe__return(long, long, long, long);
+    probe st__get__key__entry(long, long, long, long);
+    probe st__get__key__return(long, long, long, long);
     probe st__delete__entry(long, long, long, long, long);
     probe st__delete__return(long, long, long, long, long);
-    probe st__delete__safe__entry(long, long, long, long, long, long);
-    probe st__delete__safe__return(long, long, long, long, long, long);
     probe st__insert__entry(long, long, long, long, long);
     probe st__insert__return(long, long, long, long, long);
     probe st__insert2__entry(long, long, long, long, long);
@@ -125,8 +128,8 @@ provider ruby {
     probe st__lookup__return(long, long, long, long, long);
     probe st__add__direct__entry(long, long, long, long, long);
     probe st__add__direct__return(long, long, long, long, long);
-    probe st__get__key__entry(long, long, long, long);
-    probe st__get__key__return(long, long, long, long);
+    probe st__delete__safe__entry(long, long, long, long, long, long);
+    probe st__delete__safe__return(long, long, long, long, long, long);
 
     probe obj__clone__entry(char *);
     probe obj__clone__return(char *);
@@ -210,9 +213,9 @@ provider ruby {
     probe gc__objspace__alloc__return(long, long, long, long, long, unsigned int);
 
     probe gc__newobj__entry();
-    probe gc__newobj__return();
-    probe gc__newnode__entry();
-    probe gc__newnode__return();
+    probe gc__newobj__return(long);
+    probe gc__newnode__entry(int);
+    probe gc__newnode__return(int);
     probe gc__init__heap__entry(long, long, long, long, long, unsigned int);
     probe gc__init__heap__return(long, long, long, long, long, unsigned int);
 
@@ -220,10 +223,10 @@ provider ruby {
     probe gc__objspace__free__return();
     probe gc__is__pointer__to__heap__entry(long, long, long, long, long, unsigned int, void *);
     probe gc__is__pointer__to__heap__return(long, long, long, long, long, unsigned int, void *);
-    probe gc__obj__free__entry(long, long, long, long, long, unsigned int, char *);
-    probe gc__obj_free__return(long, long, long, long, long, unsigned int, char *);
+    probe gc__obj__free__entry(long, long, long, long, long, unsigned int, unsigned long);
+    probe gc__obj__free__return(long, long, long, long, long, unsigned int, unsigned long);
     probe gc__garbage__collect__entry(long, long, long, long, long, unsigned int);
-    probe gc__garbage_collect__return(long, long, long, long, long, unsigned int);
+    probe gc__garbage__collect__return(long, long, long, long, long, unsigned int);
     probe gc__sweep__entry(long, long, long, long, long, unsigned int);
     probe gc__sweep__return(long, long, long, long, long, unsigned int);
     probe gc__free__unused__heaps__entry(long, long, long, long, long, unsigned int);
@@ -242,6 +245,8 @@ provider ruby {
     probe rb__trace__entry(char *);
     probe rb__trace__return(char *);
 
+    probe thread__schedule__entry(char *, int);
+    probe thread__schedule__return(char *, int);
     probe thread__with__gvl__entry(char *, int, long, int);
     probe thread__with__gvl__return(char *, int, long, int);
     probe thread__without__gvl__entry(char *, int, long, int);
@@ -250,37 +255,37 @@ provider ruby {
     probe thread__create__return(char *, int, long, int);
     probe thread__sleep__entry(char *, int, long, int);
     probe thread__sleep__return(char *, int, long, int);
-    probe thread__schedule__entry(char *, int);
-    probe thread__schedule__return(char *, int);
+    probe thread__switch__entry(char *, int, long, int);
+    probe thread__switch__return(char *, int, long, int);
 
-    probe fiber__mark__entry(char *, int, unsigned long, int);
-    probe fiber__mark__return(char *, int, unsigned long, int);
-    probe fiber__free__entry(char *, int, unsigned long, int);
-    probe fiber__free__return(char *, int, unsigned long, int);
-    probe fiber__switch__entry(char *, int, unsigned long, int);
-    probe fiber__switch__return(char *, int, unsigned long, int);
-    probe fiber__start__entry(char *, int, unsigned long, int);
-    probe fiber__start__return(char *, int, unsigned long, int);
-    probe fiber__terminate__entry(char *, int, unsigned long, int);
-    probe fiber__terminate__return(char *, int, unsigned long, int);
+    probe fiber__mark__entry(char *, int, int);
+    probe fiber__mark__return(char *, int, int);
+    probe fiber__free__entry(char *, int, int);
+    probe fiber__free__return(char *, int);
+    probe fiber__switch__entry(char *, int, int);
+    probe fiber__switch__return(char *, int, int);
+    probe fiber__start__entry(int);
+    probe fiber__start__return(int);
+    probe fiber__terminate__entry(char *, int, int);
+    probe fiber__terminate__return(char *, int, int);
 
-    probe load_search__required__entry(char *, char *);
-    probe load_search__required__return(char *, char *);
-    probe load_find_file__entry(char *);
-    probe load_find_file__return(char *);
+    probe load__search__required__entry(char *, char *);
+    probe load__search__required__return(char *, char *);
+    probe load__find__file__entry(char *);
+    probe load__find__file__return(char *);
 
+    probe proc__dup__entry(char *);
+    probe proc__dup__return(char *);
+    probe binding__dup__entry(char *);
+    probe binding__dup__return(char *);
     probe proc__mark__entry(void *);
     probe proc__mark__return(void *);
     probe proc__free__entry(void *);
     probe proc__free__return(void *);
-    probe proc__dup__entry(char *);
-    probe proc__dup__return(char *);
     probe binding__mark__entry(void *);
     probe binding__mark__return(void *);
     probe binding__free__entry(void *);
     probe binding__free__return(void *);
-    probe binding__dup__entry(char *);
-    probe binding__dup__return(char *);
     probe binding__new__entry();
     probe binding__new__return();
     probe proc__new__entry(char *,int);
