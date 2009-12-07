@@ -650,7 +650,7 @@ w_object(VALUE obj, struct dump_arg *arg, int limit)
 	    check_dump_arg(arg, s_mdump);
 	    w_class(TYPE_USRMARSHAL, obj, arg, FALSE);
 	    w_object(v, arg, limit);
-	    if (hasiv) w_ivar(obj, 0, &c_arg);
+	    if (hasiv) w_ivar(obj, ivtbl, &c_arg);
 	    return;
 	}
 	if (rb_respond_to(obj, s_dump)) {

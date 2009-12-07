@@ -310,4 +310,45 @@ class TestMarshal < Test::Unit::TestCase
     Marshal.dump(Object.new, w)
     assert_not_empty(w, bug2390)
   end
+
+  class C5
+    def marshal_dump
+      "foo"
+    end
+    def marshal_load(foo)
+      @foo = foo
+    end
+    def initialize(x)
+      @x = x
+    end
+  end
+  def test_marshal_dump
+    c = C5.new("bar")
+    s = Marshal.dump(c)
+    d = Marshal.load(s)
+    assert_equal("foo", d.instance_variable_get(:@foo))
+    assert_equal(false, d.instance_variable_defined?(:@x))
+  end
+
+  class C6
+    def initialize
+      @stdin = STDIN
+    end
+    attr_reader :stdin
+    def marshal_dump
+      1
+    end
+    def marshal_load(x)
+      @stdin = STDIN
+    end
+  end
+  def test_marshal_dump_extra_iv
+    o = C6.new
+    m = nil
+    assert_nothing_raised("[ruby-dev:21475] [ruby-dev:39845]") {
+      m = Marshal.dump(o)
+    }
+    o2 = Marshal.load(m)
+    assert_equal(STDIN, o.stdin)
+  end
 end

@@ -2555,7 +2555,8 @@ compile_cpath(LINK_ANCHOR *ret, rb_iseq_t *iseq, NODE *cpath)
     }
     else {
 	/* class at cbase Foo */
-	ADD_INSN1(ret, nd_line(cpath), putspecialobject, INT2FIX(VM_SPECIAL_OBJECT_CBASE));
+	ADD_INSN1(ret, nd_line(cpath), putspecialobject,
+		  INT2FIX(VM_SPECIAL_OBJECT_CONST_BASE));
 	return Qtrue;
     }
 }
@@ -3717,7 +3718,8 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	}
 
 	if (node->nd_vid) {
-	    ADD_INSN1(ret, nd_line(node), putspecialobject, INT2FIX(VM_SPECIAL_OBJECT_CBASE));
+	    ADD_INSN1(ret, nd_line(node), putspecialobject,
+		      INT2FIX(VM_SPECIAL_OBJECT_CONST_BASE));
 	    ADD_INSN1(ret, nd_line(node), setconstant, ID2SYM(node->nd_vid));
 	}
 	else {

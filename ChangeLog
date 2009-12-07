@@ -1,3 +1,109 @@
+Tue Dec  8 03:50:24 2009  Tanaka Akira  <akr@fsij.org>
+
+	* file.c (rb_f_test): use string form in unknown command error
+	  message.
+
+Mon Dec  7 14:11:08 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* marshal.c (w_object): reverted r26007.  [ruby-dev:39845]
+
+	* test/test_delegate.rb (test_marshal): moved from test_marshal.rb.
+
+Mon Dec  7 13:05:59 2009  Yuki Sonoda (Yugui)  <yugui@yugui.jp>
+
+	* string.c (rb_str_justify): CVE-2009-4124.
+	  Fixes a bug reported by 
+	  Emmanouel Kellinis <Emmanouel.Kellinis AT kpmg.co.uk>, KPMG London;
+	  Patch by nobu.
+
+Sun Dec  6 23:50:46 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* strftime.c: %l should be 1..12 instead of 0..12 [ruby-core:27072]
+
+Sun Dec  6 23:16:35 2009  Tanaka Akira  <akr@fsij.org>
+
+	* lib/find.rb (Find.find): reduce stat system call.
+
+Sun Dec  6 16:02:15 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* lib/webrick/httpservlet/filehandler.rb: escape filename of index.
+	  [ruby-dev:37768]
+
+Sun Dec  6 00:35:16 2009  Alexander Zavorine  <alexandre.zavorine@nokia.com>
+
+	* symbian/setup (config.h): EXECUTABLE_EXTS moved from
+	  dln.c:dln_find_1().
+
+Sat Dec  5 15:35:05 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* marshal.c (w_object): dump instance variables when using
+	  marshal_dump.   [ruby-core:24211]
+
+	* variable.c (rb_ivar_count): added.
+
+Sat Dec  5 13:19:29 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* configure.in: default ac_cv_prog_CC to CC.
+
+Sat Dec  5 10:18:26 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* lib/irb/extend-command.rb (def_extend_command): fixed argument
+	  number for negative arity.
+
+Fri Dec  4 16:50:13 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* parse.y (k_def): adjust the location of method definition to the
+	  line of def.  [Bug #2427]
+
+Fri Dec  4 19:05:28 2009  Yukihiro Matsumoto  <matz@ruby-lang.org>
+
+	* insns.def (defined): should respect #respond_to_missing? as
+	  #respond_to? does.
+
+Fri Dec  4 15:50:18 2009  Shugo Maeda  <shugo@ruby-lang.org>
+
+	* vm_eval.c (yield_under): does not yield self, and passes blockptr
+	  instead of &block to vm_cref_push().  [ruby-dev:39833]
+
+Fri Dec  4 15:15:43 2009  Yukihiro Matsumoto  <matz@ruby-lang.org>
+
+	* time.c (num_exact): should not accept strings as operands, even
+	  though they respond to #to_r.  ideally, strict rational
+	  conversion should be done by a method like #to_rational, not #to_r.
+	  [ruby-core:23729]
+
+Fri Dec  4 13:10:23 2009  NAKAMURA, Hiroshi  <nahi@ruby-lang.org>
+
+	* ext/stringio/stringio.c (ungetc): RDoc updated.  trunk allows
+	  pushing back behind the beginning of the pseudo stream.
+
+Fri Dec  4 03:10:38 2009  Shugo Maeda  <shugo@ruby-lang.org>
+
+	* compile.c (compile_cpath, iseq_compile_each): reverted
+	  constant/class variable lookup in instance_eval etc. to the
+	  behavior of 1.8.
+
+	* eval.c (rb_mod_nesting): ditto.
+
+	* insns.def (putspecialobject, defineclass): ditto.
+
+	* node.h (NODE_FL_CREF_PUSHED_BY_EVAL): ditto.
+
+	* vm_core.h (VM_SPECIAL_OBJECT_CONST_BASE): ditto.
+
+	* vm_eval.c (yield_under, eval_under): ditto.
+
+	* vm_insnhelper.c (vm_cref_push, vm_get_const_base,
+	  vm_get_ev_const, vm_get_cvar_base): ditto.
+
+Thu Dec 3 20:27:27 2009  Martin Duerst  <duerst@it.aoyama.ac.jp>
+
+	* enc/trans/gb18030-tbl.rb: Fix omission of C1 region in code table
+	  (from Tatsuya Mizuno)
+
+	* test/ruby/test_transcode.rb: Added test for converting full range of
+	  Unicode codepoints from/to GB18030 (from Tatsuya Mizuno)
+
 Wed Dec  2 23:51:28 2009  NAKAMURA, Hiroshi  <nahi@ruby-lang.org>
 
 	* ext/openssl/ossl_ssl.c: initialize @hostname of SSLSocket to avoid
