@@ -207,7 +207,7 @@ fiber_free(void *ptr)
 	fiber_link_remove(fib);
 
 	cont_free(&fib->cont);
-    PROBE_FIBER_FREE_RETURN(fib);
+    PROBE_FIBER_FREE_RETURN();
     }
     RUBY_FREE_LEAVE("fiber");
 }
