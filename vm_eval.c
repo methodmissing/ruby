@@ -289,6 +289,7 @@ check_funcall(VALUE recv, ID mid, int argc, VALUE *argv)
 	else {
 	    struct rescue_funcall_args args;
 
+	    th->method_missing_reason = 0;
 	    args.recv = recv;
 	    args.sym = ID2SYM(mid);
 	    args.argc = argc;
@@ -851,9 +852,15 @@ rb_iterate(VALUE (* it_proc) (VALUE), VALUE data1,
     if (state == 0) {
       iter_retry:
 	{
-	    rb_block_t *blockptr = RUBY_VM_GET_BLOCK_PTR_IN_CFP(th->cfp);
-	    blockptr->iseq = (void *)node;
-	    blockptr->proc = 0;
+	    rb_block_t *blockptr;
+	    if (bl_proc) {
+		blockptr = RUBY_VM_GET_BLOCK_PTR_IN_CFP(th->cfp);
+		blockptr->iseq = (void *)node;
+		blockptr->proc = 0;
+	    }
+	    else {
+		blockptr = GC_GUARDED_PTR_REF(th->cfp->lfp[0]);
+	    }
 	    th->passed_block = blockptr;
 	}
 	retval = (*it_proc) (data1);
@@ -1201,12 +1208,7 @@ yield_under(VALUE under, VALUE self, VALUE values)
     cref->flags |= NODE_FL_CREF_PUSHED_BY_EVAL;
 
     if (values == Qundef) {
-#if 0
-	/* The behavior of Ruby 1.8  */
 	return vm_yield_with_cref(th, 1, &self, cref);
-#else
-	return vm_yield_with_cref(th, 0, 0, cref);
-#endif
     }
     else {
 	return vm_yield_with_cref(th, RARRAY_LENINT(values), RARRAY_PTR(values), cref);

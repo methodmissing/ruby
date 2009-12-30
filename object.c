@@ -646,6 +646,14 @@ rb_obj_tap(VALUE obj)
  *        end
  */
 
+/*
+ * Document-method: initialize
+ *
+ * call-seq:
+ *    BasicObject.new( *args )
+ *
+ * Returns a new BasicObject. Arguments are ignored.
+ */
 
 /*
  * Not documented
@@ -1148,7 +1156,7 @@ rb_obj_not_match(VALUE obj1, VALUE obj2)
 static VALUE
 rb_obj_cmp(VALUE obj1, VALUE obj2)
 {
-    if (obj1 == obj2 || rb_obj_equal(obj1, obj2))
+    if (obj1 == obj2 || rb_equal(obj1, obj2))
 	return INT2FIX(0);
     return Qnil;
 }
@@ -2643,7 +2651,7 @@ Init_Object(void)
 #undef rb_intern
 #define rb_intern(str) rb_intern_const(str)
 
-    rb_define_private_method(rb_cBasicObject, "initialize", rb_obj_dummy, 0);
+    rb_define_private_method(rb_cBasicObject, "initialize", rb_obj_dummy, -1);
     rb_define_alloc_func(rb_cBasicObject, rb_class_allocate_instance);
     rb_define_method(rb_cBasicObject, "==", rb_obj_equal, 1);
     rb_define_method(rb_cBasicObject, "equal?", rb_obj_equal, 1);

@@ -70,24 +70,28 @@ enc_new(rb_encoding *encoding)
     return TypedData_Wrap_Struct(rb_cEncoding, &encoding_data_type, encoding);
 }
 
-VALUE
-rb_enc_from_encoding(rb_encoding *encoding)
+static VALUE
+rb_enc_from_encoding_index(int idx)
 {
     VALUE list, enc;
-    int idx;
 
-    if (!encoding) return Qnil;
-    idx = ENC_TO_ENCINDEX(encoding);
     if (!(list = rb_encoding_list)) {
-	rb_bug("rb_enc_from_encoding(%d\"%s\"): no rb_encoding_list",
-	       idx, rb_enc_name(encoding));
+	rb_bug("rb_enc_from_encoding_index(%d): no rb_encoding_list", idx);
     }
     enc = rb_ary_entry(list, idx);
     if (NIL_P(enc)) {
-	rb_bug("rb_enc_from_encoding(%d\"%s\"): not created yet",
-	       idx, rb_enc_name(encoding));
+	rb_bug("rb_enc_from_encoding_index(%d): not created yet", idx);
     }
     return enc;
+}
+
+VALUE
+rb_enc_from_encoding(rb_encoding *encoding)
+{
+    int idx;
+    if (!encoding) return Qnil;
+    idx = ENC_TO_ENCINDEX(encoding);
+    return rb_enc_from_encoding_index(idx);
 }
 
 static int enc_autoload(rb_encoding *);
@@ -309,8 +313,25 @@ rb_enc_replicate(const char *name, rb_encoding *encoding)
     return idx;
 }
 
+/*
+ * call-seq:
+ *   enc.replicate(name) => encoding
+ *
+ * Returns a replicated encoding of _enc whose name is _name_.
+ * The new encoding should have the same byte structure of _enc_.
+ * If _name_ is used by another encoding, raise ArgumentError.
+ *
+ */
+static VALUE
+enc_replicate(VALUE encoding, VALUE name)
+{
+    return rb_enc_from_encoding_index(
+	rb_enc_replicate(RSTRING_PTR(name),
+			 rb_to_encoding(encoding)));
+}
+
 static int
-enc_replicate(int idx, const char *name, rb_encoding *origenc)
+enc_replicate_with_index(const char *name, rb_encoding *origenc, int idx)
 {
     if (idx < 0) {
 	idx = enc_register(name, origenc);
@@ -334,7 +355,7 @@ rb_encdb_replicate(const char *name, const char *orig)
     if (origidx < 0) {
 	origidx = enc_register(orig, 0);
     }
-    return enc_replicate(idx, name, rb_enc_from_index(origidx));
+    return enc_replicate_with_index(name, rb_enc_from_index(origidx), idx);
 }
 
 int
@@ -350,8 +371,8 @@ rb_define_dummy_encoding(const char *name)
 int
 rb_encdb_dummy(const char *name)
 {
-    int index = enc_replicate(rb_enc_registered(name), name,
-			      rb_ascii8bit_encoding());
+    int index = enc_replicate_with_index(name, rb_ascii8bit_encoding(),
+					 rb_enc_registered(name));
     rb_encoding *enc = enc_table.list[index].enc;
 
     ENC_SET_DUMMY(enc);
@@ -1484,12 +1505,14 @@ Init_Encoding(void)
 
     rb_cEncoding = rb_define_class("Encoding", rb_cObject);
     rb_undef_alloc_func(rb_cEncoding);
+    rb_undef_method(CLASS_OF(rb_cEncoding), "new");
     rb_define_method(rb_cEncoding, "to_s", enc_name, 0);
     rb_define_method(rb_cEncoding, "inspect", enc_inspect, 0);
     rb_define_method(rb_cEncoding, "name", enc_name, 0);
     rb_define_method(rb_cEncoding, "names", enc_names, 0);
     rb_define_method(rb_cEncoding, "dummy?", enc_dummy_p, 0);
     rb_define_method(rb_cEncoding, "ascii_compatible?", enc_ascii_compatible_p, 0);
+    rb_define_method(rb_cEncoding, "replicate", enc_replicate, 1);
     rb_define_singleton_method(rb_cEncoding, "list", enc_list, 0);
     rb_define_singleton_method(rb_cEncoding, "name_list", rb_enc_name_list, 0);
     rb_define_singleton_method(rb_cEncoding, "aliases", rb_enc_aliases, 0);

@@ -322,6 +322,16 @@ class TestObject < Test::Unit::TestCase
     assert_raise(ArgumentError) do
       c.new.method_missing
     end
+
+    bug2494 = '[ruby-core:27219]'
+    c = Class.new do
+      def method_missing(meth, *args)
+        super
+      end
+    end
+    b = c.new
+    foo rescue nil
+    assert_nothing_raised(bug2494) {[b].flatten}
   end
 
   def test_respond_to_missing
@@ -399,7 +409,7 @@ class TestObject < Test::Unit::TestCase
   def test_superclass_method
     bug2312 = '[ruby-dev:39581]'
     assert_in_out_err(["-e", "module Enumerable;undef min;end; (1..2).min{}"],
-                      [], [], /no superclass method/, bug2312)
+                      "", [], /no superclass method/, bug2312)
   end
 
   def test_specific_eval_with_wrong_arguments

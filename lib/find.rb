@@ -41,30 +41,22 @@ module Find
 	yield file.dup.taint
         begin
           s = File.lstat(file)
-        rescue SystemCallError
+        rescue Errno::ENOENT, Errno::EACCES, Errno::ENOTDIR, Errno::ELOOP, Errno::ENAMETOOLONG
           next
         end
-	begin
-	  if s.directory? then
-	    d = Dir.open(file)
-	    begin
-	      for f in d
-		next if f == "." or f == ".."
-		if File::ALT_SEPARATOR and file =~ /^(?:[\/\\]|[A-Za-z]:[\/\\]?)$/ then
-		  f = file + f
-		elsif file == "/" then
-		  f = "/" + f
-		else
-		  f = File.join(file, f)
-		end
-		paths.unshift f.untaint
-	      end
-	    ensure
-	      d.close
-	    end
-	  end
-        rescue Errno::ENOENT, Errno::EACCES
-	end
+        if s.directory? then
+          begin
+            fs = Dir.entries(file)
+          rescue Errno::ENOENT, Errno::EACCES, Errno::ENOTDIR, Errno::ELOOP, Errno::ENAMETOOLONG
+            next
+          end
+          fs.sort!
+          fs.reverse_each {|f|
+            next if f == "." or f == ".."
+            f = File.join(file, f)
+            paths.unshift f.untaint
+          }
+        end
       end
     end
   end

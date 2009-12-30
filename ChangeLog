@@ -1,3 +1,324 @@
+Thu Dec 31 06:03:48 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* ext/socket/raddrinfo.c (addrinfo_type): typed.
+
+	* ext/socket/extconf.rb: fix for wide-getaddrinfo option.
+
+	* ext/socket/addrinfo.c: rename {addr,name}info functions to ensure
+	  those are used on darwin.
+
+Thu Dec 31 03:27:53 2009  NAKAMURA Usaku  <usa@ruby-lang.org>
+
+	* thread_win32.c (native_thread_destroy): decreased the probability of
+	  using the interrupt event in the thread termination.
+	  see [ruby-core:27199].
+
+Thu Dec 31 02:35:57 2009  NAKAMURA Usaku  <usa@ruby-lang.org>
+
+	* thread_win32.c (w32_error): should report the function.
+
+Thu Dec 31 01:58:47 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* ext/extmk.rb: fix for extstatic.
+
+Wed Dec 30 19:43:00 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* include/ruby/ruby.h (RREGEXP_SRC_END): added.
+
+Wed Dec 30 19:40:00 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* include/ruby/defines.h (INFINITY): this is float.
+
+	* include/ruby/defines.h (NAN): ditto.
+
+	* numeric.c (rb_infinity): change content as float.
+
+	* numeric.c (rb_nan): ditto.
+
+Wed Dec 30 17:59:14 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* gem_prelude.rb (push_all_highest_version_gems_on_load_path):
+	  simplified.
+
+	* lib/rubygems/command_manager.rb (Gem#load_and_instantiate):
+	  rescue only NameError from const_get.
+
+	* lib/rubygems/source_index.rb (Gem#load_specification): don't use
+	  RUBY_VERSION to branch.
+
+	* lib/rubygems/validator.rb (Gem::TestRunner, Gem#alien): ditto.
+
+	* lib/rubygems.rb: Kernel#gem is already defined, and workaround
+	  for home directory and custom_require are no longer needed.
+
+Tue Dec 29 16:03:33 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* numeric.c (Init_Numeric): Add Float::INFINITY and Float::NAN.
+	  [ruby-dev:1657] [ruby-dev:4760] [ruby-list:7023]
+	  [ruby-list:46690]
+	  [ruby-core:26632] [ruby-talk:41352] [ruby-talk:203333]
+
+	* include/ruby/defines.h (INFINITY): defined.
+
+	* include/ruby/defines.h (NAN): defined.
+
+	* include/ruby/util.h (ruby_div0): removed.
+
+	* numeric.c (fix_pow): use INFINITY and NAN
+	  instead of ruby_div0(1.0).
+
+	* marshal.c (r_object0): ditto.
+
+	* bignum.c (big_fdiv): ditto.
+
+Tue Dec 29 10:36:23 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* lib/rexml/parsers/baseparser.rb (REXML::Parsers::BaseParser::STANDALONE):
+	  any number spaces can be placed between equal-sign and the value.
+	  patch from Ed Howland in [ruby-core:27345].
+
+Mon Dec 28 22:33:58 2009  NAKAMURA Usaku  <usa@ruby-lang.org>
+
+	* win32/win32.c (CreateChild): force to inherit standard I/O handles.
+	  this change fixes [ruby-core:27273], but other side effects might
+	  exist.
+
+Mon Dec 28 22:00:10 2009  NAKAMURA, Hiroshi  <nahi@ruby-lang.org>
+
+	* test/ruby/test_marshal.rb: added tests for taintness/untrustness
+	  propagation.
+
+Mon Dec 28 18:13:26 2009  Yuki Sonoda (Yugui)  <yugui@yugui.jp>
+
+	* sample/occur2.rb: reimplemented in modern style. [ruby-dev:39927].
+
+Mon Dec 28 17:19:37 2009  Yuki Sonoda (Yugui)  <yugui@yugui.jp>
+
+	* tool/install-sh: correction by Hiro Asari.
+	  https://gist.github.com/264558/58ad1cae45cde49600bbb39286af2aae23e639d5
+
+Mon Dec 28 13:18:52 2009  Yuki Sonoda (Yugui)  <yugui@yugui.jp>
+
+	* tool/install-sh: wrote the intention. [ruby-dev:39928]
+
+Sun Dec 27 10:45:00 2009  Masaki Suketa <masaki.suketa@nifty.ne.jp>
+
+	* ext/win32ole/win32ole.c (foleparam_initialize): add foleparam_initialize
+	  to check argument of WIN32OLE_PARAM.new
+
+	* test/win32ole/test_win32ole_param.rb (test_s_new): add some assertion
+	  to test WIN32OLE_PARAM.new
+
+Sun Dec 27 09:41:54 2009  Yuki Sonoda (Yugui)  <yugui@yugui.jp>
+
+	* tool/rbinstall.rb (install?(:local, :comm, :bin, :'bin-comm')):
+	  Makes it vim friendly.  __END__ in a heredoc is confusing with 
+	  the script end for vim.
+
+Sun Dec 27 09:13:55 2009  Yuki Sonoda (Yugui)  <yugui@yugui.jp>
+
+	* sample/occur2.rb: have been broken. fixed for Ruby 1.9 feature.
+
+Thu Dec 24 16:32:30 2009  Marc-Andre Lafortune  <ruby-core@marc-andre.ca>
+
+	* lib/uri/generic.rb (eql?): Check the class of the compared object.
+	  Based on a patch by Peter McLain [ruby-core:27019]
+
+Thu Dec 24 15:20:03 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* regexec.c (match_at): follow enclen's change.
+
+Thu Dec 24 12:08:00 2009  Marc-Andre Lafortune  <ruby-core@marc-andre.ca>
+
+	* lib/delegate.rb (marshal_dump/load): dump & load instance variables
+	  by default [ruby-core:24211]
+
+Thu Dec 24 10:31:50 2009  Marc-Andre Lafortune  <ruby-core@marc-andre.ca>
+
+	* lib/object.c (rb_obj_cmp): Default <=> operator returns 0 if
+	  objects are == [ruby-core:24063]
+
+Wed Dec 23 09:12:31 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* test/cgi/test_cgi_multipart.rb (CGIMultipartTest#_prepare):
+	  always must be binary mode.  c.f. Bug#2341
+
+Thu Dec 10 09:20:58 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* encoding.c (Init_Encoding): undef Encoding.new because
+	  a class which is rb_undef_alloc-func-ed can't call new method.
+	  [ruby-dev:39862]
+
+	* vm.c (Init_VM): undef RubyVM.new and RubyVM::Env.new.
+
+Mon Dec 21 17:51:44 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* regcomp.c (optimize_node_left): include equal on the condition of for-loop.
+	  This bug also affects original Oniguruma. [ruby-core:27247]
+
+Mon Dec 21 10:03:33 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* regcomp.c (print_enc_string): follow enclen's change.
+
+	* regcomp.c (onig_print_compiled_byte_code): ditto.
+
+	* regcomp.c (onig_print_compiled_byte_code): change prototype.
+
+	* regint.c (onig_print_compiled_byte_code): comment out.
+
+Mon Dec 21 08:04:34 2009  Marc-Andre Lafortune  <ruby-core@marc-andre.ca>
+
+	* object.c: BasicObject#initialize accepts any number of arguments
+	  [ruby-core:27080]
+
+Mon Dec 21 02:45:46 2009  Yusuke Endoh  <mame@tsg.ne.jp>
+
+	* vm_eval.c (rb_iterate): remove SEGV (retry).
+
+Sun Dec 20 23:18:23 2009  Yusuke Endoh  <mame@tsg.ne.jp>
+
+	* vm_eval.c (rb_iterate): remove SEGV (use the original patch).
+	  [ruby-dev:39874]
+
+Sun Dec 20 21:26:05 2009  Yusuke Endoh  <mame@tsg.ne.jp>
+
+	* vm_eval.c (rb_iterate): pass current block when the argument bl_proc
+	  is NULL.  This behavior can be used to make enumerator faster
+	  [ruby-dev:39874]
+
+	* enumerator.c (enumerator_each): pass current block directly instead
+	  of trampoline block (enumerator_each_i).
+
+	* io.c (argf_each_line, argf_each_byte, argf_each_char): ditto.
+
+Sat Dec 19 14:59:30 2009  Yukihiro Matsumoto  <matz@ruby-lang.org>
+
+	* gem_prelude.rb (Kernel#gem): should make gem private.  a patch
+	  from Sho Hashimoto in [ruby-dev:39838].
+
+Sat Dec 19 14:57:17 2009  Yukihiro Matsumoto  <matz@ruby-lang.org>
+
+	* lib/webrick/config.rb (WEBrick::Config): typo fixed.  a patch
+	  from Sho Hashimoto in [ruby-dev:39835].
+
+Sat Dec 19 11:06:48 2009  Marc-Andre Lafortune  <ruby-core@marc-andre.ca>
+
+	* lib/matrix.rb (each2,collect2,map2): Fix enumerator
+	  [ruby-core:27225]
+
+Sat Dec 19 09:58:05 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* vm_eval.c (check_funcall): reset method_missing_reason before
+	  trying the call.  based on a patch from Yehuda Katz in
+	  [ruby-core:27219].
+
+Sat Dec 19 09:29:22 2009  Marc-Andre Lafortune  <ruby-core@marc-andre.ca>
+
+	* lib/set.rb: Add checks that passed argument is Enumerable.
+	  [ruby-core:23844]
+
+Wed Dec 16 20:28:46 2009  Kazuhiro NISHIYAMA  <zn@mbf.nifty.com>
+
+	* test/ruby/envutil.rb: fix a typo in assert message.
+
+Wed Dec 16 16:57:59 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* lib/un.rb (httpd): try to convert port number to integer.
+
+Wed Dec 16 11:18:30 2009  WATANABE Hirofumi  <eban@ruby-lang.org>
+
+	* configure.in(MINIRUBY): use "$BASERUBY" as a default ruby executable
+	  name.
+
+Wed Dec 16 00:53:14 2009  Tanaka Akira  <akr@fsij.org>
+
+	* lib/find.rb (Find.find): rescue more exceptions which is possible to
+	  occur by other process change the directory tree.
+
+Tue Dec 15 09:06:33 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* lib/find.rb (Find.find): get rid of race condition.
+
+Mon Dec 14 22:33:21 2009  Tanaka Akira  <akr@fsij.org>
+
+	* lib/find.rb (Find.find): rescue only ENOENT and EACCES for lstat.
+
+Mon Dec 14 21:49:30 2009  Tanaka Akira  <akr@fsij.org>
+
+	* lib/find.rb (Find.find): narrow rescue region.
+
+Mon Dec 14 09:20:54 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* lib/find.rb (Find.find): removed already unnecessary code.
+
+Sun Dec 13 23:48:25 2009  Tanaka Akira  <akr@fsij.org>
+
+	* lib/find.rb (Find.find): sort directory entries.  [ruby-dev:39847]
+
+Sun Dec 13 20:55:30 2009  Tanaka Akira  <akr@fsij.org>
+
+	* test/ruby/envutil.rb (invoke_ruby): call to_str for stdin_data to
+	  reject non-string.
+
+Sun Dec 13 20:26:57 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* ruby.c (rb_parser_dump_tree): add prototype.
+
+Thu Dec 10 20:55:55 2009  Martin Duerst  <duerst@it.aoyama.ac.jp>
+
+	* transcode_data.h, transcode.c, tool/transcode-tblgen.rb: Added
+	  support for new transcoding instruction FUNsio (with Tatsuya Mizuno)
+
+	* enc/trans/gb18030.trans: Significantly reduced GB18030 conversion
+	  table footprint using FUNsio and differences (with Tatsuya Mizuno)
+
+	* test/ruby/test_transcode.rb: Minor name fix (from Tatsuya Mizuno)
+
+Thu Dec 10 17:22:36 2009  Shugo Maeda  <shugo@ruby-lang.org>
+
+	* vm_eval.c (yield_under): yields self the same as 1.8.
+
+Thu Dec 10 15:49:13 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* thread_pthread.c (native_mutex_reinitialize_atfork): release and
+	  re-acquire the lock at re-initialization.
+
+Thu Dec 10 12:56:02 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* encoding.c (enc_replicate): add Encoding#replicate(name).
+
+	* encoding.c (enc_replicate_with_index): renamed from old
+	  enc_replicate.
+
+	* encoding.c (rb_enc_from_encoding_index): split from
+	  rb_enc_from_encoding.
+
+Thu Dec 10 09:15:00 2009  NARUSE, Yui  <naruse@ruby-lang.org>
+
+	* string.c (rb_str_inspect): CHAR_ESC_LEN should be 13.
+
+Thu Dec 10 01:12:55 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* parse.y (dyna_pop_gen): pop dvars.  [ruby-dev:39861]
+
+Thu Dec 10 00:46:43 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* node.c (dump_node): fixed for long members.
+
+Wed Dec  9 22:57:04 2009  Yusuke Endoh  <mame@tsg.ne.jp>
+
+	* node.c: node management added.  Currently, only pretty-dumper is
+	  implemented.  [ruby-dev:39853]
+
+	* ruby.c: --dump=parsetree and --dump=parsetree_with_comment options
+	  added.  This is just for debug or research purpose.  Note that the
+	  compatibility of these options are not supported at all.
+
+Wed Dec  9 09:50:35 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* string.c (rb_str_justify): fixed the case a fill size is a
+	  multiple of the length of the padding.  [ruby-dev:39856]
+
 Tue Dec  8 23:41:34 2009  NAKAMURA Usaku  <usa@ruby-lang.org>
 
 	* win32/configure.bat: now recognize --with-*-{dir,include,lib} options
@@ -11,7 +332,7 @@ Tue Dec  8 23:41:34 2009  NAKAMURA Usaku  <usa@ruby-lang.org>
 
 Tue Dec  8 23:39:52 2009  NAKAMURA Usaku  <usa@ruby-lang.org>
 
-	* numeric.c (flo_eq): supress a warning on VC++ for x64.
+	* numeric.c (flo_eq): suppress a warning on VC++ for x64.
 
 Tue Dec  8 16:19:05 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
 
@@ -34,7 +355,7 @@ Mon Dec  7 14:11:08 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
 Mon Dec  7 13:05:59 2009  Yuki Sonoda (Yugui)  <yugui@yugui.jp>
 
 	* string.c (rb_str_justify): CVE-2009-4124.
-	  Fixes a bug reported by 
+	  Fixes a bug reported by
 	  Emmanouel Kellinis <Emmanouel.Kellinis AT kpmg.co.uk>, KPMG London;
 	  Patch by nobu.
 
@@ -339,9 +660,9 @@ Sat Nov 21 16:38:50 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
 
 Sat Nov 21 15:58:43 2009  NARUSE, Yui  <naruse@ruby-lang.org>
 
-	* io.c (read_all): fix: false negative invalid byte seequence
+	* io.c (read_all): fix: false negative invalid byte sequence
 	  on reading from pipes. [ruby-dev:39743]
-	  fix: assigin the variable 'pos' as relative value from recent pos.
+	  fix: assign the variable 'pos' as relative value from recent pos.
 
 Sat Nov 21 14:44:16 2009  NARUSE, Yui  <naruse@ruby-lang.org>
 
@@ -410,7 +731,7 @@ Wed Nov 18 15:27:20 2009  NAKAMURA Usaku  <usa@ruby-lang.org>
 
 Wed Nov 18 12:33:42 2009  NARUSE, Yui  <naruse@ruby-lang.org>
 
-	* encoding.c (enc_set_default_encoding): reset filesytem
+	* encoding.c (enc_set_default_encoding): reset filesystem
 	  encoding because on resetting default_external because
 	  Unix's filesystem encoding depends on default_external.
 
@@ -491,12 +812,12 @@ Mon Nov 16 15:51:53 2009  Shugo Maeda  <shugo@ruby-lang.org>
 
 Mon Nov 16 14:03:53 2009  wanabe  <s.wanabe@gmail.com>
 
-	* io.c (read_all): shift read buffer if exception occured.
+	* io.c (read_all): shift read buffer if exception occurred.
 	  pointed out in [ruby-dev:39702].
 
 Mon Nov 16 07:59:38 2009  wanabe  <s.wanabe@gmail.com>
 
-	* io.c (read_all): don't call io_shift_cbuf until bufffering enough or
+	* io.c (read_all): don't call io_shift_cbuf until buffering enough or
 	  econv_finished.   [ruby-dev:39696]
 
 	* io.c (more_char): don't call clear_readconv to read buffer after
@@ -641,7 +962,7 @@ Wed Nov 11 02:14:48 2009  Yuki Sonoda (Yugui)  <yugui@yugui.jp>
 
 Tue Nov 10 08:23:21 2009  Nobuyoshi Nakada  <nobu@ruby-lang.org>
 
-	* process.c (rb_f_exec, rb_f_system, rb_f_spawn): mentioned abou
+	* process.c (rb_f_exec, rb_f_system, rb_f_spawn): mentioned about
 	  the shell to be used when the command line is single string.
 	  See [ruby-core:26652]
 
