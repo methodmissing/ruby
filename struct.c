@@ -10,6 +10,7 @@
 **********************************************************************/
 
 #include "ruby/ruby.h"
+#include "ruby/cached_obj_hash.h"
 
 VALUE rb_cStruct;
 static ID id_members;
@@ -151,6 +152,7 @@ static VALUE (*const ref_func[])(VALUE) = {
 static void
 rb_struct_modify(VALUE s)
 {
+    COND_EXPIRE_CACHED_OBJ_HASH(s);
     if (OBJ_FROZEN(s)) rb_error_frozen("Struct");
     if (!OBJ_UNTRUSTED(s) && rb_safe_level() >= 4)
        rb_raise(rb_eSecurityError, "Insecure: can't modify Struct");
@@ -837,7 +839,7 @@ recursive_hash(VALUE s, VALUE dummy, int recur)
     long i, len;
     st_index_t h;
     VALUE n, *ptr;
-
+    GET_CACHED_OBJ_HASH(s);
     h = rb_hash_start(rb_hash(rb_obj_class(s)));
     if (!recur) {
 	ptr = RSTRUCT_PTR(s);
@@ -848,6 +850,7 @@ recursive_hash(VALUE s, VALUE dummy, int recur)
 	}
     }
     h = rb_hash_end(h);
+    CACHE_OBJ_HASH(s,h);
     return INT2FIX(h);
 }
 

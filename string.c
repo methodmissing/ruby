@@ -14,6 +14,7 @@
 #include "ruby/ruby.h"
 #include "ruby/re.h"
 #include "ruby/encoding.h"
+#include "ruby/cached_obj_hash.h"
 #include <assert.h>
 
 #define BEG(no) regs->beg[no]
@@ -1257,6 +1258,7 @@ str_make_independent(VALUE str)
 {
     char *ptr;
     long len = RSTRING_LEN(str);
+    COND_EXPIRE_CACHED_OBJ_HASH(str);
 
     ptr = ALLOC_N(char, len+1);
     if (RSTRING_PTR(str)) {
@@ -1273,6 +1275,7 @@ str_make_independent(VALUE str)
 void
 rb_str_modify(VALUE str)
 {
+    COND_EXPIRE_CACHED_OBJ_HASH(str);
     if (!str_independent(str))
 	str_make_independent(str);
     ENC_CODERANGE_CLEAR(str);
@@ -2036,7 +2039,10 @@ rb_str_hash_cmp(VALUE str1, VALUE str2)
 static VALUE
 rb_str_hash_m(VALUE str)
 {
-    st_index_t hval = rb_str_hash(str);
+    st_index_t hval;
+    GET_CACHED_OBJ_HASH(str);
+    hval = rb_str_hash(str);
+    CACHE_OBJ_HASH_DIRECT(str,hval);
     return INT2FIX(hval);
 }
 

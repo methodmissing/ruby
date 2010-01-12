@@ -14,6 +14,7 @@
 #include "ruby/ruby.h"
 #include "ruby/util.h"
 #include "ruby/st.h"
+#include "ruby/cached_obj_hash.h"
 
 #ifndef ARRAY_DEBUG
 # define NDEBUG
@@ -249,6 +250,7 @@ static void
 rb_ary_modify(VALUE ary)
 {
     rb_ary_modify_check(ary);
+    COND_EXPIRE_CACHED_OBJ_HASH(ary);
     if (ARY_SHARED_P(ary)) {
         long len = RARRAY_LEN(ary);
         if (len <= RARRAY_EMBED_LEN_MAX) {
@@ -2883,7 +2885,7 @@ recursive_hash(VALUE ary, VALUE dummy, int recur)
     long i;
     st_index_t h;
     VALUE n;
-
+    GET_CACHED_OBJ_HASH(ary);
     h = rb_hash_start(RARRAY_LEN(ary));
     if (recur) {
 	h = rb_hash_uint(h, NUM2LONG(rb_hash(rb_cArray)));
@@ -2895,6 +2897,7 @@ recursive_hash(VALUE ary, VALUE dummy, int recur)
 	}
     }
     h = rb_hash_end(h);
+    CACHE_OBJ_HASH(ary,h);
     return LONG2FIX(h);
 }
 

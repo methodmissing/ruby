@@ -13,6 +13,7 @@
 #include "ruby/re.h"
 #include "ruby/encoding.h"
 #include "ruby/util.h"
+#include "ruby/cached_obj_hash.h"
 #include "regint.h"
 #include <ctype.h>
 
@@ -2496,7 +2497,9 @@ static st_index_t reg_hash(VALUE re);
 static VALUE
 rb_reg_hash(VALUE re)
 {
+    GET_CACHED_OBJ_HASH(re);
     st_index_t hashval = reg_hash(re);
+    CACHE_OBJ_HASH_DIRECT(re,hashval);
     return LONG2FIX(hashval);
 }
 

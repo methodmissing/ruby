@@ -14,6 +14,7 @@
 #include "ruby/ruby.h"
 #include "ruby/st.h"
 #include "ruby/util.h"
+#include "ruby/cached_obj_hash.h"
 
 #ifdef __APPLE__
 #include <crt_externs.h>
@@ -250,6 +251,7 @@ rb_hash_modify_check(VALUE hash)
     if (OBJ_FROZEN(hash)) rb_error_frozen("hash");
     if (!OBJ_UNTRUSTED(hash) && rb_safe_level() >= 4)
 	rb_raise(rb_eSecurityError, "Insecure: can't modify hash");
+    COND_EXPIRE_CACHED_OBJ_HASH(hash);
 }
 
 struct st_table *
@@ -1570,14 +1572,15 @@ static VALUE
 recursive_hash(VALUE hash, VALUE dummy, int recur)
 {
     st_index_t hval;
-
     if (!RHASH(hash)->ntbl)
         return LONG2FIX(0);
+	GET_CACHED_OBJ_HASH(hash);
     hval = RHASH(hash)->ntbl->num_entries;
     if (recur)
 	hval = rb_hash_end(rb_hash_uint(rb_hash_start(rb_hash(rb_cHash)), hval));
     else
 	rb_hash_foreach(hash, hash_i, (VALUE)&hval);
+    CACHE_OBJ_HASH(hash,(long)hval);
     return INT2FIX(hval);
 }
 

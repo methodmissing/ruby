@@ -15,6 +15,7 @@
 #include "ruby/st.h"
 #include "ruby/util.h"
 #include "ruby/encoding.h"
+#include "ruby/cached_obj_hash.h"
 #include "node.h"
 
 void rb_vm_change_state(void);
@@ -22,6 +23,8 @@ void rb_vm_inc_const_missing_count(void);
 
 st_table *rb_global_tbl;
 st_table *rb_class_tbl;
+st_table *rb_obj_hash_cache;
+
 static ID autoload, classpath, tmp_classpath, classid;
 
 void
@@ -29,6 +32,7 @@ Init_var_tables(void)
 {
     rb_global_tbl = st_init_numtable();
     rb_class_tbl = st_init_numtable();
+    rb_obj_hash_cache = st_init_numtable();
     CONST_ID(autoload, "__autoload__");
     CONST_ID(classpath, "__classpath__");
     CONST_ID(tmp_classpath, "__tmp_classpath__");

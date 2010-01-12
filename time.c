@@ -14,6 +14,7 @@
 #include <time.h>
 #include <errno.h>
 #include "ruby/encoding.h"
+#include "ruby/cached_obj_hash.h"
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -1120,6 +1121,7 @@ time_modify(VALUE time)
     rb_check_frozen(time);
     if (!OBJ_UNTRUSTED(time) && rb_safe_level() >= 4)
 	rb_raise(rb_eSecurityError, "Insecure: can't modify Time");
+    COND_EXPIRE_CACHED_OBJ_HASH(time);
 }
 
 static VALUE
@@ -2595,10 +2597,13 @@ time_utc_p(VALUE time)
 static VALUE
 time_hash(VALUE time)
 {
+    VALUE hash;
     struct time_object *tobj;
-
+    GET_CACHED_OBJ_HASH(time);
     GetTimeval(time, tobj);
-    return rb_hash(tobj->timexv);
+    hash = rb_hash(tobj->timexv);
+    CACHE_OBJ_HASH(time,hash);
+    return hash; 
 }
 
 /* :nodoc: */

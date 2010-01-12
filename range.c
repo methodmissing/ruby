@@ -11,6 +11,7 @@
 
 #include "ruby/ruby.h"
 #include "ruby/encoding.h"
+#include "ruby/cached_obj_hash.h"
 
 VALUE rb_cRange;
 static ID id_cmp, id_succ, id_beg, id_end, id_excl;
@@ -217,7 +218,7 @@ recursive_hash(VALUE range, VALUE dummy, int recur)
 {
     st_index_t hash = EXCL(range);
     VALUE v;
-
+    GET_CACHED_OBJ_HASH(range);
     hash = rb_hash_start(hash);
     if (!recur) {
 	v = rb_hash(RANGE_BEG(range));
@@ -227,7 +228,7 @@ recursive_hash(VALUE range, VALUE dummy, int recur)
     }
     hash = rb_hash_uint(hash, EXCL(range) << 24);
     hash = rb_hash_end(hash);
-
+    CACHE_OBJ_HASH_DIRECT(range,hash);
     return LONG2FIX(hash);
 }
 

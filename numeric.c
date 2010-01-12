@@ -12,6 +12,7 @@
 #include "ruby/ruby.h"
 #include "ruby/encoding.h"
 #include "ruby/util.h"
+#include "ruby/cached_obj_hash.h"
 #include <ctype.h>
 #include <math.h>
 #include <stdio.h>
@@ -951,11 +952,12 @@ flo_hash(VALUE num)
 {
     double d;
     st_index_t hash;
-
+    GET_CACHED_OBJ_HASH(num);
     d = RFLOAT_VALUE(num);
     /* normalize -0.0 to 0.0 */
     if (d == 0.0) d = 0.0;
     hash = rb_memhash(&d, sizeof(d));
+    CACHE_OBJ_HASH_DIRECT(num,hash);
     return INT2FIX(hash);
 }
 

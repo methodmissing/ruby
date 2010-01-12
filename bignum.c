@@ -11,6 +11,7 @@
 
 #include "ruby/ruby.h"
 #include "ruby/util.h"
+#include "ruby/cached_obj_hash.h"
 
 #include <math.h>
 #include <float.h>
@@ -3144,8 +3145,9 @@ static VALUE
 rb_big_hash(VALUE x)
 {
     st_index_t hash;
-
+    GET_CACHED_OBJ_HASH(x);
     hash = rb_memhash(BDIGITS(x), sizeof(BDIGIT)*RBIGNUM_LEN(x)) ^ RBIGNUM_SIGN(x);
+    CACHE_OBJ_HASH_DIRECT(x,hash);
     return INT2FIX(hash);
 }
 
