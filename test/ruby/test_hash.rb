@@ -103,6 +103,13 @@ class TestHash < Test::Unit::TestCase
     assert_equal(40, ObjectSpace.memsize_of(hash))
   end
 
+  def test_initialize_defaults_to_no_hash_table
+    h1 = {}
+    h2 = Hash.new
+    assert_equal(40, ObjectSpace.memsize_of(h2))
+    assert_equal(40, ObjectSpace.memsize_of(h2))
+  end
+
   def test_bad_initialize_copy
     h = Class.new(Hash) {
       def initialize_copy(h)

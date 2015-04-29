@@ -536,7 +536,7 @@ rb_hash_initialize(int argc, VALUE *argv, VALUE hash)
 {
     VALUE ifnone;
 
-    rb_hash_modify(hash);
+    rb_hash_modify_check(hash);
     if (rb_block_given_p()) {
 	rb_check_arity(argc, 0, 0);
 	ifnone = rb_block_proc();
