@@ -92,6 +92,17 @@ class TestHash < Test::Unit::TestCase
     $VERBOSE = @verbose
   end
 
+  def test_free_table_on_freeze_for_empty_hash
+    require 'objspace'
+    hash = {}
+    hash[:a] = [:b]
+    assert_equal(232, ObjectSpace.memsize_of(hash))
+    hash.clear
+    assert_equal(232, ObjectSpace.memsize_of(hash))
+    hash.freeze
+    assert_equal(40, ObjectSpace.memsize_of(hash))
+  end
+
   def test_bad_initialize_copy
     h = Class.new(Hash) {
       def initialize_copy(h)

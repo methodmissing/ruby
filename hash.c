@@ -59,6 +59,11 @@ static VALUE rb_hash_s_try_convert(VALUE, VALUE);
 VALUE
 rb_hash_freeze(VALUE hash)
 {
+    if (OBJ_FROZEN(hash)) return hash;
+    if (RHASH_EMPTY_P(hash) && RHASH(hash)->ntbl) {
+       st_free_table(RHASH(hash)->ntbl);
+       RHASH(hash)->ntbl = NULL;
+    }
     return rb_obj_freeze(hash);
 }
 
@@ -3970,6 +3975,7 @@ Init_Hash(void)
     rb_define_method(rb_cHash,"initialize", rb_hash_initialize, -1);
     rb_define_method(rb_cHash,"initialize_copy", rb_hash_initialize_copy, 1);
     rb_define_method(rb_cHash,"rehash", rb_hash_rehash, 0);
+    rb_define_method(rb_cHash,"freeze", rb_hash_freeze, 0);
 
     rb_define_method(rb_cHash,"to_hash", rb_hash_to_hash, 0);
     rb_define_method(rb_cHash,"to_h", rb_hash_to_h, 0);
