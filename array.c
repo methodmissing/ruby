@@ -398,6 +398,8 @@ ary_ensure_room_for_push(VALUE ary, long add_len)
 VALUE
 rb_ary_freeze(VALUE ary)
 {
+    if (OBJ_FROZEN(ary)) return ary;
+    ary_resize_capa(ary, RARRAY_LEN(ary));
     return rb_obj_freeze(ary);
 }
 
@@ -5760,6 +5762,7 @@ Init_Array(void)
     rb_define_method(rb_cArray, "==", rb_ary_equal, 1);
     rb_define_method(rb_cArray, "eql?", rb_ary_eql, 1);
     rb_define_method(rb_cArray, "hash", rb_ary_hash, 0);
+    rb_define_method(rb_cArray, "freeze", rb_ary_freeze, 0);
 
     rb_define_method(rb_cArray, "[]", rb_ary_aref, -1);
     rb_define_method(rb_cArray, "[]=", rb_ary_aset, -1);

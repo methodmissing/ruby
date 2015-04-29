@@ -12,6 +12,17 @@ class TestArray < Test::Unit::TestCase
     $VERBOSE = @verbose
   end
 
+  def test_resize_on_freeze
+    require 'objspace'
+    ary = %w(a b c d)
+    assert_equal(72, ObjectSpace.memsize_of(ary))
+    ary[9] = "e"
+    assert_equal(240, ObjectSpace.memsize_of(ary))
+    ary.freeze
+    assert_equal(120, ObjectSpace.memsize_of(ary))
+    assert_equal(10, ary.size)
+  end
+
   def test_percent_i
     assert_equal([:foo, :bar], %i[foo bar])
     assert_equal([:"\"foo"], %i["foo])
