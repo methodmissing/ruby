@@ -846,12 +846,6 @@ x = __ENCODING__
     assert_equal(':"foo=="', "foo==".intern.inspect)
   end
 
-  def test_all_symbols
-    x = Symbol.all_symbols
-    assert_kind_of(Array, x)
-    assert_empty(x.reject {|s| s.is_a?(Symbol) })
-  end
-
   def test_is_class_id
     c = Class.new
     assert_raise(NameError) do

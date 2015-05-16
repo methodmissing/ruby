@@ -847,6 +847,77 @@ rb_sym_all_symbols(void)
     return ary;
 }
 
+static int
+symbols_each_i(st_data_t key, st_data_t value, st_data_t arg)
+{
+    VALUE sym = (VALUE)value;
+
+    if (STATIC_SYM_P(sym)) {
+	rb_yield(sym);
+	return ST_CONTINUE;
+    }
+    else if (!DYNAMIC_SYM_P(sym)) {
+	rb_bug("invalid symbol: %s", RSTRING_PTR((VALUE)key));
+    }
+    else if (!SYMBOL_PINNED_P(sym) && rb_objspace_garbage_object_p(sym)) {
+	RSYMBOL(sym)->fstr = 0;
+	return ST_DELETE;
+    }
+    else {
+	rb_yield(sym);
+	return ST_CONTINUE;
+    }
+
+}
+
+static VALUE
+symbol_enum_size(VALUE hash, VALUE args, VALUE eobj)
+{
+#if SIZEOF_LONG == SIZEOF_VOIDP
+    return ULONG2NUM(global_symbols.str_sym->num_entries);
+#elif SIZEOF_LONG_LONG == SIZEOF_VOIDP
+    return ULL2NUM(global_symbols.str_sym->num_entries);
+#endif
+}
+
+/*
+ *  call-seq:
+ *     Symobl.each {| sym | block } -> Symbol
+ *     Symbol.each                  -> an_enumerator
+ *
+ *  Calls <i>block</i> once for each symbol in <i>the symbol table</i>, passing the
+ *  symbol as a parameter.
+ *
+ *  If no block is given, an enumerator is returned instead.
+ *
+ *     bacon = :bacon
+ *     lettuce = :lettuce
+ *     Symbol.each {|sym| puts sym }
+ *
+ *  <em>produces:</em>
+ *
+ *     ... many other symbols ...
+ *     bacon
+ *     lettuce
+ *
+ *   It's also a cheaper alternative to <i>Symbol.all_symbols.size</i> to get the
+ *   size of Ruby's symbol table.
+ *
+ *     Symbol.count
+ *
+ *  <em>produces:</em>
+ *
+ *     903
+ */
+
+VALUE
+rb_sym_each(void)
+{
+    RETURN_SIZED_ENUMERATOR(Qnil, 0, 0, symbol_enum_size);
+    st_foreach(global_symbols.str_sym, symbols_each_i, 0);
+    return rb_cSymbol;
+}
+
 int
 rb_is_const_id(ID id)
 {

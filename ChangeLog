@@ -1,3 +1,20 @@
+Thu May 21 10:44:07 2015  Lourens Naudé  <lourens@bearmetal.eu>
+
+	* symbol.c (rb_sym_each): Implement `rb_sym_each` to expose the Symbol table
+	  as an Enumerator. This is a more versatile method to walking the Symbol table
+	  with the slower `rb_sym_all_symbols` API. Also possible to count total Symbols
+	  with `Symbol.each.size`
+
+	* include/ruby/intern.h (rb_sym_each): Expose `rb_sym_each` API. Move
+	  `rb_sym_all_symbols` to a symbol.c specific section (does not live in parse.y
+	  anymore)
+
+	* string.c (Init_string): Implement Symbol.each, extend Symbol with Enumerable
+
+	* test/ruby/test_symbol.rb: Test for Symbol API addition.
+
+	* test/ruby/test_parse.rb: Moved `test_all_symbols` to test/ruby/test_symbol.rb
+
 Thu May 21 04:11:03 2015  Koichi Sasada  <ko1@atdot.net>
 
 	* iseq.c (exception_type2symbol): show correct bug message.
